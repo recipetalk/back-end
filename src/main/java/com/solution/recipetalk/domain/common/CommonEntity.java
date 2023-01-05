@@ -1,9 +1,7 @@
-package com.solution.recipetalk.domain.auditing;
+package com.solution.recipetalk.domain.common;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -18,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @MappedSuperclass  // ①
 @EntityListeners(AuditingEntityListener.class) // ②
-public abstract class AuditingEntity {
+public abstract class CommonEntity {
 
     @CreatedDate // ③
     @Column(name="created_date")
@@ -27,6 +25,10 @@ public abstract class AuditingEntity {
     @LastModifiedDate // ④
     @Column(name="modified_date")
     private LocalDateTime modifiedDate;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
 }
 
 // ① : JPA Entity 클래스들이 BaseTimeEntity을 상속할 경우 필드들(createdDate, modifiedDate)도 칼럼으로 인식하도록 한다.
