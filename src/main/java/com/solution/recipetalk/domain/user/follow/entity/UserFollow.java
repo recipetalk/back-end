@@ -1,5 +1,7 @@
 package com.solution.recipetalk.domain.user.follow.entity;
 
+import com.solution.recipetalk.domain.common.CommonEntity;
+import com.solution.recipetalk.domain.user.entity.UserDetail;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +12,20 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Entity
 @Table(name = "user_follow")
-public class UserFollow {
+public class UserFollow extends CommonEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(name = "user_follow_id", nullable = false)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "follower_id")
+    private UserDetail follower;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "followee_id")
+    private UserDetail followee;
+
+
+
 }

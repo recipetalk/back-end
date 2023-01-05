@@ -1,5 +1,8 @@
 package com.solution.recipetalk.domain.recipe.ingredient.group.entity;
 
+import com.solution.recipetalk.domain.common.CommonEntity;
+import com.solution.recipetalk.domain.recipe.entity.Recipe;
+import com.solution.recipetalk.domain.recipe.ingredient.entity.RecipeIngredient;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,10 +14,21 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Entity
 @Table(name = "recipe_ingredient_group")
-public class RecipeIngredientGroup {
+public class RecipeIngredientGroup extends CommonEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(name = "recipe_ingredient_group_id", nullable = false)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipe_id", nullable = false)
+    private Recipe recipe;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipe_ingredient_id", nullable = false)
+    private RecipeIngredient recipeIngredient;
+
+
+
 }
