@@ -1,6 +1,6 @@
 package com.solution.recipetalk.domain.recipe.row.img;
 
-import com.solution.recipetalk.domain.common.CommonEntity;
+import com.solution.recipetalk.domain.common.AuditingEntity;
 import com.solution.recipetalk.domain.image.entity.Image;
 import com.solution.recipetalk.domain.recipe.row.entity.RecipeRow;
 import jakarta.persistence.*;
@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Entity
 @Table(name = "recipe_row_img")
-public class RecipeRowImg extends CommonEntity {
+public class RecipeRowImg extends AuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "recipe_row_img_id")

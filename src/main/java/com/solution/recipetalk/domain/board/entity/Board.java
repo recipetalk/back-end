@@ -1,13 +1,15 @@
 package com.solution.recipetalk.domain.board.entity;
 
-import com.solution.recipetalk.domain.common.CommonEntity;
 import com.solution.recipetalk.domain.board.like.entity.BoardLike;
 import com.solution.recipetalk.domain.comment.entity.Comment;
+import com.solution.recipetalk.domain.common.SoftDeleteEntity;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.List;
 
@@ -16,7 +18,9 @@ import java.util.List;
 @SuperBuilder
 @Entity
 @Table(name = "board")
-public class Board extends CommonEntity {
+@SQLDelete(sql = "UPDATE board SET is_deleted = true WHERE id = ?")
+@Where(clause = "is_deleted = false")
+public class Board extends SoftDeleteEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="board_id", nullable = false)
     private Long id;

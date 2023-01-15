@@ -1,12 +1,14 @@
 package com.solution.recipetalk.domain.ingredient.trimming.entity;
 
-import com.solution.recipetalk.domain.common.CommonEntity;
 import com.solution.recipetalk.domain.board.entity.Board;
+import com.solution.recipetalk.domain.common.SoftDeleteEntity;
 import com.solution.recipetalk.domain.ingredient.entity.Ingredient;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 
 @Getter
@@ -14,7 +16,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Entity
 @Table(name="ingredient_trimming")
-public class IngredientTrimming extends CommonEntity {
+@SQLDelete(sql = "UPDATE ingredient_trimming SET is_deleted = true WHERE id = ?")
+@Where(clause = "is_deleted = false")
+public class IngredientTrimming extends SoftDeleteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="ingredient_trimming_id", nullable = false)

@@ -1,12 +1,13 @@
 package com.solution.recipetalk.domain.ingredient.userhas.entity;
 
-import com.solution.recipetalk.domain.common.CommonEntity;
+import com.solution.recipetalk.domain.common.AuditingEntity;
 import com.solution.recipetalk.domain.ingredient.entity.Ingredient;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
 
 import java.time.LocalDate;
 
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 @SuperBuilder
 @Entity
 @Table(name = "user_has_ingredient")
-public class UserHasIngredient extends CommonEntity {
+public class UserHasIngredient extends AuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_has_ingredient_id", nullable = false)

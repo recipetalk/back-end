@@ -1,18 +1,20 @@
 package com.solution.recipetalk.domain.user.entity;
 
-import com.solution.recipetalk.domain.common.CommonEntity;
+import com.solution.recipetalk.domain.common.SoftDeleteEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
 
 @Getter
 @NoArgsConstructor
 @SuperBuilder
 @Entity
 @Table(name = "user_detail")
-public class UserDetail extends CommonEntity {
+@SQLDelete(sql = "UPDATE user_detail SET is_deleted = true WHERE id = ?")
+public class UserDetail extends SoftDeleteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_detail_id", nullable = false)
@@ -27,4 +29,6 @@ public class UserDetail extends CommonEntity {
     @Column(name = "phone_num", nullable = false)
     @Pattern(regexp = "(01[016789])(\\d{3,4})(\\d{4})")
     private String phoneNum;
+
+    //TODO : Where 절 없는 이유? 관리 입장에서 없어야 할 수 있음. 따라서 직접 false이면 어떻게, true이면 어떻게 조회해야 할지에 대한 처리 필요.
 }

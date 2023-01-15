@@ -1,18 +1,20 @@
 package com.solution.recipetalk.domain.user.login.entity;
 
-import com.solution.recipetalk.domain.common.CommonEntity;
+import com.solution.recipetalk.domain.common.SoftDeleteEntity;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
 
 @Getter
 @NoArgsConstructor
 @SuperBuilder
 @Entity
 @Table(name = "user_login")
-public class UserLogin extends CommonEntity {
+@SQLDelete(sql = "UPDATE user_login SET is_deleted = true WHERE id = ?")
+public class UserLogin extends SoftDeleteEntity {
     @Id
     @Column(name = "user_id")
     private Long id;
