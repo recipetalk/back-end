@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.solution.recipetalk.config.jwt.token.properties.AccessTokenProperties;
 import com.solution.recipetalk.config.jwt.token.properties.CommonTokenProperties;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +12,6 @@ import java.util.Optional;
 
 @Getter
 @Setter
-@Builder
 public class RequestToken {
     private String accessToken;
     public RequestToken(HttpServletRequest request){
