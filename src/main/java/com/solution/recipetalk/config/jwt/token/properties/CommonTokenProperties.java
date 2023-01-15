@@ -1,4 +1,4 @@
-package com.solution.recipetalk.config.token;
+package com.solution.recipetalk.config.jwt.token.properties;
 
 public interface CommonTokenProperties {
     String SECRET = "cos";

@@ -1,7 +1,9 @@
-package com.solution.recipetalk.config.token;
+package com.solution.recipetalk.config.jwt.token;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.solution.recipetalk.config.jwt.token.properties.AccessTokenProperties;
+import com.solution.recipetalk.config.jwt.token.properties.CommonTokenProperties;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Builder;
 import lombok.Getter;
