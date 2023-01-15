@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 
 @Getter
@@ -29,6 +30,14 @@ public class UserDetail extends SoftDeleteEntity {
     @Column(name = "phone_num", nullable = false)
     @Pattern(regexp = "(01[016789])(\\d{3,4})(\\d{4})")
     private String phoneNum;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provider")
+    private UserProvider provider;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private RoleType role;
 
     //TODO : Where 절 없는 이유? 관리 입장에서 없어야 할 수 있음. 따라서 직접 false이면 어떻게, true이면 어떻게 조회해야 할지에 대한 처리 필요.
 }
