@@ -1,6 +1,6 @@
 package com.solution.recipetalk.domain.user.follow.entity;
 
-import com.solution.recipetalk.domain.common.CommonEntity;
+import com.solution.recipetalk.domain.common.AuditingEntity;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Entity
 @Table(name = "user_follow")
-public class UserFollow extends CommonEntity {
+public class UserFollow extends AuditingEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_follow_id", nullable = false)

@@ -1,7 +1,7 @@
 package com.solution.recipetalk.domain.board.like.entity;
 
 
-import com.solution.recipetalk.domain.common.CommonEntity;
+import com.solution.recipetalk.domain.common.AuditingEntity;
 import com.solution.recipetalk.domain.board.entity.Board;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import jakarta.persistence.*;
@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Entity
 @Table(name="user_board_liked")
-public class BoardLike extends CommonEntity {
+public class BoardLike extends AuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_board_like_id", nullable = false)

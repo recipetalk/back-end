@@ -1,6 +1,7 @@
 package com.solution.recipetalk.domain.recipe.row.entity;
 
-import com.solution.recipetalk.domain.common.CommonEntity;
+import com.solution.recipetalk.domain.common.AuditingEntity;
+import com.solution.recipetalk.domain.recipe.entity.Recipe;
 import com.solution.recipetalk.domain.recipe.row.img.RecipeRowImg;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.util.List;
 @SuperBuilder
 @Entity
 @Table(name = "recipe_row")
-public class RecipeRow extends CommonEntity {
+public class RecipeRow extends AuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "recipe_row_id", nullable = false)
@@ -26,7 +27,10 @@ public class RecipeRow extends CommonEntity {
     @Column(name = "timer")
     private Long timer; //currentTimeMillis
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "recipeRow", fetch = FetchType.LAZY)
     private List<RecipeRowImg> recipeRowImgs;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipe_id")
+    private Recipe recipe;
 }

@@ -1,7 +1,7 @@
 package com.solution.recipetalk.domain.recipe.ingredient.entity;
 
 
-import com.solution.recipetalk.domain.common.CommonEntity;
+import com.solution.recipetalk.domain.common.AuditingEntity;
 import com.solution.recipetalk.domain.ingredient.entity.Ingredient;
 import com.solution.recipetalk.domain.recipe.ingredient.group.entity.RecipeIngredientGroup;
 import jakarta.persistence.*;
@@ -17,7 +17,7 @@ import java.util.List;
 @SuperBuilder
 @Entity
 @Table(name = "recipe_ingredient")
-public class RecipeIngredient extends CommonEntity {
+public class RecipeIngredient extends AuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +31,7 @@ public class RecipeIngredient extends CommonEntity {
     @Column(name = "quantity")
     private Long quantity;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "recipeIngredient", fetch = FetchType.LAZY)
     private List<RecipeIngredientGroup> recipeIngredientGroups;
 
 }

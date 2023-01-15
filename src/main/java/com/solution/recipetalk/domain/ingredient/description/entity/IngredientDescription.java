@@ -1,7 +1,7 @@
 package com.solution.recipetalk.domain.ingredient.description.entity;
 
 import com.solution.recipetalk.domain.board.entity.Board;
-import com.solution.recipetalk.domain.common.CommonEntity;
+import com.solution.recipetalk.domain.common.AuditingEntity;
 import com.solution.recipetalk.domain.ingredient.entity.Ingredient;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Entity
 @Table(name="ingredient_description")
-public class IngredientDescription extends CommonEntity {
+public class IngredientDescription extends AuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

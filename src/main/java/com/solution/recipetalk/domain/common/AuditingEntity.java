@@ -16,18 +16,16 @@ import java.time.LocalDateTime;
 @Getter
 @MappedSuperclass  // ①
 @EntityListeners(AuditingEntityListener.class) // ②
-public abstract class CommonEntity {
+public abstract class AuditingEntity {
 
     @CreatedDate // ③
-    @Column(name="created_date")
+    @Column(name="created_date", updatable = false)
     private LocalDateTime createdDate;
 
     @LastModifiedDate // ④
-    @Column(name="modified_date")
+    @Column(name="modified_date", updatable = false)
     private LocalDateTime modifiedDate;
 
-    @Column(name = "is_deleted")
-    private Boolean isDeleted;
 
 }
 
