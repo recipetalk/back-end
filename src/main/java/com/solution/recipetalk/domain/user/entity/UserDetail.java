@@ -1,12 +1,12 @@
 package com.solution.recipetalk.domain.user.entity;
 
 import com.solution.recipetalk.domain.common.SoftDeleteEntity;
+import com.solution.recipetalk.domain.user.login.entity.UserLogin;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 
 @Getter
@@ -39,5 +39,12 @@ public class UserDetail extends SoftDeleteEntity {
     @Column(name = "role")
     private RoleType role;
 
+    @OneToOne(mappedBy = "userDetail", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private UserLogin userLogin;
+
     //TODO : Where 절 없는 이유? 관리 입장에서 없어야 할 수 있음. 따라서 직접 false이면 어떻게, true이면 어떻게 조회해야 할지에 대한 처리 필요.
+
+    public void setUserLogin(UserLogin userLogin) {
+        this.userLogin = userLogin;
+    }
 }
