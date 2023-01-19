@@ -16,3 +16,4 @@ spring:
         ddl-auto: create
         highlight_sql: true
         format_sql: true
+

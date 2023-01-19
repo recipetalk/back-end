@@ -23,9 +23,13 @@ public class FindUserServiceImpl implements FindUserService {
 
     @Override
     public ResponseEntity<?> findDuplicatedUsernameInUserLogin(String userName) {
-        Optional<UserLogin> optionalUserLogin = userLoginRepository.findByUsername(userName);
-
-        DuplicateUserDTO dto = DuplicateUserDTO.builder().isValid(optionalUserLogin.isEmpty()).build();
+        DuplicateUserDTO dto = DuplicateUserDTO.builder().isValid(isDuplicatedUsername(userName)).build();
         return ResponseEntity.ok(dto);
+    }
+
+
+    private Boolean isDuplicatedUsername(String userName){
+        Optional<UserLogin> optionalUserLogin = userLoginRepository.findByUsername(userName);
+        return optionalUserLogin.isEmpty();
     }
 }
