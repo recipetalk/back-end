@@ -7,9 +7,10 @@ import com.solution.recipetalk.domain.user.login.entity.UserLogin;
 import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserControllerTest {
 
     @Autowired
@@ -37,9 +39,9 @@ class UserControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @BeforeEach
+    @BeforeAll
     void setUserDetailAndUserLogin() {
-        UserDetail userDetail = UserDetail.builder().id(1L).nickname("test1").phoneNum("01031798788").provider(UserProvider.GOOGLE).role(RoleType.USER).profileImageURI("testURI").build();
+        UserDetail userDetail = UserDetail.builder().id(1L).nickname("test1").phoneNum("01031798788").provider(UserProvider.GOOGLE).role(RoleType.DEV).profileImageURI("testURI").build();
         userDetailRepository.save(userDetail);
 
         UserLogin userLogin = UserLogin.builder().userDetail(userDetail).password("test1").pwSalt("11").username("test").build();
@@ -48,13 +50,23 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("[USER][GET] 아이디 중복 확인")
-    void duplicatedUserCheck() throws Exception {
+    @DisplayName("[USER][GET] 아이디 사용 가능 확인")
+    void duplicatedUserCheckIsFalse() throws Exception {
         Optional<UserLogin> userLogin = userLoginRepository.findByUsername("test");
-        System.out.println(userLogin.isEmpty());
         mvc.perform(get("/user/signup/test")
             )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.isValid").value("false"));
+    }
+
+
+    @Test
+    @DisplayName("[USER][GET] 아이디 사용 불가 확인")
+    void duplicatedUserCheckIsTrue() throws Exception {
+        Optional<UserLogin> userLogin = userLoginRepository.findByUsername("test1");
+        mvc.perform(get("/user/signup/test1")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isValid").value("true"));
     }
 }
