@@ -34,7 +34,7 @@ public class RequestToken {
                     .build().verify(token)
                     .getClaim(element).asString()).orElseThrow();
         }catch (Exception e){
-            throw new CustomFilterException("Occur Exception");
+            throw new CustomFilterException("Token verified failure");
         }
     }
 }
