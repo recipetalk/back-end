@@ -53,8 +53,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         ResponseToken responseToken = new ResponseToken(principalDetails);
 
         String accessToken = responseToken.getAccessToken();
+        String refreshToken = responseToken.makeToken(RefreshTokenProperties.HEADER_STRING, RefreshTokenProperties.EXPIRE_TIME);
 
         response.addHeader(AccessTokenProperties.HEADER_STRING, CommonTokenProperties.TOKEN_PREFIX + accessToken);
+        response.addHeader(RefreshTokenProperties.HEADER_STRING, CommonTokenProperties.TOKEN_PREFIX + refreshToken);
 
     }
 }
