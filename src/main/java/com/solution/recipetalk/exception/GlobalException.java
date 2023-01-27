@@ -7,16 +7,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalException {
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(value = Exception.class)
     public ResponseEntity<Object> handleApiRequestException(Exception exception){
         CustomErrorResponse errorResponse = new CustomErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
         return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
     }
 
-    @ExceptionHandler(CustomException.class)
+    @ExceptionHandler(value = CustomException.class)
     public ResponseEntity<Object> handleCustomException(CustomException exception){
         ErrorCode errorCode = exception.getErrorCode();
         CustomErrorResponse errorResponse = new CustomErrorResponse(errorCode);
         return new ResponseEntity<>(errorResponse, errorCode.getHttpStatus());
+    }
+
+    @ExceptionHandler(value = NullPointerException.class)
+    public ResponseEntity<Object> handleApiRequestException2(NullPointerException exception){
+        CustomErrorResponse errorResponse = new CustomErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
     }
 }
