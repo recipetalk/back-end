@@ -1,6 +1,7 @@
 package com.solution.recipetalk.config.jwt;
 
 import com.solution.recipetalk.config.jwt.token.RequestToken;
+import com.solution.recipetalk.config.jwt.token.ResponseToken;
 import com.solution.recipetalk.config.jwt.token.properties.AccessTokenProperties;
 import com.solution.recipetalk.config.jwt.token.properties.CommonTokenProperties;
 import com.solution.recipetalk.config.jwt.token.properties.RefreshTokenProperties;
@@ -16,6 +17,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Autowired
@@ -37,23 +39,36 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+        JwtTokenHeader jwtAccessTokenHeader = new JwtTokenHeader(AccessTokenProperties.HEADER_STRING, request);
+        JwtTokenHeader jwtRefreshTokenHeader = new JwtTokenHeader(RefreshTokenProperties.HEADER_STRING, request);
 
+        if (jwtAccessTokenHeader.getHeaderData() == null && jwtRefreshTokenHeader.getHeaderData() == null){
+            chain.doFilter(request, response);
+            return;
+        }
 
-        String jwtAccessTokenHeader = request.getHeader(AccessTokenProperties.HEADER_STRING);
-        String jwtRefreshTokenHeader = request.getHeader(RefreshTokenProperties.HEADER_STRING);
-
-//        if (jwtAccessTokenHeader == null || !jwtAccessTokenHeader.startsWith(CommonTokenProperties.TOKEN_PREFIX)){
-//            chain.doFilter(request, response);
-//            return;
-//        }
-
-        RequestToken requestToken = new RequestToken(request);
         try{
-            requestToken.getUsername();
+            RequestToken requestToken;
+            if (jwtAccessTokenHeader.getHeaderData() != null){
+                requestToken = new RequestToken(jwtAccessTokenHeader);
+            }
+            else {
+                requestToken = new RequestToken(jwtRefreshTokenHeader);
+            }
+            String username = requestToken.getElementInToken(requestToken.getToken(), "username");
+            ResponseToken responseToken = new ResponseToken(username);
+            String accessToken = responseToken.makeToken(AccessTokenProperties.HEADER_STRING, AccessTokenProperties.EXPIRE_TIME);
+            response.addHeader(AccessTokenProperties.HEADER_STRING, "Bearer " + accessToken);
+
+            if (requestToken.getTokenType().equals(RefreshTokenProperties.HEADER_STRING)){
+                String refreshToken = responseToken.makeToken(RefreshTokenProperties.HEADER_STRING, RefreshTokenProperties.EXPIRE_TIME);
+                response.addHeader(RefreshTokenProperties.HEADER_STRING, "Bearer " + refreshToken);
+            }
             chain.doFilter(request, response);
         }catch (AuthenticationException e){
             restAuthenticationEntryPoint.commence(request, response, e);
         }
 
     }
+
 }
