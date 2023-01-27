@@ -58,11 +58,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             String username = requestToken.getElementInToken(requestToken.getToken(), "username");
             ResponseToken responseToken = new ResponseToken(username);
             String accessToken = responseToken.makeToken(AccessTokenProperties.HEADER_STRING, AccessTokenProperties.EXPIRE_TIME);
-            response.addHeader(AccessTokenProperties.HEADER_STRING, "Bearer " + accessToken);
+            response.addHeader(AccessTokenProperties.HEADER_STRING, CommonTokenProperties.TOKEN_PREFIX + accessToken);
 
             if (requestToken.getTokenType().equals(RefreshTokenProperties.HEADER_STRING)){
                 String refreshToken = responseToken.makeToken(RefreshTokenProperties.HEADER_STRING, RefreshTokenProperties.EXPIRE_TIME);
-                response.addHeader(RefreshTokenProperties.HEADER_STRING, "Bearer " + refreshToken);
+                response.addHeader(RefreshTokenProperties.HEADER_STRING, CommonTokenProperties.TOKEN_PREFIX + refreshToken);
             }
             chain.doFilter(request, response);
         }catch (AuthenticationException e){
