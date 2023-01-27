@@ -3,6 +3,7 @@ package com.solution.recipetalk.config.jwt.token;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.solution.recipetalk.config.jwt.CustomFilterException;
+import com.solution.recipetalk.config.jwt.JwtTokenHeader;
 import com.solution.recipetalk.config.jwt.token.properties.AccessTokenProperties;
 import com.solution.recipetalk.config.jwt.token.properties.CommonTokenProperties;
 import com.solution.recipetalk.config.jwt.token.properties.RefreshTokenProperties;
@@ -16,17 +17,17 @@ import java.util.Optional;
 @Getter
 @Setter
 public class RequestToken {
-    private String accessToken;
-    private String refreshToken;
-    public RequestToken(HttpServletRequest request){
-        this.accessToken = request.getHeader(AccessTokenProperties.HEADER_STRING).replace(CommonTokenProperties.TOKEN_PREFIX, "");
-        this.refreshToken = request.getHeader(RefreshTokenProperties.HEADER_STRING).replace(CommonTokenProperties.TOKEN_PREFIX, "");
-
-        System.out.println(this.accessToken);
-        System.out.println(this.refreshToken);
+    private String token;
+    private String tokenType;
+    public RequestToken(JwtTokenHeader jwtTokenHeader){
+        this.tokenType = jwtTokenHeader.getHeaderType();
+        if (!jwtTokenHeader.getHeaderData().startsWith(CommonTokenProperties.TOKEN_PREFIX)){
+            throw new CustomFilterException("Not a valid Token (token type : " + tokenType + ")");
+        }
+        this.token = jwtTokenHeader.getHeaderData().replace(CommonTokenProperties.TOKEN_PREFIX, "");
     }
 
-    public String getTokenElement(String token, String element){
+    public String getElementInToken(String token, String element){
         try{
             return Optional.ofNullable(JWT
                     .require(Algorithm.HMAC512(CommonTokenProperties.SECRET))
@@ -35,9 +36,5 @@ public class RequestToken {
         }catch (Exception e){
             throw new CustomFilterException("Occur Exception");
         }
-    }
-
-    public String getUsername(){
-        return getTokenElement(accessToken, "username");
     }
 }
