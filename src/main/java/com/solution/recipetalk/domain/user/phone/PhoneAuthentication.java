@@ -34,4 +34,12 @@ public class PhoneAuthentication extends AuditingEntity {
         count = 0;
     }
 
+    public void increaseCount() {
+        count ++;
+    }
+
+    public void updateAuthNum(String authNum){
+        this.authNum = authNum;
+    }
+
 }
