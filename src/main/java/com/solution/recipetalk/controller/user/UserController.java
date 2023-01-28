@@ -4,6 +4,7 @@ package com.solution.recipetalk.controller.user;
 import com.solution.recipetalk.config.jwt.JwtTokenHeader;
 import com.solution.recipetalk.config.jwt.token.RequestToken;
 import com.solution.recipetalk.config.jwt.token.properties.AccessTokenProperties;
+import com.solution.recipetalk.config.jwt.token.properties.RefreshTokenProperties;
 import com.solution.recipetalk.dto.user.SignUpUserReqDto;
 import com.solution.recipetalk.service.user.FindUserService;
 import com.solution.recipetalk.service.user.RegisterUserService;
@@ -45,10 +46,15 @@ public class UserController {
 
     private String getUsername(HttpServletRequest request){
         JwtTokenHeader jwtAccessTokenHeader = new JwtTokenHeader(AccessTokenProperties.HEADER_STRING, request);
+        JwtTokenHeader jwtRefreshTokenHeader = new JwtTokenHeader(RefreshTokenProperties.HEADER_STRING, request);
         try{
             RequestToken requestToken = new RequestToken(jwtAccessTokenHeader);
             return requestToken.getElementInToken(requestToken.getToken(), "username");
         }catch (Exception e){
+            if (jwtRefreshTokenHeader.getHeaderData() != null){
+                RequestToken requestToken = new RequestToken(jwtRefreshTokenHeader);
+                return requestToken.getElementInToken(requestToken.getToken(), "username");
+            }
             throw new RuntimeException("권한없음");
         }
     }
