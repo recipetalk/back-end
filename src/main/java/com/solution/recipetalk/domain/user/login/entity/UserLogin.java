@@ -16,11 +16,13 @@ import org.hibernate.annotations.SQLDelete;
 @SQLDelete(sql = "UPDATE user_login SET is_deleted = true WHERE id = ?")
 public class UserLogin extends SoftDeleteEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @PrimaryKeyJoinColumn(name = "user_id", referencedColumnName = "user_detail_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "user_id")
     private UserDetail userDetail;
 
     @Column(name = "username", nullable = false)
@@ -31,4 +33,5 @@ public class UserLogin extends SoftDeleteEntity {
 
     @Column(name = "pw_salt", nullable = false)
     private String pwSalt;
+
 }
