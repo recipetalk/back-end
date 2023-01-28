@@ -3,6 +3,9 @@ package com.solution.recipetalk.config.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solution.recipetalk.config.auth.PrincipalDetails;
 import com.solution.recipetalk.config.jwt.token.ResponseToken;
+import com.solution.recipetalk.config.jwt.token.properties.AccessTokenProperties;
+import com.solution.recipetalk.config.jwt.token.properties.CommonTokenProperties;
+import com.solution.recipetalk.config.jwt.token.properties.RefreshTokenProperties;
 import com.solution.recipetalk.domain.user.login.entity.UserLogin;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -50,8 +53,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         ResponseToken responseToken = new ResponseToken(principalDetails);
 
         String accessToken = responseToken.getAccessToken();
+        String refreshToken = responseToken.makeToken(RefreshTokenProperties.HEADER_STRING, RefreshTokenProperties.EXPIRE_TIME);
 
-        response.addHeader("Authorization", "Bearer " + accessToken);
+        response.addHeader(AccessTokenProperties.HEADER_STRING, CommonTokenProperties.TOKEN_PREFIX + accessToken);
+        response.addHeader(RefreshTokenProperties.HEADER_STRING, CommonTokenProperties.TOKEN_PREFIX + refreshToken);
 
     }
 }
