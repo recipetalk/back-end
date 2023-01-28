@@ -35,6 +35,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .headers().frameOptions().disable()
+                .and()
                 .csrf().disable()
                 .apply(new MyCustomDsl())
                 .and()
