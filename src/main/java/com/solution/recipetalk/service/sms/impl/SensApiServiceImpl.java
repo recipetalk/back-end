@@ -2,7 +2,7 @@ package com.solution.recipetalk.service.sms.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.solution.recipetalk.domain.sms.PhoneAuthentication;
+import com.solution.recipetalk.domain.sms.PhoneAuthenticationSMS;
 import com.solution.recipetalk.dto.sms.PhoneAuthenticationRequestSMSDTO;
 import com.solution.recipetalk.exception.signup.AuthRequestTimeoutException;
 import com.solution.recipetalk.service.sms.SMSRequestService;
@@ -32,7 +32,7 @@ import java.security.NoSuchAlgorithmException;
 public class SensApiServiceImpl implements SMSRequestService {
 
     @Autowired
-    private final PhoneAuthentication phoneAuthentication;
+    private final PhoneAuthenticationSMS phoneAuthentication;
     @Value("${open-api.naver-sms.service-id}") private final String serviceId;
     @Value("${open-api.naver-sms.access-key}") private final String accessKey;
     @Value("${open-api.naver-sms.secret-key}") private final String secretKey;
