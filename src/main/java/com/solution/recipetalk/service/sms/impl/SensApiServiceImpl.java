@@ -4,8 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solution.recipetalk.domain.sms.PhoneAuthenticationSMS;
 import com.solution.recipetalk.dto.sms.PhoneAuthenticationRequestSMSDTO;
-import com.solution.recipetalk.exception.signup.AuthRequestTimeoutException;
+import com.solution.recipetalk.exception.signup.SMSAuthRequestTimeoutException;
 import com.solution.recipetalk.service.sms.SMSRequestService;
+import com.solution.recipetalk.service.user.ModifyAuthenticationService;
 import com.solution.recipetalk.util.RandomNumberProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class SensApiServiceImpl implements SMSRequestService {
     @Value("${open-api.naver-sms.access-key}") private final String accessKey;
     @Value("${open-api.naver-sms.secret-key}") private final String secretKey;
     @Value("${open-api.naver-sms.sender-phone-number}") private final String fromPhoneNum;
+    @Value("${open-api.naver-sms.activate}") private final Boolean SMSActive;
 
     @Override
     public ResponseEntity<?> sendSMS(String toPhoneNum) {
@@ -47,8 +49,14 @@ public class SensApiServiceImpl implements SMSRequestService {
 
         String randNum = RandomNumberProvider.getRandNum(6);
 
-        //TODO : 인증번호 저장 확인해야 함. 인증 시간도 같이 포함하도록 하고, 당일 최대 인증 가능 횟수는 휴대폰 번호당 5회로 지정하도록.
+        if(!SMSActive){ // 휴대폰 인증 비활성화
+            randNum = "000000";
+            modifyAuthenticationService.modifyAuthentication(toPhoneNum, randNum);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        }
 
+        //TODO : 인증번호 저장 확인해야 함. 인증 시간도 같이 포함하도록 하고, 당일 최대 인증 가능 횟수는 휴대폰 번호당 5회로 지정하도록.
+        modifyAuthenticationService.modifyAuthentication(toPhoneNum, randNum);
 
         PhoneAuthenticationRequestSMSDTO dto = phoneAuthentication.toDTO(fromPhoneNum, toPhoneNum ,randNum);
 
