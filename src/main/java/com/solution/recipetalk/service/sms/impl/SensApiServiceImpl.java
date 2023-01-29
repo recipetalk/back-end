@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solution.recipetalk.domain.sms.PhoneAuthenticationSMS;
 import com.solution.recipetalk.dto.sms.PhoneAuthenticationRequestSMSDTO;
-import com.solution.recipetalk.exception.signup.SMSAuthRequestTimeoutException;
+import com.solution.recipetalk.exception.signup.SMSAPIRequestTimeoutException;
 import com.solution.recipetalk.service.sms.SMSRequestService;
 import com.solution.recipetalk.service.user.ModifyAuthenticationService;
 import com.solution.recipetalk.util.RandomNumberProvider;
@@ -85,7 +85,7 @@ public class SensApiServiceImpl implements SMSRequestService {
 
         } catch (URISyntaxException | JsonProcessingException | NoSuchAlgorithmException | InvalidKeyException e) {
             log.error("SMS 발송 준비 중 예외 발생", e);
-            throw new SMSAuthRequestTimeoutException();
+            throw new SMSAPIRequestTimeoutException();
 
         }
     }
