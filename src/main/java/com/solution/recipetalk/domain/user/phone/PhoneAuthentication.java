@@ -1,11 +1,15 @@
 package com.solution.recipetalk.domain.user.phone;
 
 import com.solution.recipetalk.domain.common.AuditingEntity;
+import com.solution.recipetalk.exception.signup.PhoneAuthNotEqualException;
+import com.solution.recipetalk.exception.signup.PhoneAuthRequestTimeoutException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -40,6 +44,19 @@ public class PhoneAuthentication extends AuditingEntity {
 
     public void updateAuthNum(String authNum){
         this.authNum = authNum;
+    }
+
+    public void authComplete() {
+        isAuthentication = true;
+    }
+
+    public void isValid(){
+        if (count > 5 ){
+            throw new PhoneAuthNotEqualException();
+        }
+        if (!getModifiedDate().isAfter(LocalDateTime.now().minusMonths(4))) {
+            throw new PhoneAuthRequestTimeoutException();
+        }
     }
 
 }
