@@ -1,6 +1,9 @@
 package com.solution.recipetalk.controller.user;
 
 
+import com.solution.recipetalk.dto.user.PhoneAuthRequestDTO;
+import com.solution.recipetalk.dto.user.PhoneAuthVerificationRequestDTO;
+import com.solution.recipetalk.service.sms.SMSRequestService;
 import com.solution.recipetalk.config.jwt.JwtTokenHeader;
 import com.solution.recipetalk.config.jwt.token.RequestToken;
 import com.solution.recipetalk.config.jwt.token.properties.AccessTokenProperties;
@@ -9,9 +12,13 @@ import com.solution.recipetalk.dto.user.SignUpUserReqDto;
 import com.solution.recipetalk.service.user.FindUserService;
 import com.solution.recipetalk.service.user.RegisterUserService;
 import jakarta.servlet.http.HttpServletRequest;
+import com.solution.recipetalk.service.user.VerifyAuthenticationService;
+import jakarta.validation.Valid;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +35,14 @@ public class UserController {
     @Autowired
     private final RegisterUserService registerUserService;
 
+    @Autowired
+    private final SMSRequestService smsRequestService;
+
+    @Autowired
+    private final VerifyAuthenticationService verifyAuthenticationService;
+
     @GetMapping("/signup/{id}")
-    public ResponseEntity<?> duplicatedUserCheck(@PathVariable("id")String userName) {
+    public ResponseEntity<?> duplicatedUserCheck(@PathVariable("id") @NonNull String userName) {
         return findUserService.findDuplicatedUsernameInUserLogin(userName);
     }
 
@@ -57,5 +70,15 @@ public class UserController {
             }
             throw new RuntimeException("권한없음");
         }
+    }
+
+    @PostMapping("/signup/phone")
+    public ResponseEntity<?> sendPhoneAuthSMS(@RequestBody @Valid @NonNull PhoneAuthRequestDTO dto) {
+        return smsRequestService.sendSMS(dto.getPhoneNum());
+    }
+
+    @PatchMapping("/signup/phone")
+    public ResponseEntity<?> verifyPHoneAuth(@RequestBody @Valid @NonNull PhoneAuthVerificationRequestDTO dto) {
+        return verifyAuthenticationService.verifyAuthentication(dto.getPhoneNum(), dto.getAuthNum());
     }
 }
