@@ -51,7 +51,11 @@ public class PhoneAuthentication extends AuditingEntity {
     }
 
     public void isValid(){
-        if (count > 5 ){
+        if(count == null){
+            return;
+        }
+
+        if ( count > 5 ){
             throw new PhoneAuthNotEqualException();
         }
         if (!getModifiedDate().isAfter(LocalDateTime.now().minusMonths(4))) {
