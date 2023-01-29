@@ -34,6 +34,8 @@ public class SensApiServiceImpl implements SMSRequestService {
 
     @Autowired
     private final PhoneAuthenticationSMS phoneAuthentication;
+    @Autowired
+    private final ModifyAuthenticationService modifyAuthenticationService;
     @Value("${open-api.naver-sms.service-id}") private final String serviceId;
     @Value("${open-api.naver-sms.access-key}") private final String accessKey;
     @Value("${open-api.naver-sms.secret-key}") private final String secretKey;
@@ -83,7 +85,7 @@ public class SensApiServiceImpl implements SMSRequestService {
 
         } catch (URISyntaxException | JsonProcessingException | NoSuchAlgorithmException | InvalidKeyException e) {
             log.error("SMS 발송 준비 중 예외 발생", e);
-            throw new AuthRequestTimeoutException();
+            throw new SMSAuthRequestTimeoutException();
 
         }
     }
