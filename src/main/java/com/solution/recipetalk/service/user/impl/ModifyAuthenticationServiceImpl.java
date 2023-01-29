@@ -18,16 +18,21 @@ public class ModifyAuthenticationServiceImpl implements ModifyAuthenticationServ
 
     @Override
     public void modifyAuthentication(String phoneNum, String authNum) {
-        Optional<PhoneAuthentication> find = findPhoneAuthenticationIfNotNull(phoneNum);
-        PhoneAuthentication getData = find.orElse(PhoneAuthentication.builder().phoneNum(phoneNum).authNum(authNum).build());
+
+        PhoneAuthentication getData = findPhoneAuthIfNullCreatePhoneAuth(phoneNum, authNum);
+        getData = phoneAuthenticationRepository.save(getData);
 
         getData.updateAuthNum(authNum);
         getData.increaseCount();
 
-        phoneAuthenticationRepository.save(getData);
     }
 
-    private Optional<PhoneAuthentication> findPhoneAuthenticationIfNotNull(String phoneNum) {
-        return phoneAuthenticationRepository.findById(phoneNum);
+    private PhoneAuthentication findPhoneAuthIfNullCreatePhoneAuth(String phoneNum, String authNum) {
+        Optional<PhoneAuthentication> find = phoneAuthenticationRepository.findById(phoneNum);
+        PhoneAuthentication getData = find.orElse(PhoneAuthentication.builder().phoneNum(phoneNum).authNum(authNum).build());
+
+        getData.isValid();
+
+        return getData;
     }
 }
