@@ -25,4 +25,10 @@ public class GlobalException {
         CustomErrorResponse errorResponse = new CustomErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
         return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
     }
+
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException exception){
+        CustomErrorResponse errorResponse = new CustomErrorResponse(HttpStatus.FORBIDDEN, "정확하게 입력하였는지 확인바랍니다.");
+        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
+    }
 }
