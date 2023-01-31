@@ -5,40 +5,36 @@ import com.solution.recipetalk.domain.board.repository.BoardRepository;
 import com.solution.recipetalk.domain.comment.entity.Comment;
 import com.solution.recipetalk.domain.comment.repository.CommentRepository;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
-import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
-import com.solution.recipetalk.dto.comment.CommentDTO;
-import com.solution.recipetalk.exception.CustomException;
+import com.solution.recipetalk.dto.comment.CommentCreateDTO;
+import com.solution.recipetalk.exception.board.CannotFindBoardException;
 import com.solution.recipetalk.service.comment.RegisterCommentService;
+import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
-
-import static com.solution.recipetalk.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-@Validated
 public class RegisterCommentServiceImpl implements RegisterCommentService {
 
+    @Autowired
     private final CommentRepository commentRepository;
-    private final UserDetailRepository userDetailRepository;
+
+    @Autowired
     private final BoardRepository boardRepository;
 
     @Override
-    public ResponseEntity<?> addComment(Long boardId, CommentDTO.Create comment) {
+    public ResponseEntity<?> addComment(Long boardId, CommentCreateDTO comment) {
         validateCommentDescription(comment.getDescription());
 
-        // TODO: writer와 board validation 로직 필요
-        UserDetail writer = userDetailRepository.findById(comment.getWriterId()).orElseThrow(
-                () -> new CustomException(NOT_FOUND)
-        );
+        UserDetail writer = ContextHolder.getUserDetail();
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new CustomException(NOT_FOUND)
+                CannotFindBoardException::new
         );
 
         Comment newComment = Comment.builder()
@@ -60,7 +56,7 @@ public class RegisterCommentServiceImpl implements RegisterCommentService {
 
     private void validateCommentDescription(String description) {
         /*
-        * TODO: SQL Injection, XSS 등의 방지 위한 댓글 내용 validation 구현
+        * TODO : script는 입력 불가
         */
     }
 }
