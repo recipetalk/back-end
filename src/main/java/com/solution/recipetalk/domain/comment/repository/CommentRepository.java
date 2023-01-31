@@ -6,8 +6,11 @@ import com.solution.recipetalk.domain.user.entity.UserDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllByBoard(Board board);
     List<Comment> findAllByWriter(UserDetail writer);
+
+    Optional<Comment> findByBoardAndId(Board board, Long commentId);
 }
