@@ -13,4 +13,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllByWriter(UserDetail writer);
 
     Optional<Comment> findByBoardAndId(Board board, Long commentId);
+
+    void deleteAllByBoard(Board board);
 }
