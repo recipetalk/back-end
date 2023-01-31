@@ -2,15 +2,14 @@ package com.solution.recipetalk.service.user.impl;
 
 import com.solution.recipetalk.domain.user.phone.PhoneAuthentication;
 import com.solution.recipetalk.domain.user.repository.PhoneAuthenticationRepository;
-import com.solution.recipetalk.exception.signup.PhoneAuthCountOverException;
 import com.solution.recipetalk.exception.signup.PhoneAuthEntityNotFoundException;
 import com.solution.recipetalk.exception.signup.PhoneAuthNotEqualException;
 import com.solution.recipetalk.service.user.VerifyAuthenticationService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 

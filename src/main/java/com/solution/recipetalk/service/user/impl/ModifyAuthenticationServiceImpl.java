@@ -3,9 +3,10 @@ package com.solution.recipetalk.service.user.impl;
 import com.solution.recipetalk.domain.user.phone.PhoneAuthentication;
 import com.solution.recipetalk.domain.user.repository.PhoneAuthenticationRepository;
 import com.solution.recipetalk.service.user.ModifyAuthenticationService;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
