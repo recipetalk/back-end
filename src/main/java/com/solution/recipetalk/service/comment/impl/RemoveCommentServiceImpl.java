@@ -18,8 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -38,8 +36,7 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
 
         validateWhoIsRemovingComment(comment.getWriter());
 
-        comment.softDeleteComment(true);
-        commentRepository.save(comment);
+        commentRepository.deleteById(commentId);
 
         return ResponseEntity.ok("댓글이 삭제되었습니다");
     }
@@ -49,12 +46,7 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
         validateIsAdmin();
 
         Board board = boardRepository.findById(boardId).orElseThrow(CannotFindBoardException::new);
-        List<Comment> commentsByBoard = commentRepository.findAllByBoard(board);
-
-        for(Comment comment : commentsByBoard) {
-            comment.softDeleteComment(true);
-            commentRepository.save(comment);
-        }
+        commentRepository.deleteAllByBoard(board);
 
         return ResponseEntity.ok("게시물의 댓글이 모두 삭제되었습니다");
     }
@@ -63,12 +55,7 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
     public ResponseEntity<?> removeAllComments() {
         validateIsAdmin();
 
-        List<Comment> allComments = commentRepository.findAll();
-
-        for(Comment comment : allComments) {
-            comment.softDeleteComment(true);
-            commentRepository.save(comment);
-        }
+        commentRepository.deleteAll();
 
         return ResponseEntity.ok("모든 댓글이 삭제되었습니다");
     }
