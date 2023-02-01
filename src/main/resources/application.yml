@@ -17,3 +17,11 @@ spring:
         highlight_sql: true
         format_sql: true
 
+###추가된 내용###
+open-api:
+  naver-sms:
+    activate: false
+    service-id: ncp:sms:kr:300119697795:recipetalk
+    access-key: 642jLgjDzsEfWz9e4F6X
+    secret-key: pJ5FdAYlavhFdmv9zvKeUugKtw5CU8WX0AG7E0EO
+    sender-phone-number: '01031798788' #발신자 번호 : 사전 인증된 휴대폰번호로만 설정가능.
