@@ -6,8 +6,8 @@ import com.solution.recipetalk.domain.user.entity.RoleType;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.dto.comment.CommentModifyDTO;
 import com.solution.recipetalk.dto.comment.CommentResponseDTO;
-import com.solution.recipetalk.exception.comment.NoCommentFoundException;
-import com.solution.recipetalk.exception.comment.NotAuthorizedToModifyComment;
+import com.solution.recipetalk.exception.comment.CommentNotFoundException;
+import com.solution.recipetalk.exception.comment.NotAuthorizedToModifyCommentException;
 import com.solution.recipetalk.service.comment.EditCommentService;
 import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,9 @@ public class EditCommentServiceImpl implements EditCommentService {
 
     @Override
     public ResponseEntity<?> modifyCommentById(Long boardId, Long commentId, CommentModifyDTO commentModifyDTO) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(NoCommentFoundException::new);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+
+        comment.checkDeletedComment();
 
         validateWhoIsModifyingComment(comment.getWriter());
 
@@ -40,7 +42,7 @@ public class EditCommentServiceImpl implements EditCommentService {
         UserDetail currentlyLoginUser = ContextHolder.getUserDetail();
         if(!currentlyLoginUser.equals(writer) && !currentlyLoginUser.getRole().equals(RoleType.ADMIN)) {
             // 작성자와 현재 로그인 한 사람이 다르고 관리자가 아니면 예외발생
-            throw new NotAuthorizedToModifyComment();
+            throw new NotAuthorizedToModifyCommentException();
         }
     }
 

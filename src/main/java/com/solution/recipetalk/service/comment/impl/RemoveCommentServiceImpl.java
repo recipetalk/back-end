@@ -7,9 +7,9 @@ import com.solution.recipetalk.domain.comment.repository.CommentRepository;
 import com.solution.recipetalk.domain.user.entity.RoleType;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.exception.board.CannotFindBoardException;
-import com.solution.recipetalk.exception.comment.NoCommentFoundException;
+import com.solution.recipetalk.exception.comment.CommentNotFoundException;
 import com.solution.recipetalk.exception.comment.NotAdminUserException;
-import com.solution.recipetalk.exception.comment.NotAuthorizedToModifyComment;
+import com.solution.recipetalk.exception.comment.NotAuthorizedToModifyCommentException;
 import com.solution.recipetalk.service.comment.RemoveCommentService;
 import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,9 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
     @Override
     public ResponseEntity<?> removeCommentByIdAndBoardId(Long boardId, Long commentId) {
         Board board = boardRepository.findById(boardId).orElseThrow(CannotFindBoardException::new);
-        Comment comment = commentRepository.findByBoardAndId(board, commentId).orElseThrow(NoCommentFoundException::new);
+        Comment comment = commentRepository.findByBoardAndId(board, commentId).orElseThrow(CommentNotFoundException::new);
+
+        comment.checkDeletedComment();
 
         validateWhoIsRemovingComment(comment.getWriter());
 
@@ -63,7 +65,7 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
     private void validateWhoIsRemovingComment(UserDetail writer) {
         UserDetail currentlyLoginUser = ContextHolder.getUserDetail();
         if(currentlyLoginUser.equals(writer) && !currentlyLoginUser.getRole().equals(RoleType.ADMIN)) {
-            throw new NotAuthorizedToModifyComment();
+            throw new NotAuthorizedToModifyCommentException();
         }
     }
 
