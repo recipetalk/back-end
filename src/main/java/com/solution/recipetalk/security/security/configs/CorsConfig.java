@@ -1,4 +1,4 @@
-package com.solution.recipetalk.config;
+package com.solution.recipetalk.security.security.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

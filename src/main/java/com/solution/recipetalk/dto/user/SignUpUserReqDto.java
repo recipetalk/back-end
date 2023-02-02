@@ -1,10 +1,9 @@
 package com.solution.recipetalk.dto.user;
 
-import com.solution.recipetalk.domain.user.entity.RoleType;
+import com.solution.recipetalk.domain.user.login.entity.RoleType;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
-import com.solution.recipetalk.domain.user.entity.UserProvider;
+import com.solution.recipetalk.domain.user.login.entity.UserProvider;
 import com.solution.recipetalk.domain.user.login.entity.UserLogin;
-import com.solution.recipetalk.util.PasswordUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,8 +22,6 @@ public class SignUpUserReqDto {
                 .nickname(nickname)
                 .phoneNum(phoneNum)
                 .profileImageURI("")
-                .provider(UserProvider.NONE)
-                .role(RoleType.USER)
                 .build();
     }
 
@@ -32,8 +29,9 @@ public class SignUpUserReqDto {
         return UserLogin.builder()
                 .userDetail(userDetail)
                 .password(encryptedPassword)
-                .pwSalt(PasswordUtils.generateSalt())
                 .username(username)
+                .provider(UserProvider.NONE)
+                .role(RoleType.USER)
                 .build();
     }
 }
