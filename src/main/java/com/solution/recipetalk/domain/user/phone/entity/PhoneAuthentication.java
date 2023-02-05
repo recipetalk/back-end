@@ -1,4 +1,4 @@
-package com.solution.recipetalk.domain.user.phone;
+package com.solution.recipetalk.domain.user.phone.entity;
 
 import com.solution.recipetalk.domain.common.AuditingEntity;
 import com.solution.recipetalk.exception.signup.PhoneAuthNotEqualException;
