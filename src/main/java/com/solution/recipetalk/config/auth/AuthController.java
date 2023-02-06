@@ -49,4 +49,9 @@ public class AuthController {
         return verifyAuthenticationService.verifyAuthentication(dto.getPhoneNum(), dto.getAuthNum());
     }
 
+    @GetMapping("/signup/{id}")
+    public ResponseEntity<?> duplicatedUserCheck(@PathVariable("id") @NonNull String userName) {
+        return findUserService.findDuplicatedUsernameInUserLogin(userName);
+    }
+
 }
