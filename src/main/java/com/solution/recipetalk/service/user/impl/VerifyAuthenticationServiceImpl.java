@@ -1,7 +1,7 @@
 package com.solution.recipetalk.service.user.impl;
 
-import com.solution.recipetalk.domain.user.phone.PhoneAuthentication;
-import com.solution.recipetalk.domain.user.repository.PhoneAuthenticationRepository;
+import com.solution.recipetalk.domain.user.phone.entity.PhoneAuthentication;
+import com.solution.recipetalk.domain.user.phone.repository.PhoneAuthenticationRepository;
 import com.solution.recipetalk.exception.signup.PhoneAuthEntityNotFoundException;
 import com.solution.recipetalk.exception.signup.PhoneAuthNotEqualException;
 import com.solution.recipetalk.service.user.VerifyAuthenticationService;
@@ -36,11 +36,7 @@ public class VerifyAuthenticationServiceImpl implements VerifyAuthenticationServ
     }
 
     private PhoneAuthentication findByIdExceptionHandler(String phoneNum) {
-        Optional<PhoneAuthentication> byId = phoneAuthenticationRepository.findById(phoneNum);
-        if (byId.isEmpty()){
-            throw new PhoneAuthEntityNotFoundException();
-        }
-        return byId.get();
+        return phoneAuthenticationRepository.findById(phoneNum).orElseThrow(PhoneAuthEntityNotFoundException::new);
     }
 
 

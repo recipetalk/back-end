@@ -1,7 +1,7 @@
 package com.solution.recipetalk.service.user.impl;
 
-import com.solution.recipetalk.domain.user.phone.PhoneAuthentication;
-import com.solution.recipetalk.domain.user.repository.PhoneAuthenticationRepository;
+import com.solution.recipetalk.domain.user.phone.entity.PhoneAuthentication;
+import com.solution.recipetalk.domain.user.phone.repository.PhoneAuthenticationRepository;
 import com.solution.recipetalk.service.user.ModifyAuthenticationService;
 
 import lombok.RequiredArgsConstructor;

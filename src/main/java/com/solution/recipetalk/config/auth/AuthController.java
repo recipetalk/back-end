@@ -35,7 +35,7 @@ public class AuthController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUpUser(@RequestBody SignUpUserReqDto signUpUserReqDto){
+    public ResponseEntity<?> signUpUser(@RequestBody @NonNull SignUpUserReqDto signUpUserReqDto){
         return registerUserService.addUser(signUpUserReqDto);
     }
 
@@ -45,8 +45,13 @@ public class AuthController {
     }
 
     @PatchMapping("/signup/phone")
-    public ResponseEntity<?> verifyPHoneAuth(@RequestBody @Valid @NonNull PhoneAuthVerificationRequestDTO dto) {
+    public ResponseEntity<?> verifyPhoneAuth(@RequestBody @Valid @NonNull PhoneAuthVerificationRequestDTO dto) {
         return verifyAuthenticationService.verifyAuthentication(dto.getPhoneNum(), dto.getAuthNum());
+    }
+
+    @GetMapping("/signup/{id}")
+    public ResponseEntity<?> duplicatedUserCheck(@PathVariable("id") @NonNull String userName) {
+        return findUserService.findDuplicatedUsernameInUserLogin(userName);
     }
 
 }

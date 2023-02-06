@@ -31,10 +31,6 @@ public class UserController {
     private final VerifyAuthenticationService verifyAuthenticationService;
 
 
-    @GetMapping("/signup/{id}")
-    public ResponseEntity<?> duplicatedUserCheck(@PathVariable("id") @NonNull String userName) {
-        return findUserService.findDuplicatedUsernameInUserLogin(userName);
-    }
 
 
 }
