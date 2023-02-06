@@ -3,6 +3,7 @@ package com.solution.recipetalk.domain.user.phone.entity;
 import com.solution.recipetalk.domain.common.AuditingEntity;
 import com.solution.recipetalk.exception.signup.PhoneAuthNotEqualException;
 import com.solution.recipetalk.exception.signup.PhoneAuthRequestTimeoutException;
+import com.solution.recipetalk.exception.signup.PhoneVerifiedException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
@@ -60,6 +61,10 @@ public class PhoneAuthentication extends AuditingEntity {
         }
         if (!getModifiedDate().isAfter(LocalDateTime.now().minusMonths(4))) {
             throw new PhoneAuthRequestTimeoutException();
+        }
+
+        if(isAuthentication != null && isAuthentication){
+            throw new PhoneVerifiedException();
         }
     }
 
