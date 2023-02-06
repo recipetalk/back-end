@@ -59,12 +59,14 @@ public class PhoneAuthentication extends AuditingEntity {
         if ( count > 5 ){
             throw new PhoneAuthNotEqualException();
         }
-        if (!getModifiedDate().isAfter(LocalDateTime.now().minusMonths(4))) {
-            throw new PhoneAuthRequestTimeoutException();
-        }
-
         if(isAuthentication != null && isAuthentication){
             throw new PhoneVerifiedException();
+        }
+    }
+
+    public void verifyHandlerWithLastModifiedDate() {
+        if (!getModifiedDate().isAfter(LocalDateTime.now().minusMonths(4))) {
+            throw new PhoneAuthRequestTimeoutException();
         }
     }
 

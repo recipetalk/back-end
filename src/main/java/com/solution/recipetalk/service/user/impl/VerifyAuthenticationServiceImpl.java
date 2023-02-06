@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -26,6 +25,8 @@ public class VerifyAuthenticationServiceImpl implements VerifyAuthenticationServ
         PhoneAuthentication phoneAuthenticationData = findByIdExceptionHandler(phoneNum);
 
         phoneAuthenticationData.isValid();
+
+        phoneAuthenticationData.verifyHandlerWithLastModifiedDate();
 
         if(!authNum.equals(phoneAuthenticationData.getAuthNum())){
             throw new PhoneAuthNotEqualException();
