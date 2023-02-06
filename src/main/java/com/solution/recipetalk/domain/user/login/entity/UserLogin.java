@@ -31,7 +31,12 @@ public class UserLogin extends SoftDeleteEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "pw_salt", nullable = false)
-    private String pwSalt;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provider")
+    private UserProvider provider;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private RoleType role;
 
 }

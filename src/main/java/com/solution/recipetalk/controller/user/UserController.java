@@ -1,27 +1,36 @@
 package com.solution.recipetalk.controller.user;
 
 
+import com.solution.recipetalk.service.sms.SMSRequestService;
 import com.solution.recipetalk.service.user.FindUserService;
+import com.solution.recipetalk.service.user.RegisterUserService;
+import com.solution.recipetalk.service.user.VerifyAuthenticationService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
 @Validated
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
     private final FindUserService findUserService;
 
-    @GetMapping("/signup/{id}")
-    public ResponseEntity<?> duplicatedUserCheck(@PathVariable("id")String userName) {
-        return findUserService.findDuplicatedUsernameInUserLogin(userName);
-    }
+    @Autowired
+    private final RegisterUserService registerUserService;
+
+    @Autowired
+    private final SMSRequestService smsRequestService;
+
+    @Autowired
+    private final VerifyAuthenticationService verifyAuthenticationService;
+
+
+
+
 }

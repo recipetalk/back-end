@@ -31,14 +31,6 @@ public class UserDetail extends SoftDeleteEntity {
     @Pattern(regexp = "(01[016789])(\\d{3,4})(\\d{4})")
     private String phoneNum;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "provider")
-    private UserProvider provider;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private RoleType role;
-
     @OneToOne(mappedBy = "userDetail", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private UserLogin userLogin;
 
