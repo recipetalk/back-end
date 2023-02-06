@@ -4,11 +4,10 @@ import com.solution.recipetalk.domain.board.entity.Board;
 import com.solution.recipetalk.domain.board.repository.BoardRepository;
 import com.solution.recipetalk.domain.comment.entity.Comment;
 import com.solution.recipetalk.domain.comment.repository.CommentRepository;
-import com.solution.recipetalk.domain.user.entity.RoleType;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
+import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.exception.board.CannotFindBoardException;
 import com.solution.recipetalk.exception.comment.CommentNotFoundException;
-import com.solution.recipetalk.exception.comment.NotAdminUserException;
 import com.solution.recipetalk.exception.comment.NotAuthorizedToModifyCommentException;
 import com.solution.recipetalk.service.comment.RemoveCommentService;
 import com.solution.recipetalk.util.ContextHolder;
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @RequiredArgsConstructor
 @Service
@@ -27,6 +27,9 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
     private final CommentRepository commentRepository;
 
     @Autowired
+    private final UserDetailRepository userDetailRepository;
+
+    @Autowired
     private final BoardRepository boardRepository;
 
     @Override
@@ -34,9 +37,13 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
         Board board = boardRepository.findById(boardId).orElseThrow(CannotFindBoardException::new);
         Comment comment = commentRepository.findByBoardAndId(board, commentId).orElseThrow(CommentNotFoundException::new);
 
+        Long userLoginId = ContextHolder.getUserLoginId();
+        UserDetail currentLoginUser = userDetailRepository.findById(userLoginId).orElse(null);
+
         comment.checkDeletedComment();
 
-        validateWhoIsRemovingComment(comment.getWriter());
+        assert currentLoginUser != null;
+        validateWhoIsRemovingComment(comment.getWriter(), currentLoginUser);
 
         commentRepository.deleteById(commentId);
 
@@ -45,7 +52,6 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
 
     @Override
     public ResponseEntity<?> removeAllCommentsOfBoard(Long boardId) {
-        validateIsAdmin();
 
         Board board = boardRepository.findById(boardId).orElseThrow(CannotFindBoardException::new);
         commentRepository.deleteAllByBoard(board);
@@ -55,24 +61,15 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
 
     @Override
     public ResponseEntity<?> removeAllComments() {
-        validateIsAdmin();
 
         commentRepository.deleteAll();
 
         return ResponseEntity.ok("모든 댓글이 삭제되었습니다");
     }
 
-    private void validateWhoIsRemovingComment(UserDetail writer) {
-        UserDetail currentlyLoginUser = ContextHolder.getUserDetail();
-        if(currentlyLoginUser.equals(writer) && !currentlyLoginUser.getRole().equals(RoleType.ADMIN)) {
+    private void validateWhoIsRemovingComment(UserDetail writer, UserDetail currentLoginUser) {
+        if(currentLoginUser.equals(writer)) {
             throw new NotAuthorizedToModifyCommentException();
-        }
-    }
-
-    private void validateIsAdmin() {
-        UserDetail currentlyLoginUser = ContextHolder.getUserDetail();
-        if(!currentlyLoginUser.getRole().equals(RoleType.ADMIN)) {
-            throw new NotAdminUserException();
         }
     }
 }

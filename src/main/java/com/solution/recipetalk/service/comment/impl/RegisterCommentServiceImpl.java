@@ -5,6 +5,7 @@ import com.solution.recipetalk.domain.board.repository.BoardRepository;
 import com.solution.recipetalk.domain.comment.entity.Comment;
 import com.solution.recipetalk.domain.comment.repository.CommentRepository;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
+import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.dto.comment.CommentCreateDTO;
 import com.solution.recipetalk.exception.board.CannotFindBoardException;
 import com.solution.recipetalk.service.comment.RegisterCommentService;
@@ -28,15 +29,21 @@ public class RegisterCommentServiceImpl implements RegisterCommentService {
     @Autowired
     private final BoardRepository boardRepository;
 
+    @Autowired
+    private final UserDetailRepository userDetailRepository;
+
     @Override
     public ResponseEntity<?> addComment(Long boardId, CommentCreateDTO comment) {
         validateCommentDescription(comment.getDescription());
 
-        UserDetail writer = ContextHolder.getUserDetail();
+        Long currentLoginUserId= ContextHolder.getUserLoginId();
+        UserDetail writer = userDetailRepository.findById(currentLoginUserId).orElse(null);
+
         Board board = boardRepository.findById(boardId).orElseThrow(
                 CannotFindBoardException::new
         );
 
+        assert writer != null;
         Comment newComment = Comment.builder()
                 .writer(writer)
                 .parentComment(

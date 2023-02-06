@@ -5,6 +5,7 @@ import com.solution.recipetalk.domain.board.repository.BoardRepository;
 import com.solution.recipetalk.domain.comment.entity.Comment;
 import com.solution.recipetalk.domain.comment.repository.CommentRepository;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
+import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.dto.comment.CommentInBoardResponseDTO;
 import com.solution.recipetalk.dto.comment.CommentResponseDTO;
 import com.solution.recipetalk.exception.board.CannotFindBoardException;
@@ -29,6 +30,9 @@ public class FindCommentServiceImpl implements FindCommentService {
     @Autowired
     private final BoardRepository boardRepository;
 
+    @Autowired
+    private final UserDetailRepository userDetailRepository;
+
     @Override
     public ResponseEntity<?> findAllCommentsOfBoard(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
@@ -44,8 +48,11 @@ public class FindCommentServiceImpl implements FindCommentService {
 
     @Override
     public ResponseEntity<?> findCommentsByUser() {
-        UserDetail writer = ContextHolder.getUserDetail();
+        Long currentLoginUserId = ContextHolder.getUserLoginId();
 
+        UserDetail writer = userDetailRepository.findById(currentLoginUserId).orElse(null);
+
+        assert writer != null;
         List<Comment> allByWriter = commentRepository.findAllByWriter(writer);
 
         List<CommentResponseDTO> responseDTOS = allByWriter.stream().map(CommentResponseDTO::toResponse).toList();
