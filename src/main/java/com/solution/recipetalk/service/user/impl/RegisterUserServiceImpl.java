@@ -27,12 +27,14 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 
     @Transactional
     public ResponseEntity<?> addUser(SignUpUserReqDto signUpUserReqDto){
-        if(userLoginRepository.findByUsername(signUpUserReqDto.getUsername()).isPresent()){
+        //휴대폰 중복 혹은 아이디 존재
+        if(userDetailRepository.findByPhoneNum(signUpUserReqDto.getPhoneNum()).isPresent() || userLoginRepository.findByUsername(signUpUserReqDto.getUsername()).isPresent())
             throw new DuplicatedUserException();
-        }
 
+        // 인증 시도조차 없다면 에러
         PhoneAuthentication phoneAuthentication = phoneAuthenticationRepository.findById(signUpUserReqDto.getPhoneNum()).orElseThrow(PhoneAuthEntityNotFoundException::new);
 
+        //인증 되지 않은 유저라면
         if(!phoneAuthentication.getIsAuthentication()){
             throw new PhoneUnverifiedException();
         }
