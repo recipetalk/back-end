@@ -14,6 +14,10 @@ import com.solution.recipetalk.domain.recipe.ingredient.repository.RecipeIngredi
 import com.solution.recipetalk.domain.recipe.repository.RecipeRepository;
 import com.solution.recipetalk.domain.recipe.row.repository.RecipeRowRepository;
 import com.solution.recipetalk.domain.report.repository.ReportRepository;
+import com.solution.recipetalk.domain.user.entity.UserDetail;
+import com.solution.recipetalk.domain.user.login.entity.RoleType;
+import com.solution.recipetalk.domain.user.login.entity.UserLogin;
+import com.solution.recipetalk.domain.user.login.entity.UserProvider;
 import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import jakarta.transaction.Transactional;
@@ -21,7 +25,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -45,9 +52,39 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private final ReportRepository reportRepository;
     private final UserLoginRepository userLoginRepository;
     private final UserDetailRepository userDetailRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        loadUserData();
+    }
 
+    private void loadUserData() {
+        //테스트를 위해 id : 2L로 시작함.
+        createUserDataIfNotNull(2L, "hyunkim", "khj745700", "testtest", "01031798788");
+    }
+
+    private void createUserDataIfNotNull(Long id, String nickname, String username, String password, String phoneNum){
+        Optional<UserDetail> byId = userDetailRepository.findById(id);
+        if(byId.isPresent()){
+            return;
+        }
+        UserDetail userDetail = UserDetail.builder()
+                .nickname(nickname)
+                .id(id)
+                .phoneNum(phoneNum)
+                .profileImageURI("")
+                .build();
+
+        UserLogin userLogin = UserLogin.builder()
+                .userDetail(userDetail)
+                .password(bCryptPasswordEncoder.encode(password))
+                .username(username)
+                .provider(UserProvider.NONE)
+                .role(RoleType.DEV)
+                .build();
+
+        userDetail.setUserLogin(userLogin);
+        userDetailRepository.save(userDetail);
     }
 }
