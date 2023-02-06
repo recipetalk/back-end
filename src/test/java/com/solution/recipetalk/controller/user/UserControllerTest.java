@@ -15,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -47,17 +46,16 @@ class UserControllerTest {
     @Test
     @DisplayName("[USER][GET] 아이디 사용 가능 확인")
     void duplicatedUserCheckIsFalse() throws Exception {
-        mvc.perform(get("/user/signup/test")
+        mvc.perform(get("/auth/signup/test")
             )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.isValid").value("false"));
+                .andExpect(status().isBadRequest());
     }
 
 
     @Test
     @DisplayName("[USER][GET] 아이디 사용 불가 확인")
     void duplicatedUserCheckIsTrue() throws Exception {
-        mvc.perform(get("/user/signup/test1")
+        mvc.perform(get("/auth/signup/test1")
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.isValid").value("true"));
