@@ -3,13 +3,13 @@ package com.solution.recipetalk.domain.recipe.ingredient.entity;
 
 import com.solution.recipetalk.domain.common.AuditingEntity;
 import com.solution.recipetalk.domain.ingredient.entity.Ingredient;
-import com.solution.recipetalk.domain.recipe.ingredient.group.entity.RecipeIngredientGroup;
+import com.solution.recipetalk.domain.recipe.entity.Recipe;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
+
 
 
 @Getter
@@ -31,8 +31,9 @@ public class RecipeIngredient extends AuditingEntity {
     @Column(name = "quantity")
     private Long quantity;
 
-    @OneToMany(mappedBy = "recipeIngredient", fetch = FetchType.LAZY)
-    private List<RecipeIngredientGroup> recipeIngredientGroups;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipe_id", nullable = false)
+    private Recipe recipe;
 
 }
 
