@@ -29,13 +29,13 @@ public class RegisterRecipeServiceImpl implements RegisterRecipeService {
         Long writerId = ContextHolder.getUserLoginId();
         UserDetail writer = userDetailRepository.getReferenceById(writerId);
 
-        Board newBoard = recipeRegisterDTO.toBoardDTO(writer);
+        Board newBoard = recipeRegisterDTO.toBoardEntity(writer);
 
         boardRepository.save(newBoard);
 
         String thumbnailURI = "";
 
-        Recipe newRecipe = recipeRegisterDTO.toRecipeDTO(thumbnailURI, newBoard);
+        Recipe newRecipe = recipeRegisterDTO.toRecipeEntity(thumbnailURI, newBoard);
         newRecipe = recipeRepository.save(newRecipe);
 
 
