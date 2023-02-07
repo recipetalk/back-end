@@ -14,8 +14,6 @@ import java.util.List;
 @Builder
 public class RecipeRowRegisterDTO {
     @NonNull
-    private Long recipeId;
-    @NonNull
     private String description;
 
     //TODO : File valid 기능 필요
