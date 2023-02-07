@@ -20,7 +20,7 @@ public class RecipeController {
     private final RegisterRecipeService registerRecipeService;
 
     @PostMapping("")
-    public ResponseEntity<?> recipeAdd(@RequestBody @Valid @NonNull RecipeRegisterDTO dto) {
+    public ResponseEntity<?> recipeAdd(@Valid @NonNull RecipeRegisterDTO dto) {
         return registerRecipeService.addRecipe(dto);
     }
 }
