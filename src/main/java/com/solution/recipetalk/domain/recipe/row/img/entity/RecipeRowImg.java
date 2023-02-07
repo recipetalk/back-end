@@ -1,4 +1,4 @@
-package com.solution.recipetalk.domain.recipe.row.img;
+package com.solution.recipetalk.domain.recipe.row.img.entity;
 
 import com.solution.recipetalk.domain.common.AuditingEntity;
 import com.solution.recipetalk.domain.image.entity.Image;
