@@ -2,7 +2,7 @@ package com.solution.recipetalk.domain.recipe.entity;
 
 import com.solution.recipetalk.domain.board.entity.Board;
 import com.solution.recipetalk.domain.common.SoftDeleteEntity;
-import com.solution.recipetalk.domain.recipe.ingredient.group.entity.RecipeIngredientGroup;
+import com.solution.recipetalk.domain.recipe.ingredient.entity.RecipeIngredient;
 import com.solution.recipetalk.domain.recipe.row.entity.RecipeRow;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -38,7 +38,7 @@ public class Recipe extends SoftDeleteEntity {
     private Long quantity;
 
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
-    private List<RecipeIngredientGroup> recipeIngredientGroups;
+    private List<RecipeIngredient> recipeIngredients;
 
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
     private List<RecipeRow> recipeRows;

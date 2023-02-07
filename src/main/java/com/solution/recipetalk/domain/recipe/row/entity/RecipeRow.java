@@ -2,7 +2,7 @@ package com.solution.recipetalk.domain.recipe.row.entity;
 
 import com.solution.recipetalk.domain.common.AuditingEntity;
 import com.solution.recipetalk.domain.recipe.entity.Recipe;
-import com.solution.recipetalk.domain.recipe.row.img.RecipeRowImg;
+import com.solution.recipetalk.domain.recipe.row.img.entity.RecipeRowImg;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
