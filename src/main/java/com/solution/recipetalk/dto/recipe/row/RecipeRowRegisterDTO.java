@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 public class RecipeRowRegisterDTO {
     @NonNull
-    private Long boardId;
+    private Long recipeId;
     @NonNull
     private String description;
 
