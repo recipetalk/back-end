@@ -27,7 +27,10 @@ public enum ErrorCode {
 
     // comment
     NO_COMMENT_FOUND(HttpStatus.NOT_FOUND, "C101", "존재하지 않는 댓글입니다"),
-    COMMENT_IS_DELETED(HttpStatus.NOT_FOUND, "C104", "삭제된 댓글입니다.");
+    COMMENT_IS_DELETED(HttpStatus.NOT_FOUND, "C104", "삭제된 댓글입니다."),
+
+    // s3
+    IMAGE_UPLOAD_FAILED_EXCEPTION(HttpStatus.BAD_REQUEST, "I001", "이미지 업로드에 실패했습니다.");
 
     private HttpStatus httpStatus;
     private String message;
