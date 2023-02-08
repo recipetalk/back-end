@@ -32,13 +32,14 @@ public enum ErrorCode {
     // s3
     IMAGE_UPLOAD_FAILED_EXCEPTION(HttpStatus.BAD_REQUEST, "I001", "이미지 업로드에 실패했습니다."),
 
-
     // ingredient
     INGREDIENT_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "IN001", "식재료를 찾을 수 없습니다."),
 
-
     // recipe
-    RECIPE_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "R001", "레시피를 찾을 수 없습니다.");
+    RECIPE_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "R001", "레시피를 찾을 수 없습니다."),
+
+    //user
+    USER_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "U001", "유저를 찾을 수 없습니다.");
     private HttpStatus httpStatus;
     private String message;
     private String code;

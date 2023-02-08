@@ -9,7 +9,6 @@ import com.solution.recipetalk.domain.ingredient.description.repository.Ingredie
 import com.solution.recipetalk.domain.ingredient.repository.IngredientRepository;
 import com.solution.recipetalk.domain.ingredient.trimming.repository.IngredientTrimmingRepository;
 import com.solution.recipetalk.domain.ingredient.trimming.row.repository.IngredientTrimmingRowRepository;
-import com.solution.recipetalk.domain.recipe.ingredient.group.repository.RecipeIngredientGroupRepository;
 import com.solution.recipetalk.domain.recipe.ingredient.repository.RecipeIngredientRepository;
 import com.solution.recipetalk.domain.recipe.repository.RecipeRepository;
 import com.solution.recipetalk.domain.recipe.row.repository.RecipeRowRepository;
@@ -48,7 +47,6 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private final RecipeRepository repository;
     private final RecipeRowRepository recipeRowRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
-    private final RecipeIngredientGroupRepository recipeIngredientGroupRepository;
     private final ReportRepository reportRepository;
     private final UserLoginRepository userLoginRepository;
     private final UserDetailRepository userDetailRepository;

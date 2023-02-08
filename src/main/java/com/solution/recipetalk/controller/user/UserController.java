@@ -1,10 +1,7 @@
 package com.solution.recipetalk.controller.user;
 
 
-import com.solution.recipetalk.service.sms.SMSRequestService;
 import com.solution.recipetalk.service.user.FindUserService;
-import com.solution.recipetalk.service.user.RegisterUserService;
-import com.solution.recipetalk.service.user.VerifyAuthenticationService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +18,9 @@ public class UserController {
     @Autowired
     private final FindUserService findUserService;
 
-    @Autowired
-    private final RegisterUserService registerUserService;
 
-    @Autowired
-    private final SMSRequestService smsRequestService;
-
-    @Autowired
-    private final VerifyAuthenticationService verifyAuthenticationService;
-
-
-
-
+    @GetMapping("/profile/{username}")
+    public ResponseEntity<?> profileDetails(@PathVariable @NonNull String username){
+        return findUserService.findUserProfile(username);
+    }
 }
