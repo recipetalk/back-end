@@ -8,9 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentCreateDTO {
-    @NonNull
-    private Long writerId;
-
     private Long parentCommentId;
 
     @NonNull

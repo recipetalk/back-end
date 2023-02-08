@@ -28,7 +28,7 @@ public class CommentController {
     @Autowired
     private final RemoveCommentService removeCommentService;
 
-    @PostMapping("/{boardId}/comment")
+    @PostMapping("/board/{boardId}/comment")
     public ResponseEntity<?> commentAdd(
             @PathVariable Long boardId
             , @Valid @RequestBody CommentCreateDTO request
