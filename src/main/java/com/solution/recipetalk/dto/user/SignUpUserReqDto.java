@@ -29,6 +29,7 @@ public class SignUpUserReqDto {
                 .nickname(nickname)
                 .phoneNum(phoneNum)
                 .profileImageURI("")
+                .username(username)
                 .build();
     }
 
