@@ -14,4 +14,8 @@ public class ContextHolder {
     public static Long getUserLoginId() {
         return getUserLogin().getId();
     }
+
+    public static String getUsername() {
+        return getUserLogin().getUsername();
+    }
 }

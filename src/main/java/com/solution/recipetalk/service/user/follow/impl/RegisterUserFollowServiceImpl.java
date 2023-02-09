@@ -20,18 +20,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class RegisterUserFollowServiceImpl implements RegisterUserFollowService {
 
     private final UserFollowRepository userFollowRepository;
-    private final UserLoginRepository userLoginRepository;
     private final UserDetailRepository userDetailRepository;
 
     @Override
     public ResponseEntity<?> registerUserFollow(String followee) {
-        UserLogin followeeLogin = userLoginRepository.findByUsername(followee).orElseThrow(UserNotFoundException::new);
+        UserDetail followeeDetail = userDetailRepository.findUserDetailByUsername(followee).orElseThrow(UserNotFoundException::new);
+
         UserLogin followerLogin = ContextHolder.getUserLogin();
 
         UserDetail followerDetail = userDetailRepository.getReferenceById(followerLogin.getId());
 
         UserFollow userFollow = UserFollow.builder().follower(followerDetail)
-                .followee(followeeLogin.getUserDetail())
+                .followee(followeeDetail)
                 .build();
 
         userFollowRepository.save(userFollow);

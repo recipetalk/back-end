@@ -16,13 +16,13 @@ public class UserDetailProfileDTO {
     private String profileImg;
     private Long followNum;
 
-    public static UserDetailProfileDTO toDTO(UserLogin userLogin, UserDetail userDetail, Long followNum){
+    public static UserDetailProfileDTO toDTO(UserDetail userDetail, Long followNum){
         return UserDetailProfileDTO.builder()
                 .description(userDetail.getDescription())
                 .nickname(userDetail.getNickname())
                 .profileImg(userDetail.getProfileImageURI())
                 .followNum(followNum)
-                .username(userLogin.getUsername())
+                .username(userDetail.getUsername())
                 .build();
     }
 }

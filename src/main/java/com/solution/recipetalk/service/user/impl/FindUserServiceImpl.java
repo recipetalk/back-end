@@ -49,13 +49,11 @@ public class FindUserServiceImpl implements FindUserService {
 
     @Override
     public ResponseEntity<?> findUserProfile(String username) {
-        UserLogin findUserLogin = userLoginRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
-
-        UserDetail findUserDetail = findUserLogin.getUserDetail();
+        UserDetail findUserDetail = userDetailRepository.findUserDetailByUsername(username).orElseThrow(UserNotFoundException::new);
 
         Long followCount = userFollowRepository.countByFollowee(findUserDetail);
 
-        UserDetailProfileDTO findUserProfileDTO = UserDetailProfileDTO.toDTO(findUserLogin, findUserDetail, followCount);
+        UserDetailProfileDTO findUserProfileDTO = UserDetailProfileDTO.toDTO(findUserDetail, followCount);
 
         return ResponseEntity.ok(findUserProfileDTO);
     }

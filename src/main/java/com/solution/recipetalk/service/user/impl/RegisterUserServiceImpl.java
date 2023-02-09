@@ -28,7 +28,7 @@ public class RegisterUserServiceImpl implements RegisterUserService {
     @Transactional
     public ResponseEntity<?> addUser(SignUpUserReqDto signUpUserReqDto){
         //휴대폰 중복 혹은 아이디 존재
-        if(userDetailRepository.findByPhoneNum(signUpUserReqDto.getPhoneNum()).isPresent() || userLoginRepository.findByUsername(signUpUserReqDto.getUsername()).isPresent())
+        if(userDetailRepository.findByPhoneNum(signUpUserReqDto.getPhoneNum()).isPresent() || userDetailRepository.findUserDetailByUsername(signUpUserReqDto.getUsername()).isPresent())
             throw new DuplicatedUserException();
 
         // 인증 시도조차 없다면 에러

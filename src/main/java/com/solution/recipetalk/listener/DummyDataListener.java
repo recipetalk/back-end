@@ -71,6 +71,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
                 .nickname(nickname)
                 .id(id)
                 .phoneNum(phoneNum)
+                .username(username)
                 .profileImageURI("")
                 .build();
 

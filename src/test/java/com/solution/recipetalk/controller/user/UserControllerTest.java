@@ -35,7 +35,7 @@ class UserControllerTest {
 
     @BeforeAll
     void setUserDetailAndUserLogin() {
-        UserDetail userDetail = UserDetail.builder().id(1L).nickname("test1").phoneNum("01031798788").profileImageURI("testURI").build();
+        UserDetail userDetail = UserDetail.builder().id(1L).nickname("test1").username("test").phoneNum("01031798788").profileImageURI("testURI").build();
         userDetailRepository.save(userDetail);
 
         UserLogin userLogin = UserLogin.builder().userDetail(userDetail).password("test1").provider(UserProvider.GOOGLE).role(RoleType.DEV).username("test").build();
