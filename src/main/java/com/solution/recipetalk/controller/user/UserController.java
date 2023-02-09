@@ -23,4 +23,6 @@ public class UserController {
     public ResponseEntity<?> profileDetails(@PathVariable @NonNull String username){
         return findUserService.findUserProfile(username);
     }
+
+
 }

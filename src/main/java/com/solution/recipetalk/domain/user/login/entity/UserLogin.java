@@ -12,7 +12,9 @@ import org.hibernate.annotations.SQLDelete;
 @NoArgsConstructor
 @SuperBuilder
 @Entity
-@Table(name = "user_login")
+@Table(name = "user_login", indexes = {
+        @Index(name = "idx__username", columnList = "username", unique = true)
+})
 @SQLDelete(sql = "UPDATE user_login SET is_deleted = true WHERE id = ?")
 public class UserLogin extends SoftDeleteEntity {
     @Id
@@ -25,7 +27,7 @@ public class UserLogin extends SoftDeleteEntity {
     @JoinColumn(name = "user_id")
     private UserDetail userDetail;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @Column(name = "password", nullable = false)
