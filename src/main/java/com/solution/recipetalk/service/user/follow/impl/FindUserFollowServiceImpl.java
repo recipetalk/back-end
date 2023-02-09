@@ -22,7 +22,7 @@ public class FindUserFollowServiceImpl implements FindUserFollowService {
     public ResponseEntity<?> findUserFolloweeList(String username, Pageable pageable) {
         UserDetail followee = userDetailRepository.findUserDetailByUsername(username).orElseThrow(UserNotFoundException::new);
         return ResponseEntity.ok(
-                followRepository.findAllByFolloweePage(followee.getId(), pageable).stream().toList()
+                followRepository.findAllByUserPage(followee.getId(), pageable).stream().toList()
         );
     }
 }
