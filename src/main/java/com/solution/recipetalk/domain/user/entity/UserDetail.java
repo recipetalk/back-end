@@ -45,4 +45,5 @@ public class UserDetail extends SoftDeleteEntity {
     public void setUserLogin(UserLogin userLogin) {
         this.userLogin = userLogin;
     }
+
 }
