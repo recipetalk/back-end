@@ -4,7 +4,6 @@ import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.domain.user.follow.entity.UserFollow;
 import com.solution.recipetalk.domain.user.follow.repository.UserFollowRepository;
 import com.solution.recipetalk.domain.user.login.entity.UserLogin;
-import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.user.follow.RegisterUserFollowService;
@@ -24,14 +23,14 @@ public class RegisterUserFollowServiceImpl implements RegisterUserFollowService 
 
     @Override
     public ResponseEntity<?> registerUserFollow(String followee) {
-        UserDetail followeeDetail = userDetailRepository.findUserDetailByUsername(followee).orElseThrow(UserNotFoundException::new);
+        UserDetail followingDetail = userDetailRepository.findUserDetailByUsername(followee).orElseThrow(UserNotFoundException::new);
 
         UserLogin followerLogin = ContextHolder.getUserLogin();
 
         UserDetail followerDetail = userDetailRepository.getReferenceById(followerLogin.getId());
 
-        UserFollow userFollow = UserFollow.builder().follower(followerDetail)
-                .followee(followeeDetail)
+        UserFollow userFollow = UserFollow.builder().user(followerDetail)
+                .following(followingDetail)
                 .build();
 
         userFollowRepository.save(userFollow);
