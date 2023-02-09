@@ -3,6 +3,7 @@ package com.solution.recipetalk.domain.user.follow.entity;
 import com.solution.recipetalk.domain.common.AuditingEntity;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 
+import com.solution.recipetalk.domain.user.follow.UserFollowId;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

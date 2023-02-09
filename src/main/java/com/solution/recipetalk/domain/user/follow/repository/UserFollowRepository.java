@@ -1,8 +1,8 @@
 package com.solution.recipetalk.domain.user.follow.repository;
 
 import com.solution.recipetalk.domain.user.entity.UserDetail;
-import com.solution.recipetalk.domain.user.follow.entity.UserFollow;
-import com.solution.recipetalk.domain.user.follow.entity.UserFollowId;
+import com.solution.recipetalk.domain.user.follow.UserFollowId;
+import com.solution.recipetalk.domain.user.follow.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

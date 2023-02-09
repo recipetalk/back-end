@@ -1,4 +1,4 @@
-package com.solution.recipetalk.domain.user.follow.entity;
+package com.solution.recipetalk.domain.user.follow;
 
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import lombok.AllArgsConstructor;
