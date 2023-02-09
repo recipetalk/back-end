@@ -3,6 +3,7 @@ package com.solution.recipetalk.controller.user.follow;
 
 import com.solution.recipetalk.service.user.follow.FindUserFollowService;
 import com.solution.recipetalk.service.user.follow.RegisterUserFollowService;
+import com.solution.recipetalk.service.user.follow.RemoveUserFollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -19,13 +20,21 @@ public class UserFollowController {
 
     private final RegisterUserFollowService registerUserFollowService;
     private final FindUserFollowService findUserFollowService;
-    @PostMapping("/{followee}")
-    public ResponseEntity<?> followAdd(@PathVariable(name = "followee") String followee){
-        return registerUserFollowService.registerUserFollow(followee);
+
+    private final RemoveUserFollowService removeUserFollowService;
+
+    @PostMapping("/{following}")
+    public ResponseEntity<?> followAdd(@PathVariable(name = "following") String following){
+        return registerUserFollowService.registerUserFollow(following);
     }
 
-    @GetMapping("/{followee}")
-    public ResponseEntity<?> followingList(@PathVariable(name = "followee") String followee, @PageableDefault(size = 20) Pageable pageable){
-        return findUserFollowService.findUserFolloweeList(followee, pageable);
+    @GetMapping("/{following}")
+    public ResponseEntity<?> followingList(@PathVariable(name = "following") String following, @PageableDefault(size = 20) Pageable pageable){
+        return findUserFollowService.findUserFolloweeList(following, pageable);
+    }
+
+    @DeleteMapping("/{following}")
+    public ResponseEntity<?> followingRemove(@PathVariable(name = "following") String following) {
+        return removeUserFollowService.removeUserFollow(following);
     }
 }

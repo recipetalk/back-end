@@ -38,8 +38,11 @@ public enum ErrorCode {
     // recipe
     RECIPE_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "R001", "레시피를 찾을 수 없습니다."),
 
-    //user
-    USER_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "U001", "유저를 찾을 수 없습니다.");
+    // user
+    USER_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "U001", "유저를 찾을 수 없습니다."),
+
+    // user Follow
+    USER_FOLLOW_NOT_FOUND(HttpStatus.NOT_FOUND, "UF001", "팔로우 되어 있지 않습니다.");
     private HttpStatus httpStatus;
     private String message;
     private String code;
