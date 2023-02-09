@@ -18,13 +18,13 @@ import lombok.experimental.SuperBuilder;
 public class UserFollow extends AuditingEntity {
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "follower", referencedColumnName = "user_detail_id")
-    private UserDetail follower;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_detail_id")
+    private UserDetail user;
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "followee", referencedColumnName = "user_detail_id")
-    private UserDetail followee;
+    @JoinColumn(name = "following_id", referencedColumnName = "user_detail_id")
+    private UserDetail following;
 
 
 }

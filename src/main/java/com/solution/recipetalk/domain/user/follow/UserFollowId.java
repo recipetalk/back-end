@@ -11,6 +11,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserFollowId implements Serializable {
-    private UserDetail follower;
-    private UserDetail followee;
+    private UserDetail user;
+    private UserDetail following;
 }

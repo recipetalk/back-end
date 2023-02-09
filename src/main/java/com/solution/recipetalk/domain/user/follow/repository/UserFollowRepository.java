@@ -13,11 +13,11 @@ import org.springframework.data.repository.query.Param;
 
 
 public interface UserFollowRepository extends JpaRepository<UserFollow, UserFollowId> {
-    Long countByFollowee(UserDetail userDetail);
+    Long countByUser(UserDetail userDetail);
 
-    @Query(value = "SELECT u.nickname, u.username, u.profile_image_uri FROM user_follow f JOIN user_detail u WHERE f.followee = u.id AND u.id = :id AND u.is_deleted = false",
+    @Query(value = "SELECT u2.nickname, u2.username, u2.profile_image_uri FROM user_follow f JOIN user_detail u JOIN user_detail u2 WHERE f.user_id = u.id AND f.following_id = u2.id AND u.id = :id AND u2.is_deleted = false",
             countQuery = "SELECT count(*) FROM UserFollow f JOIN UserDetail u WHERE f.followee = u AND u.id = :id",
             nativeQuery = true
     )
-    Page<UserSimpleProfileDTO> findAllByFolloweePage(@Param("id") Long followeeUsername, Pageable pageable);
+    Page<UserSimpleProfileDTO> findAllByUserPage(@Param("id") Long Username, Pageable pageable);
 }
