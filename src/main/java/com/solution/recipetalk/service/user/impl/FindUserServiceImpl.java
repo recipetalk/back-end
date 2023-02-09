@@ -51,7 +51,7 @@ public class FindUserServiceImpl implements FindUserService {
     public ResponseEntity<?> findUserProfile(String username) {
         UserDetail findUserDetail = userDetailRepository.findUserDetailByUsername(username).orElseThrow(UserNotFoundException::new);
 
-        Long followCount = userFollowRepository.countByFollowee(findUserDetail);
+        Long followCount = userFollowRepository.countByUser(findUserDetail);
 
         UserDetailProfileDTO findUserProfileDTO = UserDetailProfileDTO.toDTO(findUserDetail, followCount);
 
