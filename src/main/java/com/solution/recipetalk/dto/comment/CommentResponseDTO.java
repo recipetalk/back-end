@@ -13,13 +13,15 @@ import lombok.NoArgsConstructor;
 public class CommentResponseDTO {
     private String userName;
     private String description;
-    private String lastModifiedDate;
+    private String createdDate;
+    private boolean isModified;
 
     public static CommentResponseDTO toResponse(Comment comment) {
         return CommentResponseDTO.builder()
                 .userName(comment.getWriter().getNickname())
                 .description(comment.getDescription())
-                .lastModifiedDate(comment.getModifiedDate().toString())
+                .createdDate(comment.getCreatedDate().toString())
+                .isModified(!comment.getModifiedDate().toString().equals(comment.getCreatedDate().toString()))
                 .build();
     }
 }

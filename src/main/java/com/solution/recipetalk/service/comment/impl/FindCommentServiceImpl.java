@@ -9,6 +9,7 @@ import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.dto.comment.CommentInBoardResponseDTO;
 import com.solution.recipetalk.dto.comment.CommentResponseDTO;
 import com.solution.recipetalk.exception.board.CannotFindBoardException;
+import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.comment.FindCommentService;
 import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
@@ -50,9 +51,8 @@ public class FindCommentServiceImpl implements FindCommentService {
     public ResponseEntity<?> findCommentsByUser() {
         Long currentLoginUserId = ContextHolder.getUserLoginId();
 
-        UserDetail writer = userDetailRepository.findById(currentLoginUserId).orElse(null);
+        UserDetail writer = userDetailRepository.findById(currentLoginUserId).orElseThrow(UserNotFoundException::new);
 
-        assert writer != null;
         List<Comment> allByWriter = commentRepository.findAllByWriter(writer);
 
         List<CommentResponseDTO> responseDTOS = allByWriter.stream().map(CommentResponseDTO::toResponse).toList();

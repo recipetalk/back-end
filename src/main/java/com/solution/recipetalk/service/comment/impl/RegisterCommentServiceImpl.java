@@ -8,6 +8,8 @@ import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.dto.comment.CommentCreateDTO;
 import com.solution.recipetalk.exception.board.CannotFindBoardException;
+import com.solution.recipetalk.exception.comment.CommentNotFoundException;
+import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.comment.RegisterCommentService;
 import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+
 
 @Service
 @RequiredArgsConstructor
@@ -37,28 +39,20 @@ public class RegisterCommentServiceImpl implements RegisterCommentService {
         validateCommentDescription(comment.getDescription());
 
         Long currentLoginUserId= ContextHolder.getUserLoginId();
-        UserDetail writer = userDetailRepository.findById(currentLoginUserId).orElse(null);
+        UserDetail writer = userDetailRepository.findById(currentLoginUserId).orElseThrow(UserNotFoundException::new);
 
         Board board = boardRepository.findById(boardId).orElseThrow(
                 CannotFindBoardException::new
         );
+        Comment parentComment = comment.getParentCommentId() != null ?
+                commentRepository.findById(comment.getParentCommentId()).orElseThrow(CommentNotFoundException::new) : null;
 
-        assert writer != null;
-        Comment newComment = Comment.builder()
-                .writer(writer)
-                .parentComment(
-                        // parentComment가 존재한다 = 대댓글
-                        // 존재하지 않는다(null 이다) = 그냥 댓글
-                        commentRepository.findById(comment.getParentCommentId()).orElse(null)
-                )
-                .board(board)
-                .childComment(new ArrayList<>())
-                .description(comment.getDescription())
-                .build();
+
+        Comment newComment = comment.toEntity(writer, parentComment, board);
 
         commentRepository.save(newComment);
 
-        return ResponseEntity.ok(comment);
+        return ResponseEntity.ok(null);
     }
 
     private void validateCommentDescription(String description) {

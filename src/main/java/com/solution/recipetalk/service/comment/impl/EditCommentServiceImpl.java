@@ -8,6 +8,7 @@ import com.solution.recipetalk.dto.comment.CommentModifyDTO;
 import com.solution.recipetalk.dto.comment.CommentResponseDTO;
 import com.solution.recipetalk.exception.comment.CommentNotFoundException;
 import com.solution.recipetalk.exception.comment.NotAuthorizedToModifyCommentException;
+import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.comment.EditCommentService;
 import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
@@ -34,10 +35,8 @@ public class EditCommentServiceImpl implements EditCommentService {
         comment.checkDeletedComment();
 
         Long currentUserId = ContextHolder.getUserLoginId();
-        UserDetail currentLoginUser = userDetailRepository.findById(currentUserId).orElse(null);
+        UserDetail currentLoginUser = userDetailRepository.findById(currentUserId).orElseThrow(UserNotFoundException::new);
 
-
-        assert currentLoginUser != null;
         validateWhoIsModifyingComment(comment.getWriter(), currentLoginUser);
 
         comment.updateDescription(commentModifyDTO.getDescription());
