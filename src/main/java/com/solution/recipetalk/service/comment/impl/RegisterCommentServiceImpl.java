@@ -47,7 +47,6 @@ public class RegisterCommentServiceImpl implements RegisterCommentService {
         Comment parentComment = comment.getParentCommentId() != null ?
                 commentRepository.findById(comment.getParentCommentId()).orElseThrow(CommentNotFoundException::new) : null;
 
-
         Comment newComment = comment.toEntity(writer, parentComment, board);
 
         commentRepository.save(newComment);
