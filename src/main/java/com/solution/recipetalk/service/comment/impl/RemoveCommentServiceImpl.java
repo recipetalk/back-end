@@ -9,6 +9,7 @@ import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.exception.board.CannotFindBoardException;
 import com.solution.recipetalk.exception.comment.CommentNotFoundException;
 import com.solution.recipetalk.exception.comment.NotAuthorizedToModifyCommentException;
+import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.comment.RemoveCommentService;
 import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
@@ -38,16 +39,15 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
         Comment comment = commentRepository.findByBoardAndId(board, commentId).orElseThrow(CommentNotFoundException::new);
 
         Long userLoginId = ContextHolder.getUserLoginId();
-        UserDetail currentLoginUser = userDetailRepository.findById(userLoginId).orElse(null);
+        UserDetail currentLoginUser = userDetailRepository.findById(userLoginId).orElseThrow(UserNotFoundException::new);
 
         comment.checkDeletedComment();
 
-        assert currentLoginUser != null;
         validateWhoIsRemovingComment(comment.getWriter(), currentLoginUser);
 
         commentRepository.deleteById(commentId);
 
-        return ResponseEntity.ok("댓글이 삭제되었습니다");
+        return ResponseEntity.ok(null);
     }
 
     @Override

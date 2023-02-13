@@ -9,6 +9,7 @@ import com.solution.recipetalk.service.comment.RemoveCommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,13 +38,18 @@ public class CommentController {
     }
 
     @GetMapping("/{boardId}/comment")
-    public ResponseEntity<?> commentListByBoard(@PathVariable Long boardId) {
-        return findCommentService.findAllCommentsOfBoard(boardId);
+    public ResponseEntity<?> commentParentListByBoard(@PathVariable Long boardId, Pageable pageable) {
+        return findCommentService.findAllParentCommentsOfBoard(boardId, pageable);
+    }
+
+    @GetMapping("/{boardId}/comment/{commentId}")
+    public ResponseEntity<?> commentChildListByBoard(@PathVariable(name = "boardId") Long boardId, @PathVariable(name = "commentId") Long parentCommentId, Pageable pageable) {
+        return findCommentService.findAllChildCommentsOfBoard(boardId, parentCommentId, pageable);
     }
 
     @GetMapping("/user/comment")
-    public ResponseEntity<?> commentListByLoginUser() {
-        return findCommentService.findCommentsByUser();
+    public ResponseEntity<?> commentListByLoginUser(Pageable pageable) {
+        return findCommentService.findCommentsByUser(pageable);
     }
 
     @PatchMapping("/board/{boardId}/comment/{commentId}")
