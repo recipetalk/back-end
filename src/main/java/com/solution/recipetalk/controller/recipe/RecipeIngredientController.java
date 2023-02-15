@@ -2,6 +2,7 @@ package com.solution.recipetalk.controller.recipe;
 
 
 import com.solution.recipetalk.dto.recipe.ingredient.RecipeIngredientRegisterDTO;
+import com.solution.recipetalk.service.recipe.ingredient.ModifyRecipeIngredientService;
 import com.solution.recipetalk.service.recipe.ingredient.RegisterRecipeIngredientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,15 @@ import java.util.List;
 @RequestMapping("/api/board/recipe")
 public class RecipeIngredientController {
     private final RegisterRecipeIngredientService registerRecipeIngredientService;
+    private final ModifyRecipeIngredientService modifyRecipeIngredientService;
 
     @PostMapping("/{recipeId}/recipeIngredient")
     public ResponseEntity<?> recipeIngredientAdd(@PathVariable(name = "recipeId") Long recipeId, @Valid @RequestBody List<RecipeIngredientRegisterDTO> dtos){
         return registerRecipeIngredientService.registerRecipeIngredient(recipeId, dtos);
+    }
+
+    @PutMapping("/{recipeId}/recipeIngredient")
+    public ResponseEntity<?> recipeIngredientModify(@PathVariable(name = "recipeId") Long recipeId, @Valid @RequestBody List<RecipeIngredientRegisterDTO> dtos){
+        return modifyRecipeIngredientService.modifyRecipeIngredient(recipeId, dtos);
     }
 }
