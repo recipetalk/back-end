@@ -31,4 +31,7 @@ public class IngredientTrimming extends SoftDeleteEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
+
+    @Column(name = "thumb_nail_uri")
+    private String thumbnailUri;
 }

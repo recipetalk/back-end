@@ -16,7 +16,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
      * @return CommentResponseDTO
      * - 최상위 덧글은 삭제여부 상관없이 모두 조회. 그러나 삭제여부 판단은 DTO에서 판단해야 함.
      */
-    @Query(value = "SELECT u.username, u.nickname, u.profile_image_uri, c.comment_id, c.board_id c.description, c.created_date, IF(c.modified_date <> c.created_date) as isModified, " +
+    @Query(value = "SELECT u.username, u.nickname, u.profile_image_uri, c.comment_id, c.board_id c.description, c.created_date, c.modified_date <> c.created_date as isModified, " +
                         "EXISTS(SELECT c.id FROM comment c JOIN comment p ON c.parent_comment_id = p.comment_id) as childExist, c.is_deleted as isDeleted " +
                                 "FROM comment c JOIN user_detail u ON c.writer_id = u.user_detail_id " +
                                 "WHERE c.board_id = :boardId",

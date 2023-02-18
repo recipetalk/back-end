@@ -35,6 +35,10 @@ public enum ErrorCode {
     // ingredient
     INGREDIENT_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "IN001", "식재료를 찾을 수 없습니다."),
 
+    // ingredient_trimming
+    INGREDIENT_TRIMMING_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "INT001", "손질법을 찾을 수 없습니다."),
+
+
     // recipe
     RECIPE_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "R001", "레시피를 찾을 수 없습니다."),
 
