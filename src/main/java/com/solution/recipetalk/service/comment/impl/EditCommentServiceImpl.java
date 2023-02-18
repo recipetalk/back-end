@@ -42,7 +42,7 @@ public class EditCommentServiceImpl implements EditCommentService {
         comment.updateDescription(commentModifyDTO.getDescription());
         commentRepository.save(comment);
 
-        return ResponseEntity.ok(CommentResponseDTO.toResponse(comment));
+        return ResponseEntity.ok(null);
     }
 
     private void validateWhoIsModifyingComment(UserDetail writer, UserDetail currentLoginUser) {

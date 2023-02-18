@@ -44,16 +44,6 @@ public class CommentResponseDTO {
         return new CommentResponseDTOBuilder();
     }
 
-    public static CommentResponseDTO toResponse(Comment comment, UserSimpleProfileDTO dto) {
-        return CommentResponseDTO.builder()
-                .userProfile(dto)
-                .boardId(comment.getId())
-                .description(comment.getDescription())
-                .createdDate(comment.getCreatedDate().toString())
-                .isModified(!comment.getModifiedDate().toString().equals(comment.getCreatedDate().toString()))
-                .build();
-    }
-
     @ToString
     public static class CommentResponseDTOBuilder {
         private UserSimpleProfileDTO userProfile;
