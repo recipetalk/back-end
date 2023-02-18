@@ -1,7 +1,6 @@
 package com.solution.recipetalk.dto.comment;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.solution.recipetalk.domain.comment.entity.Comment;
 import com.solution.recipetalk.dto.user.UserSimpleProfileDTO;
 import lombok.*;
 
@@ -22,7 +21,7 @@ public class CommentResponseDTO {
                               String description, String createdDate, Boolean isModified,
                               Boolean childExist, Boolean isDeleted){
         if(isDeleted){
-            userProfile = new UserSimpleProfileDTO("삭제된 계정", "(이름 없음)", "");
+            userProfile = new UserSimpleProfileDTO("삭제", "(삭제)", "");
             this.commentId = commentId;
             this.boardId = boardId;
             this.description = "삭제된 덧글입니다.";

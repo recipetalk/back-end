@@ -1,6 +1,7 @@
 package com.solution.recipetalk.domain.ingredient.trimming.row.entity;
 
 import com.solution.recipetalk.domain.common.AuditingEntity;
+import com.solution.recipetalk.domain.ingredient.trimming.entity.IngredientTrimming;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,10 @@ public class IngredientTrimmingRow extends AuditingEntity {
     @Column(nullable = false)
     private String description;
 
-    @Column(name = "img_url", nullable = false)
+    @Column(name = "img_uri", nullable = false)
     private String imgURI;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ingredient_trimming_id", nullable = false)
+    private IngredientTrimming ingredientTrimming;
 }
