@@ -46,4 +46,19 @@ public class UserDetail extends SoftDeleteEntity {
         this.userLogin = userLogin;
     }
 
+    public void setNickname(String nickname){
+        if (null != nickname)
+            this.nickname = nickname;
+    }
+
+    public void setProfileImageURI(String profileImageURI){
+        if(null != profileImageURI)
+            this.profileImageURI = profileImageURI;
+    }
+
+    public void setDescription(String description){
+        if(null != description)
+            this.description = description;
+    }
+
 }
