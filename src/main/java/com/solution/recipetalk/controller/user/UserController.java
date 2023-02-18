@@ -1,7 +1,10 @@
 package com.solution.recipetalk.controller.user;
 
 
+import com.solution.recipetalk.dto.user.UserDetailProfileModifyDTO;
 import com.solution.recipetalk.service.user.FindUserService;
+import com.solution.recipetalk.service.user.ModifyUserDetailService;
+import jakarta.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +18,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/user")
 public class UserController {
 
-    @Autowired
     private final FindUserService findUserService;
 
+    private final ModifyUserDetailService modifyUserDetailService;
 
     @GetMapping("/profile/{username}")
     public ResponseEntity<?> profileDetails(@PathVariable @NonNull String username){
         return findUserService.findUserProfile(username);
     }
 
+    @PatchMapping("/profile")
+    public ResponseEntity<?> profileModify(@Valid UserDetailProfileModifyDTO dto){
+        return modifyUserDetailService.modifyUserDetail(dto);
+    }
 
 }
