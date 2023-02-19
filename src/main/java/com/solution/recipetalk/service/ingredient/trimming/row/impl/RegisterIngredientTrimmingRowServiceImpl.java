@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -40,7 +41,7 @@ public class RegisterIngredientTrimmingRowServiceImpl implements RegisterIngredi
                     } catch (IOException e) {
                         throw new ImageUploadFailedException();
                     }
-                }).toList();
+                }).collect(Collectors.toList());
 
         ingredientTrimmingRowRepository.saveAll(createdIngredientTrimmingRows);
         return ResponseEntity.ok(null);
