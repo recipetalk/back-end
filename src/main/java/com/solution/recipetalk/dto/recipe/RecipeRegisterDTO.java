@@ -36,6 +36,7 @@ public class RecipeRegisterDTO {
                 .thumbnailImgURI(thumbnailURI)
                 .board(board)
                 .quantity(quantity)
+                .description(description)
                 .build();
 
     }

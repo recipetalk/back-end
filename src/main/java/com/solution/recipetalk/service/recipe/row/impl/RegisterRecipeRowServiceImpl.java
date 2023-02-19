@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -42,7 +43,7 @@ public class RegisterRecipeRowServiceImpl implements RegisterRecipeRowService {
     public ResponseEntity<?> registerRecipeRow(Long recipeId, List<RecipeRowRegisterDTO> dtos) {
         Recipe findRecipe = recipeRepository.findById(recipeId).orElseThrow(NotFoundException::new);
 
-        List<RecipeRow> newRecipeRows = dtos.stream().map(dto -> dto.toRecipeRowEntity(findRecipe)).toList();
+        List<RecipeRow> newRecipeRows = dtos.stream().map(dto -> dto.toRecipeRowEntity(findRecipe)).collect(Collectors.toList());
 
         recipeRowRepository.saveAll(newRecipeRows);
 

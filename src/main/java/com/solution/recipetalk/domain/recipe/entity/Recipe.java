@@ -37,6 +37,9 @@ public class Recipe extends SoftDeleteEntity {
     @Column(name = "quantity", nullable = false)
     private Long quantity;
 
+    @Column(name = "description", nullable = false)
+    private String description;
+
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
     private List<RecipeIngredient> recipeIngredients;
 
