@@ -40,4 +40,8 @@ public class Board extends SoftDeleteEntity {
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
     private List<Comment> comments;
+
+    public void increaseViewCount() {
+        view_count ++;
+    }
 }
