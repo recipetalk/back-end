@@ -56,6 +56,7 @@ public class RegisterRecipeServiceImpl implements RegisterRecipeService {
         return ResponseEntity.ok(
                 RecipeRegisterResDTO.builder()
                         .recipeId(newRecipe.getId())
+                        .build()
         );
     }
 }
