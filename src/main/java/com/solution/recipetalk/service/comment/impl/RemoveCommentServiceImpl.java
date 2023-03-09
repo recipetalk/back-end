@@ -6,7 +6,7 @@ import com.solution.recipetalk.domain.comment.entity.Comment;
 import com.solution.recipetalk.domain.comment.repository.CommentRepository;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
-import com.solution.recipetalk.exception.board.CannotFindBoardException;
+import com.solution.recipetalk.exception.board.BoardNotFoundException;
 import com.solution.recipetalk.exception.comment.CommentNotFoundException;
 import com.solution.recipetalk.exception.comment.NotAuthorizedToModifyCommentException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
@@ -35,7 +35,7 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
 
     @Override
     public ResponseEntity<?> removeCommentByIdAndBoardId(Long boardId, Long commentId) {
-        Board board = boardRepository.findById(boardId).orElseThrow(CannotFindBoardException::new);
+        Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
         Comment comment = commentRepository.findByBoardAndId(board, commentId).orElseThrow(CommentNotFoundException::new);
 
         Long userLoginId = ContextHolder.getUserLoginId();
@@ -53,7 +53,7 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
     @Override
     public ResponseEntity<?> removeAllCommentsOfBoard(Long boardId) {
 
-        Board board = boardRepository.findById(boardId).orElseThrow(CannotFindBoardException::new);
+        Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
         commentRepository.deleteAllByBoard(board);
 
         return ResponseEntity.ok("게시물의 댓글이 모두 삭제되었습니다");
