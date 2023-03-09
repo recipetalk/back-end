@@ -20,28 +20,23 @@ public class JsonAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        try{
-            String loginId = (String)authentication.getPrincipal(); //loginId == phoneNumber
-            String password = (String)authentication.getCredentials();
+
+        String loginId = (String)authentication.getPrincipal(); //loginId == phoneNumber
+        String password = (String)authentication.getCredentials();
 
 
             //id 검증
-            UserLoginContext userLoginContext = (UserLoginContext) userDetailsService.loadUserByUsername(loginId);
+        UserLoginContext userLoginContext = (UserLoginContext) userDetailsService.loadUserByUsername(loginId);
 
             //pw 검증
-            if(!passwordEncoder.matches(password, userLoginContext.getPassword())){
-                throw new BadCredentialsException("Invalid Password");
-            }
+        if(!passwordEncoder.matches(password, userLoginContext.getPassword())){
+            throw new BadCredentialsException("Invalid Password");
+        }
 
             /* 여기서 추가 검증 절차 진행 가능 */
 
             // 인증 토큰 생성 반환 (Token은 Auth의 Child)
-            return new JsonAuthenticationToken(userLoginContext.getUserLogin(), null, userLoginContext.getAuthorities());
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
+        return new JsonAuthenticationToken(userLoginContext.getUserLogin(), null, userLoginContext.getAuthorities());
     }
 
     @Override

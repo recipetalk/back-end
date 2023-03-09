@@ -25,9 +25,9 @@ public class JsonAuthFailureHandler implements AuthenticationFailureHandler {
         String errMsg = "";
 
         if(exception instanceof UsernameNotFoundException){
-            errMsg = "Invalid Username";
+            errMsg = "Invalid Username or Password";
         } else if(exception instanceof BadCredentialsException){
-            errMsg = "Invalid Password";
+            errMsg = "Invalid Username or Password";
         } else {
             exception.printStackTrace();
             errMsg = "Unknown Auth Exception";
