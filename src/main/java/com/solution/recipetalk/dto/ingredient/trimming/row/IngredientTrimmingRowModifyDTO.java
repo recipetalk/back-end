@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class IngredientTrimmingRowRegisterDTO {
+public class IngredientTrimmingRowModifyDTO {
     @NonNull
     private String description;
 

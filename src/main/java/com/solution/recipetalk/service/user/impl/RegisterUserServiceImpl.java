@@ -31,13 +31,13 @@ public class RegisterUserServiceImpl implements RegisterUserService {
         if(userDetailRepository.findByPhoneNum(signUpUserReqDto.getPhoneNum()).isPresent() || userDetailRepository.findUserDetailByUsername(signUpUserReqDto.getUsername()).isPresent())
             throw new DuplicatedUserException();
 
-        // 인증 시도조차 없다면 에러
-        PhoneAuthentication phoneAuthentication = phoneAuthenticationRepository.findById(signUpUserReqDto.getPhoneNum()).orElseThrow(PhoneAuthEntityNotFoundException::new);
-
-        //인증 되지 않은 유저라면
-        if(!phoneAuthentication.getIsAuthentication()){
-            throw new PhoneUnverifiedException();
-        }
+//        // 인증 시도조차 없다면 에러
+//        PhoneAuthentication phoneAuthentication = phoneAuthenticationRepository.findById(signUpUserReqDto.getPhoneNum()).orElseThrow(PhoneAuthEntityNotFoundException::new);
+//
+//        //인증 되지 않은 유저라면
+//        if(!phoneAuthentication.getIsAuthentication()){
+//            throw new PhoneUnverifiedException();
+//        }
 
         UserDetail userDetail = userDetailRepository.save(signUpUserReqDto.toUserDetail());
 
