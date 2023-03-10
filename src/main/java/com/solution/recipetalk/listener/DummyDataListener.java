@@ -20,6 +20,9 @@ import com.solution.recipetalk.domain.recipe.repository.RecipeRepository;
 import com.solution.recipetalk.domain.recipe.row.entity.RecipeRow;
 import com.solution.recipetalk.domain.recipe.row.repository.RecipeRowRepository;
 import com.solution.recipetalk.domain.report.repository.ReportRepository;
+import com.solution.recipetalk.domain.user.block.entity.UserBlock;
+import com.solution.recipetalk.domain.user.block.id.UserBlockId;
+import com.solution.recipetalk.domain.user.block.repository.UserBlockRepository;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.domain.user.login.entity.RoleType;
 import com.solution.recipetalk.domain.user.login.entity.UserLogin;
@@ -39,6 +42,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @Slf4j
 @Component
@@ -63,6 +67,8 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private final UserDetailRepository userDetailRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final UserBlockRepository userBlockRepository;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         loadUserData();
@@ -72,17 +78,48 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         loadRecipeData();
         loadRecipeRowData();
         loadIngredientTrimmingData();
+        loadUserBlockData();
     }
 
     private void loadUserData() {
         //테스트를 위해 id : 2L로 시작함.
-        createUserDataIfNotNull(2L, "hyunkim", "khj745700", "testtest", "01031798788");
+        createUserDataIfNotNull(1L, "hyunkim", "khj745700", "testtest", "01031798788");
     }
 
     private void loadTestUserData() {
         createUserDataIfNotNull(2L, "test", "test", "test", "01012341234");
         createUserDataIfNotNull(3L, "test1", "test1", "test", "01012344321");
     }
+
+    private void loadBoardData() {
+        createBoardData(1L, "test", "test board", 0L);
+        createBoardData(2L, "test1", "test board2", 0L);
+    }
+
+    private void loadIngredientData() {
+        createTestIngredient("ingredient1", IngredientSort.마늘, IngredientState.다짐, 10);
+        createTestIngredient("ingredient2", IngredientSort.마늘, IngredientState.다짐, 6);
+    }
+
+    private void loadRecipeData() {
+        createRecipeDataIfNotNull(1L, "", 1L, 1L, "sample");
+    }
+
+    private void loadRecipeRowData() {
+        createRecipeRowDataIfNotNull(1L, "kind of food", 2L, 1L);
+        createRecipeRowDataIfNotNull(2L, "kind of recipe", 0L, 1L);
+    }
+
+    private void loadIngredientTrimmingData() {
+        createIngredientTrimmingDataIfNotNull(1L, 1L, 2L);
+    }
+
+    private void loadUserBlockData() {
+        createUserBlockIfNotNull(1L,2L);
+        createUserBlockIfNotNull(1L,3L);
+    }
+
+
 
     private void createUserDataIfNotNull(Long id, String nickname, String username, String password, String phoneNum){
         Optional<UserDetail> byId = userDetailRepository.findById(id);
@@ -109,11 +146,6 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         userDetailRepository.save(userDetail);
     }
 
-    private void loadBoardData() {
-        createBoardData(2L, "test", "test board", 0L);
-        createBoardData(2L, "test1", "test board2", 0L);
-    }
-
     private void createBoardData(Long id, String writerNickname, String title, Long viewCount) {
         Optional<Board> byId = boardRepository.findById(id);
         if(byId.isPresent()) {
@@ -131,10 +163,6 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         boardRepository.save(board);
     }
 
-    private void loadIngredientData() {
-        createTestIngredient("ingredient1", IngredientSort.마늘, IngredientState.다짐, 10);
-        createTestIngredient("ingredient2", IngredientSort.마늘, IngredientState.다짐, 6);
-    }
 
     private void createTestIngredient(String name, IngredientSort sort, IngredientState state, Integer calorie) {
         Optional<Ingredient> byName = ingredientRepository.findByName(name);
@@ -153,9 +181,6 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         ingredientRepository.save(testIngredient);
     }
 
-    private void loadRecipeData() {
-        createRecipeDataIfNotNull(2L, "", 1L, 1L, "sample");
-    }
 
     private void createRecipeDataIfNotNull(Long id, String thumbnailImgURI, Long boardId, Long quantity, String description) {
         Optional<Recipe> byId = recipeRepository.findById(id);
@@ -175,10 +200,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         recipeRepository.save(recipe);
     }
 
-    private void loadRecipeRowData() {
-        createRecipeRowDataIfNotNull(1L, "kind of food", 2L, 1L);
-        createRecipeRowDataIfNotNull(2L, "kind of recipe", 0L, 1L);
-    }
+
 
     private void createRecipeRowDataIfNotNull(Long id, String description, Long timer, Long recipeId) {
         Optional<RecipeRow> byId = recipeRowRepository.findById(id);
@@ -197,9 +219,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         recipeRowRepository.save(row);
     }
 
-    private void loadIngredientTrimmingData() {
-        createIngredientTrimmingDataIfNotNull(2L, 1L, 2L);
-    }
+
 
     private void createIngredientTrimmingDataIfNotNull(Long id, Long ingredientId, Long boardId) {
         Optional<IngredientTrimming> byId = ingredientTrimmingRepository.findById(id);
@@ -216,5 +236,19 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
                 .build();
 
         ingredientTrimmingRepository.save(ingredientTrimming);
+    }
+
+    private void createUserBlockIfNotNull(Long userId, Long blockUserId) {
+        UserDetail user = userDetailRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        UserDetail blockedUser = userDetailRepository.findById(blockUserId).orElseThrow(UserNotFoundException::new);
+        UserBlockId userBlockId = new UserBlockId(user, blockedUser);
+        Optional<UserBlock> byId = userBlockRepository.findById(userBlockId);
+
+        if(byId.isPresent()){
+            return;
+        }
+
+        UserBlock userBlock = UserBlock.builder().user(user).blockedUser(blockedUser).build();
+        userBlockRepository.save(userBlock);
     }
 }

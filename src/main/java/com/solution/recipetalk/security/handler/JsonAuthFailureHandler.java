@@ -29,7 +29,7 @@ public class JsonAuthFailureHandler implements AuthenticationFailureHandler {
         } else if(exception instanceof BadCredentialsException){
             errMsg = "Invalid Username or Password";
         } else {
-            exception.printStackTrace();
+            System.out.println(exception.getClass().getName());
             errMsg = "Unknown Auth Exception";
         }
 
