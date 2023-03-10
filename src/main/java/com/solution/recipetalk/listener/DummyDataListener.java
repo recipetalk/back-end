@@ -2,6 +2,8 @@ package com.solution.recipetalk.listener;
 
 import com.solution.recipetalk.domain.bill.repository.BillRepository;
 import com.solution.recipetalk.domain.board.entity.Board;
+import com.solution.recipetalk.domain.board.like.entity.BoardLike;
+import com.solution.recipetalk.domain.board.like.id.BoardLikeId;
 import com.solution.recipetalk.domain.board.like.repository.BoardLikeRepository;
 import com.solution.recipetalk.domain.board.repository.BoardRepository;
 import com.solution.recipetalk.domain.comment.repository.CommentRepository;
@@ -79,6 +81,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         loadRecipeRowData();
         loadIngredientTrimmingData();
         loadUserBlockData();
+        loadBoardLikeData();
     }
 
     private void loadUserData() {
@@ -119,6 +122,11 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         createUserBlockIfNotNull(1L,3L);
     }
 
+
+    private void loadBoardLikeData(){
+        createBoardLikeIfNotNull(1L, 1L );
+        createBoardLikeIfNotNull(2L, 1L);
+    }
 
 
     private void createUserDataIfNotNull(Long id, String nickname, String username, String password, String phoneNum){
@@ -250,5 +258,19 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
 
         UserBlock userBlock = UserBlock.builder().user(user).blockedUser(blockedUser).build();
         userBlockRepository.save(userBlock);
+    }
+
+    private void createBoardLikeIfNotNull(Long boardId, Long userId){
+        UserDetail user = userDetailRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
+        BoardLikeId boardLikeId = new BoardLikeId(user,board);
+
+        Optional<BoardLike> find = boardLikeRepository.findById(boardLikeId);
+        if(find.isPresent()){
+            return;
+        }
+        else{
+            boardLikeRepository.save(BoardLike.builder().user(user).board(board).build());
+        }
     }
 }
