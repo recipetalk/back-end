@@ -16,16 +16,21 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
      * @return CommentResponseDTO
      * - 최상위 덧글은 삭제여부 상관없이 모두 조회. 그러나 삭제여부 판단은 DTO에서 판단해야 함.
      */
-    @Query(value = "SELECT u.username, u.nickname, u.profile_image_uri, c.comment_id, c.board_id c.description, c.created_date, c.modified_date <> c.created_date as isModified, " +
-                        "EXISTS(SELECT c.id FROM comment c JOIN comment p ON c.parent_comment_id = p.comment_id) as childExist, c.is_deleted as isDeleted " +
-                                "FROM comment c JOIN user_detail u ON c.writer_id = u.user_detail_id " +
-                                "WHERE c.board_id = :boardId",
+    @Query(value = "SELECT u.username as username, u.nickname as nickname, u.profile_image_uri as profileImageURI, " +
+            "c.comment_id as commentId, c.board_id as boardId, c.description as description, c.created_date as createdDate, " +
+            "IF(c.modified_date <> c.created_date, c.modified_date, c.created_date) as modifiedDate " +
+            "FROM comment c INNER JOIN user_detail u ON c.writer_id = u.user_detail_id " +
+            "WHERE c.board_id = :boardId " +
+            "AND u.is_deleted = 0 " +
+            "AND c.is_deleted = 0 ",
             countQuery = "SELECT COUNT(*) FROM comment c JOIN user_detail u ON c.writer_id = u.user_detail_id WHERE c.board_id = :boardId",
             nativeQuery = true
     )
     Page<CommentResponseDTO> findAllParentCommentByBoard(Long boardId, Pageable pageable);
 
-    @Query(value = "SELECT u.username as username, u.nickname as nickname, u.profile_image_uri as profileImageURI, c.comment_id as commentId, c.board_id as boardId, c.description as description, c.created_date as createdDate, IF(c.modified_date <> c.created_date) as isModified, " +
+    @Query(value = "SELECT u.username as username, u.nickname as nickname, u.profile_image_uri as profileImageURI, " +
+            "c.comment_id as commentId, c.board_id as boardId, c.description as description, c.created_date as createdDate, " +
+            "IF(c.modified_date <> c.created_date, c.modified_date, c.created_date) as modifiedDate " +
             "FROM comment c JOIN user_detail u ON c.writer_id = u.user_detail_id "+
                              " JOIN comment pc ON c.parent_coment_id = pc.comment_id " +
             "WHERE c.board_id = :boardId AND c.parent_comment_id = :parentCommentId",
@@ -34,7 +39,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     )
     Page<CommentResponseDTO> findAllChildCommentByBoard(Long boardId, Long parentCommentId, Pageable pageable);
 
-    @Query(value = "SELECT u.username, u.nickname, u.profile_image_uri, c.board_id, c.comment_id, c.description, c.created_date, IF(c.modified_date <> c.created_date) as is_modified " +
+    @Query(value =
+            "SELECT u.username, u.nickname, u.profile_image_uri, c.board_id, c.comment_id, c.description, c.created_date, " +
+                    "IF(c.modified_date <> c.created_date, c.modified_date, c.created_date) as modifiedDate " +
             "FROM comment c JOIN user_detail u ON c.writer_id = u.user_detail_id " +
             "WHERE c.writer_id = :userId AND c.is_deleted = false",
             countQuery = "SELECT COUNT(*) FROM comment c JOIN user_detail u ON c.writer_id = u.user_detail_id WHERE c.writer_id = :userId AND is_deleted = false",
