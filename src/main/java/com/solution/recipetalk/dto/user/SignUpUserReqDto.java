@@ -30,6 +30,7 @@ public class SignUpUserReqDto {
                 .phoneNum(phoneNum)
                 .profileImageURI("")
                 .username(username)
+                .isBlocked(false)
                 .build();
     }
 

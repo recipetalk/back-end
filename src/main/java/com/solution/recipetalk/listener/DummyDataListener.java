@@ -26,6 +26,9 @@ import com.solution.recipetalk.domain.user.block.entity.UserBlock;
 import com.solution.recipetalk.domain.user.block.id.UserBlockId;
 import com.solution.recipetalk.domain.user.block.repository.UserBlockRepository;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
+import com.solution.recipetalk.domain.user.follow.UserFollowId;
+import com.solution.recipetalk.domain.user.follow.entity.UserFollow;
+import com.solution.recipetalk.domain.user.follow.repository.UserFollowRepository;
 import com.solution.recipetalk.domain.user.login.entity.RoleType;
 import com.solution.recipetalk.domain.user.login.entity.UserLogin;
 import com.solution.recipetalk.domain.user.login.entity.UserProvider;
@@ -67,9 +70,10 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private final ReportRepository reportRepository;
     private final UserLoginRepository userLoginRepository;
     private final UserDetailRepository userDetailRepository;
+    private final UserBlockRepository userBlockRepository;
+    private final UserFollowRepository userFollowRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    private final UserBlockRepository userBlockRepository;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -80,18 +84,20 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         loadRecipeData();
         loadRecipeRowData();
         loadIngredientTrimmingData();
-        loadUserBlockData();
+        //loadUserBlockData();
         loadBoardLikeData();
+        loadUserFollowData();
     }
 
     private void loadUserData() {
         //테스트를 위해 id : 2L로 시작함.
-        createUserDataIfNotNull(1L, "hyunkim", "khj745700", "testtest", "01031798788");
+        createUserDataIfNotNull(1L, "hyunkim", "khj745700", "testtest", "01031798788", false);
     }
 
     private void loadTestUserData() {
-        createUserDataIfNotNull(2L, "test", "test", "test", "01012341234");
-        createUserDataIfNotNull(3L, "test1", "test1", "test", "01012344321");
+        createUserDataIfNotNull(2L, "test", "test", "test", "01012341234", false);
+        createUserDataIfNotNull(3L, "test1", "test1", "test", "01012344321", true);
+        createUserDataIfNotNull(4L, "test2", "test2", "test", "01012344321", false);
     }
 
     private void loadBoardData() {
@@ -117,6 +123,11 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         createIngredientTrimmingDataIfNotNull(1L, 1L, 2L);
     }
 
+    private void loadUserFollowData() {
+        createUserFollowIfNotNull(1L, 2L);
+        createUserFollowIfNotNull(1L, 3L);
+    }
+
     private void loadUserBlockData() {
         createUserBlockIfNotNull(1L,2L);
         createUserBlockIfNotNull(1L,3L);
@@ -129,7 +140,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     }
 
 
-    private void createUserDataIfNotNull(Long id, String nickname, String username, String password, String phoneNum){
+    private void createUserDataIfNotNull(Long id, String nickname, String username, String password, String phoneNum, Boolean isBlocked){
         Optional<UserDetail> byId = userDetailRepository.findById(id);
         if(byId.isPresent()){
             return;
@@ -140,6 +151,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
                 .phoneNum(phoneNum)
                 .username(username)
                 .profileImageURI("")
+                .isBlocked(isBlocked)
                 .build();
 
         UserLogin userLogin = UserLogin.builder()
@@ -271,6 +283,22 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         }
         else{
             boardLikeRepository.save(BoardLike.builder().user(user).board(board).build());
+        }
+    }
+
+    private void createUserFollowIfNotNull(Long userId, Long followingId){
+        UserDetail user = userDetailRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        UserDetail followingUser = userDetailRepository.findById(followingId).orElseThrow(UserNotFoundException::new);
+
+        UserFollowId userFollowId = new UserFollowId(user, followingUser);
+
+        Optional<UserFollow> find = userFollowRepository.findById(userFollowId);
+
+        if(find.isPresent()){
+            return;
+        }
+        else{
+            userFollowRepository.save(UserFollow.builder().user(user).following(followingUser).build());
         }
     }
 }

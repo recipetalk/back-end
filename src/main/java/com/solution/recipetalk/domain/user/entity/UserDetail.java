@@ -40,6 +40,8 @@ public class UserDetail extends SoftDeleteEntity {
     @OneToOne(mappedBy = "userDetail", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private UserLogin userLogin;
 
+    @Column(name = "is_blocked")
+    private Boolean isBlocked;
     //TODO : Where 절 없는 이유? 관리 입장에서 없어야 할 수 있음. 따라서 직접 false이면 어떻게, true이면 어떻게 조회해야 할지에 대한 처리 필요.
 
     public void setUserLogin(UserLogin userLogin) {
