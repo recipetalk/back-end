@@ -16,10 +16,19 @@ import java.time.LocalDateTime;
 public class CommentResponseDTO {
     private UserSimpleProfileDTO userProfile;
     private Long commentId;
+    private Long boardId;
     private String description;
     private LocalDateTime createdDate;
     private Boolean isModified;
     private Boolean childExist;
+
+    public CommentResponseDTO(Long commentId, Long boardId, String description, LocalDateTime createdDate, Boolean isModified ){
+        this.boardId = boardId;
+        this.commentId = commentId;
+        this.description = description;
+        this.createdDate = createdDate;
+        this.isModified = isModified;
+    }
 
     public CommentResponseDTO(String username, String nickname, String profileImageURI, Long commentId,
                               String description, LocalDateTime createdDate, Boolean isModified,
@@ -39,5 +48,24 @@ public class CommentResponseDTO {
         this.createdDate = createdDate;
         this.isModified = isModified;
         this.childExist = childExist;
+    }
+
+    public CommentResponseDTO(String username, String nickname, String profileImageURI, Long commentId,
+                              String description, LocalDateTime createdDate, Boolean isModified,
+                              Boolean isDeleted, Boolean isUserDeleted){
+
+        if(isDeleted){
+            userProfile = new UserSimpleProfileDTO(null, "(삭제)", "");
+            this.description = "삭제된 덧글입니다.";
+        }
+        if(isUserDeleted){
+            userProfile = new UserSimpleProfileDTO(null, "(알수 없음)", "");
+        }
+
+        if(!isDeleted && !isUserDeleted) userProfile = new UserSimpleProfileDTO(username, nickname, profileImageURI);
+        this.commentId = commentId;
+        if(!isDeleted)  this.description = description;
+        this.createdDate = createdDate;
+        this.isModified = isModified;
     }
 }

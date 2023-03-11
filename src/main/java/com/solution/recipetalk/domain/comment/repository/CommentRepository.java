@@ -20,18 +20,13 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             countQuery = "SELECT count(*) FROM Comment c JOIN UserDetail writer ON c.writer = writer WHERE writer.isBlocked = FALSE AND c.board.id = :boardId AND writer.isDeleted = false AND writer.id NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewerId) ORDER BY c.id")
     Page<CommentResponseDTO> findAllParentCommentByBoard(Long boardId, Pageable pageable, Long viewerId);
 
-    @Query(value = "SELECT new com.solution.recipetalk.dto.comment.CommentResponseDTO(writer.username, writer.nickname, writer.profileImageURI, c.id, c.description, c.createdDate, c.createdDate <> c.modifiedDate as Modified, FALSE as childExist, c.isDeleted, writer.isDeleted) FROM Comment c JOIN UserDetail writer ON c.writer = writer WHERE c.parentComment.Id = :parentCommentId AND writer.isBlocked = FALSE AND c.board.id = :boardId AND writer.isDeleted = FALSE AND writer.id NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewerId) ORDER BY c.id",
+    @Query(value = "SELECT new com.solution.recipetalk.dto.comment.CommentResponseDTO(writer.username, writer.nickname, writer.profileImageURI, c.id, c.description, c.createdDate, c.createdDate <> c.modifiedDate as Modified, c.isDeleted, writer.isDeleted) FROM Comment c JOIN UserDetail writer ON c.writer = writer WHERE c.parentComment.Id = :parentCommentId AND writer.isBlocked = FALSE AND c.board.id = :boardId AND writer.isDeleted = FALSE AND writer.id NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewerId) ORDER BY c.id",
             countQuery = "SELECT COUNT(*) FROM Comment c JOIN UserDetail writer ON c.writer = writer WHERE c.parentComment.Id = :parentCommentId AND writer.isBlocked = FALSE AND c.board.id = :boardId AND writer.isDeleted = FALSE AND writer.id NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewerId) ORDER BY c.id"
     )
     Page<CommentResponseDTO> findAllChildCommentByBoard(Long viewerId, Long boardId, Long parentCommentId, Pageable pageable);
 
-    @Query(value =
-            "SELECT u.username, u.nickname, u.profile_image_uri, c.board_id, c.comment_id, c.description, c.created_date, " +
-                    "IF(c.modified_date <> c.created_date, c.modified_date, c.created_date) as modifiedDate " +
-            "FROM comment c JOIN user_detail u ON c.writer_id = u.user_detail_id " +
-            "WHERE c.writer_id = :userId AND c.is_deleted = false",
-            countQuery = "SELECT COUNT(*) FROM comment c JOIN user_detail u ON c.writer_id = u.user_detail_id WHERE c.writer_id = :userId AND is_deleted = false",
-            nativeQuery = true
+    @Query(value = "SELECT new com.solution.recipetalk.dto.comment.CommentResponseDTO(c.id, c.board.id,  c.description, c.createdDate, c.createdDate <> c.modifiedDate as Modified) FROM Comment c JOIN UserDetail writer ON c.writer = writer WHERE writer.id = :userId AND c.isDeleted = false ORDER BY c.id",
+            countQuery = "SELECT COUNT(*) FROM Comment c JOIN UserDetail writer ON c.writer = writer WHERE writer.id = :userId AND c.isDeleted = false"
     )
     Page<CommentResponseDTO> findAllByWriter(Long userId, Pageable pageable);
 
