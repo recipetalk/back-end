@@ -6,6 +6,7 @@ import com.solution.recipetalk.domain.board.like.entity.BoardLike;
 import com.solution.recipetalk.domain.board.like.id.BoardLikeId;
 import com.solution.recipetalk.domain.board.like.repository.BoardLikeRepository;
 import com.solution.recipetalk.domain.board.repository.BoardRepository;
+import com.solution.recipetalk.domain.comment.entity.Comment;
 import com.solution.recipetalk.domain.comment.repository.CommentRepository;
 import com.solution.recipetalk.domain.image.repository.ImageRepository;
 import com.solution.recipetalk.domain.ingredient.description.repository.IngredientDescriptionRepository;
@@ -35,6 +36,7 @@ import com.solution.recipetalk.domain.user.login.entity.UserProvider;
 import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.exception.board.BoardNotFoundException;
+import com.solution.recipetalk.exception.comment.CommentNotFoundException;
 import com.solution.recipetalk.exception.ingredient.IngredientNotFoundException;
 import com.solution.recipetalk.exception.recipe.RecipeNotFoundException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
@@ -87,6 +89,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         //loadUserBlockData();
         loadBoardLikeData();
         loadUserFollowData();
+        loadCommentData();
     }
 
     private void loadUserData() {
@@ -137,6 +140,12 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private void loadBoardLikeData(){
         createBoardLikeIfNotNull(1L, 1L );
         createBoardLikeIfNotNull(2L, 1L);
+    }
+
+    private void loadCommentData() {
+        createCommentIfNotNull(1L, 1L, 1L, null, "test");
+        createCommentIfNotNull(2L, 1L, 1L, 1L, "testtest");
+        createCommentIfNotNull(3L, 1L, 1L, 1L, "testtest");
     }
 
 
@@ -300,5 +309,27 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         else{
             userFollowRepository.save(UserFollow.builder().user(user).following(followingUser).build());
         }
+    }
+
+    private void createCommentIfNotNull(Long commentId, Long boardId, Long userId, Long parentCommentId, String description){
+        Optional<Comment> findComment = commentRepository.findById(commentId);
+
+        if(findComment.isPresent()){
+            return;
+        }
+
+        Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
+        UserDetail writer= userDetailRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+
+        Comment parentComment = null;
+        if(parentCommentId != null){
+             parentComment = commentRepository.findById(parentCommentId).orElseThrow(CommentNotFoundException::new);
+        }
+
+        Comment comment = Comment.builder().parentComment(parentComment).description(description).writer(writer).board(board).build();
+
+        commentRepository.save(comment);
+
     }
 }

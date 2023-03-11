@@ -18,7 +18,7 @@ import java.util.List;
 @SuperBuilder
 @Entity
 @Table(name="comment")
-@SQLDelete(sql = "UPDATE comment SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE comment SET is_deleted = true WHERE comment_id = ?")
 public class Comment extends SoftDeleteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
