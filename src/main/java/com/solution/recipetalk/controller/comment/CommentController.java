@@ -68,14 +68,4 @@ public class CommentController {
     ) {
         return removeCommentService.removeCommentByIdAndBoardId(boardId, commentId);
     }
-
-    @DeleteMapping("/board/{boardId}/comment")
-    public ResponseEntity<?> commentRemoveByBoardId(@PathVariable Long boardId) {
-        return removeCommentService.removeAllCommentsOfBoard(boardId);
-    }
-
-    @DeleteMapping("/comment")
-    public ResponseEntity<?> commentRemove() {
-        return removeCommentService.removeAllComments();
-    }
 }

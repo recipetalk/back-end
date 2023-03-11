@@ -6,6 +6,7 @@ import com.solution.recipetalk.domain.board.like.entity.BoardLike;
 import com.solution.recipetalk.domain.board.like.id.BoardLikeId;
 import com.solution.recipetalk.domain.board.like.repository.BoardLikeRepository;
 import com.solution.recipetalk.domain.board.repository.BoardRepository;
+import com.solution.recipetalk.domain.comment.entity.Comment;
 import com.solution.recipetalk.domain.comment.repository.CommentRepository;
 import com.solution.recipetalk.domain.image.repository.ImageRepository;
 import com.solution.recipetalk.domain.ingredient.description.repository.IngredientDescriptionRepository;
@@ -26,12 +27,16 @@ import com.solution.recipetalk.domain.user.block.entity.UserBlock;
 import com.solution.recipetalk.domain.user.block.id.UserBlockId;
 import com.solution.recipetalk.domain.user.block.repository.UserBlockRepository;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
+import com.solution.recipetalk.domain.user.follow.UserFollowId;
+import com.solution.recipetalk.domain.user.follow.entity.UserFollow;
+import com.solution.recipetalk.domain.user.follow.repository.UserFollowRepository;
 import com.solution.recipetalk.domain.user.login.entity.RoleType;
 import com.solution.recipetalk.domain.user.login.entity.UserLogin;
 import com.solution.recipetalk.domain.user.login.entity.UserProvider;
 import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.exception.board.BoardNotFoundException;
+import com.solution.recipetalk.exception.comment.CommentNotFoundException;
 import com.solution.recipetalk.exception.ingredient.IngredientNotFoundException;
 import com.solution.recipetalk.exception.recipe.RecipeNotFoundException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
@@ -67,9 +72,10 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private final ReportRepository reportRepository;
     private final UserLoginRepository userLoginRepository;
     private final UserDetailRepository userDetailRepository;
+    private final UserBlockRepository userBlockRepository;
+    private final UserFollowRepository userFollowRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    private final UserBlockRepository userBlockRepository;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -80,18 +86,21 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         loadRecipeData();
         loadRecipeRowData();
         loadIngredientTrimmingData();
-        loadUserBlockData();
+        //loadUserBlockData();
         loadBoardLikeData();
+        loadUserFollowData();
+        loadCommentData();
     }
 
     private void loadUserData() {
         //테스트를 위해 id : 2L로 시작함.
-        createUserDataIfNotNull(1L, "hyunkim", "khj745700", "testtest", "01031798788");
+        createUserDataIfNotNull(1L, "hyunkim", "khj745700", "testtest", "01031798788", false);
     }
 
     private void loadTestUserData() {
-        createUserDataIfNotNull(2L, "test", "test", "test", "01012341234");
-        createUserDataIfNotNull(3L, "test1", "test1", "test", "01012344321");
+        createUserDataIfNotNull(2L, "test", "test", "test", "01012341234", false);
+        createUserDataIfNotNull(3L, "test1", "test1", "test", "01012344321", true);
+        createUserDataIfNotNull(4L, "test2", "test2", "test", "01012344321", false);
     }
 
     private void loadBoardData() {
@@ -117,6 +126,11 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         createIngredientTrimmingDataIfNotNull(1L, 1L, 2L);
     }
 
+    private void loadUserFollowData() {
+        createUserFollowIfNotNull(1L, 2L);
+        createUserFollowIfNotNull(1L, 3L);
+    }
+
     private void loadUserBlockData() {
         createUserBlockIfNotNull(1L,2L);
         createUserBlockIfNotNull(1L,3L);
@@ -128,8 +142,14 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         createBoardLikeIfNotNull(2L, 1L);
     }
 
+    private void loadCommentData() {
+        createCommentIfNotNull(1L, 1L, 1L, null, "test");
+        createCommentIfNotNull(2L, 1L, 1L, 1L, "testtest");
+        createCommentIfNotNull(3L, 1L, 1L, 1L, "testtest");
+    }
 
-    private void createUserDataIfNotNull(Long id, String nickname, String username, String password, String phoneNum){
+
+    private void createUserDataIfNotNull(Long id, String nickname, String username, String password, String phoneNum, Boolean isBlocked){
         Optional<UserDetail> byId = userDetailRepository.findById(id);
         if(byId.isPresent()){
             return;
@@ -140,6 +160,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
                 .phoneNum(phoneNum)
                 .username(username)
                 .profileImageURI("")
+                .isBlocked(isBlocked)
                 .build();
 
         UserLogin userLogin = UserLogin.builder()
@@ -272,5 +293,43 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         else{
             boardLikeRepository.save(BoardLike.builder().user(user).board(board).build());
         }
+    }
+
+    private void createUserFollowIfNotNull(Long userId, Long followingId){
+        UserDetail user = userDetailRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        UserDetail followingUser = userDetailRepository.findById(followingId).orElseThrow(UserNotFoundException::new);
+
+        UserFollowId userFollowId = new UserFollowId(user, followingUser);
+
+        Optional<UserFollow> find = userFollowRepository.findById(userFollowId);
+
+        if(find.isPresent()){
+            return;
+        }
+        else{
+            userFollowRepository.save(UserFollow.builder().user(user).following(followingUser).build());
+        }
+    }
+
+    private void createCommentIfNotNull(Long commentId, Long boardId, Long userId, Long parentCommentId, String description){
+        Optional<Comment> findComment = commentRepository.findById(commentId);
+
+        if(findComment.isPresent()){
+            return;
+        }
+
+        Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
+        UserDetail writer= userDetailRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+
+        Comment parentComment = null;
+        if(parentCommentId != null){
+             parentComment = commentRepository.findById(parentCommentId).orElseThrow(CommentNotFoundException::new);
+        }
+
+        Comment comment = Comment.builder().parentComment(parentComment).description(description).writer(writer).board(board).build();
+
+        commentRepository.save(comment);
+
     }
 }
