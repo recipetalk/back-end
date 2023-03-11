@@ -26,11 +26,11 @@ public class Comment extends SoftDeleteEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writer_id", nullable = false, referencedColumnName = "user_detail_id")
+    @JoinColumn(name = "writer_id", nullable = false)
     private UserDetail writer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_comment_id", referencedColumnName = "comment_id")
+    @JoinColumn(name = "parent_comment_id")
     private Comment parentComment;
 
     @ManyToOne(fetch = FetchType.LAZY)

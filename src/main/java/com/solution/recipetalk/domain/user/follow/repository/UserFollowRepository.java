@@ -19,4 +19,5 @@ public interface UserFollowRepository extends JpaRepository<UserFollow, UserFoll
             countQuery = "SELECT COUNT(*) FROM UserFollow f JOIN UserDetail u WHERE f.following = u AND u.id = :id AND u.isDeleted = false AND u.isBlocked = false"
     )
     Page<UserSimpleProfileDTO> findAllByUserPage(@Param("id") Long  id, Pageable pageable);
+
 }
