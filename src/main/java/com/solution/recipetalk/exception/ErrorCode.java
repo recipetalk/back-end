@@ -20,8 +20,8 @@ public enum ErrorCode {
     DUPLICATED_USER_EXIST(HttpStatus.BAD_REQUEST, "U007", "중복된 아이디가 존재합니다."),
     PHONE_UNVERIFIED_EXCEPTION(HttpStatus.BAD_REQUEST, "U008", "인증되지 않았습니다."),
     PHONE_VERIFIED_EXCEPTION(HttpStatus.BAD_REQUEST, "U009", "이미 인증되었습니다."),
-    AUTH_REQUEST_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "U002", "인증번호를 다시 한번 요청해 주세요"),
-
+    AUTH_REQUEST_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "U002", "인증을 다시 한번 요청해 주세요"),
+    VERIFICATION_FAILED_EXCEPTION(HttpStatus.BAD_REQUEST, "U003", "인증을 요청해 주세요"),
     // board
     CANNOT_FIND_BOARD(HttpStatus.NOT_FOUND, "C001", "게시물이 삭제되었거나 찾을 수 없습니다"),
 

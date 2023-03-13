@@ -13,7 +13,6 @@ public class CorsConfig {
     public CorsFilter corsFilter(){
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-
         config.setAllowCredentials(true);
         // axios default withcredentials true
         config.addAllowedOriginPattern("*"); // 모든 IP에 대한 응답을 허용
