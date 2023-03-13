@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     // common
     NOT_FOUND(HttpStatus.NOT_FOUND, "C001", "페이지를 찾을 수 없습니다"),
-    NOT_AUTHORIZED_TO_MODIFY(HttpStatus.FORBIDDEN, "C003", "수정할 권한이 없습니다"),
+    NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "C003", "권한이 없습니다"),
 
     // signup
     SMS_API_REQUEST_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "U002", "인증번호를 다시 한번 요청해 주세요."),
@@ -38,7 +38,9 @@ public enum ErrorCode {
     // ingredient_trimming
     INGREDIENT_TRIMMING_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "INT001", "손질법을 찾을 수 없습니다."),
 
+    INGREDIENT_DESCRIPTION_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "IND001", "식재료 효능을 찾을 수 없습니다."),
 
+    INGREDIENT_DESCRIPTION_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "IND002", "해당 식재료의 효능 정보가 이미 등록되어 있습니다."),
     // recipe
     RECIPE_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "R001", "레시피를 찾을 수 없습니다."),
 

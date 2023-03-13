@@ -9,4 +9,5 @@ public interface S3dir {
     String INGREDIENT_TRIMMING_IMG_DIR = "img/ingredient/trimming";
 
     String INGREDIENT_TRIMMING_ROW_IMG_DIR = "img/ingredient/trimming/row";
+    String INGREDIENT_DESCRIPTION_DIR = "img/ingredient/description";
 }
