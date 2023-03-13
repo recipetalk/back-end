@@ -5,6 +5,6 @@ import com.solution.recipetalk.exception.ErrorCode;
 
 public class NotAuthorizedToModifyCommentException extends CustomException {
     public NotAuthorizedToModifyCommentException() {
-        super(ErrorCode.NOT_AUTHORIZED_TO_MODIFY);
+        super(ErrorCode.NOT_AUTHORIZED);
     }
 }
