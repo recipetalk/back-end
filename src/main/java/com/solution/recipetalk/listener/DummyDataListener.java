@@ -1,6 +1,9 @@
 package com.solution.recipetalk.listener;
 
 import com.solution.recipetalk.domain.bill.repository.BillRepository;
+import com.solution.recipetalk.domain.board.bookmark.entity.Bookmark;
+import com.solution.recipetalk.domain.board.bookmark.id.BookmarkId;
+import com.solution.recipetalk.domain.board.bookmark.repository.BookmarkRepository;
 import com.solution.recipetalk.domain.board.entity.Board;
 import com.solution.recipetalk.domain.board.like.entity.BoardLike;
 import com.solution.recipetalk.domain.board.like.id.BoardLikeId;
@@ -74,8 +77,8 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private final UserDetailRepository userDetailRepository;
     private final UserBlockRepository userBlockRepository;
     private final UserFollowRepository userFollowRepository;
+    private final BookmarkRepository bookmarkRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -90,6 +93,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         loadBoardLikeData();
         loadUserFollowData();
         loadCommentData();
+        loadBookmarkData();
     }
 
     private void loadUserData() {
@@ -146,6 +150,11 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         createCommentIfNotNull(1L, 1L, 1L, null, "test");
         createCommentIfNotNull(2L, 1L, 1L, 1L, "testtest");
         createCommentIfNotNull(3L, 1L, 1L, 1L, "testtest");
+    }
+
+    private void loadBookmarkData() {
+        createBookmarkIfNotNull(1L, 1L);
+        createBookmarkIfNotNull(1L, 2L);
     }
 
 
@@ -331,5 +340,19 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
 
         commentRepository.save(comment);
 
+    }
+
+    private void createBookmarkIfNotNull(Long userId, Long boardId){
+        UserDetail user = userDetailRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
+        BookmarkId bookmarkId = new BookmarkId(user,board);
+
+        Optional<Bookmark> find = bookmarkRepository.findById(bookmarkId);
+        if(find.isPresent()){
+            return;
+        }
+        else{
+            bookmarkRepository.save(Bookmark.builder().user(user).board(board).build());
+        }
     }
 }
