@@ -37,12 +37,12 @@ public class CommentController {
         return registerCommentService.addComment(boardId, request);
     }
 
-    @GetMapping("/{boardId}/comment")
+    @GetMapping("/board/{boardId}/comment")
     public ResponseEntity<?> commentParentListByBoard(@PathVariable Long boardId, Pageable pageable) {
         return findCommentService.findAllParentCommentsOfBoard(boardId, pageable);
     }
 
-    @GetMapping("/{boardId}/comment/{commentId}")
+    @GetMapping("/board/{boardId}/comment/{commentId}")
     public ResponseEntity<?> commentChildListByBoard(@PathVariable(name = "boardId") Long boardId, @PathVariable(name = "commentId") Long parentCommentId, Pageable pageable) {
         return findCommentService.findAllChildCommentsOfBoard(boardId, parentCommentId, pageable);
     }
@@ -56,9 +56,8 @@ public class CommentController {
     public ResponseEntity<?> commentModify(
             @PathVariable Long boardId,
             @PathVariable Long commentId,
-            @Valid @RequestBody String description
+            @Valid @RequestBody CommentModifyDTO commentModifyDTO
     ) {
-        CommentModifyDTO commentModifyDTO = CommentModifyDTO.builder().description(description).build();
         return editCommentService.modifyCommentById(boardId, commentId, commentModifyDTO);
     }
 
@@ -68,15 +67,5 @@ public class CommentController {
             @PathVariable Long commentId
     ) {
         return removeCommentService.removeCommentByIdAndBoardId(boardId, commentId);
-    }
-
-    @DeleteMapping("/board/{boardId}/comment")
-    public ResponseEntity<?> commentRemoveByBoardId(@PathVariable Long boardId) {
-        return removeCommentService.removeAllCommentsOfBoard(boardId);
-    }
-
-    @DeleteMapping("/comment")
-    public ResponseEntity<?> commentRemove() {
-        return removeCommentService.removeAllComments();
     }
 }

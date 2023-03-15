@@ -25,6 +25,4 @@ public class UserFollow extends AuditingEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "following_id", referencedColumnName = "user_detail_id")
     private UserDetail following;
-
-
 }

@@ -1,5 +1,5 @@
 package com.solution.recipetalk.domain.ingredient.entity;
 
 public enum IngredientState {
-    TEST
+    다짐
 }

@@ -29,7 +29,7 @@ public class RecipeIngredient extends AuditingEntity {
     private Ingredient ingredient;
 
     @Column(name = "quantity")
-    private Long quantity;
+    private String quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id", nullable = false)

@@ -30,14 +30,14 @@ public class FindCommentServiceImpl implements FindCommentService {
     @Override
     public ResponseEntity<?> findAllParentCommentsOfBoard(Long boardId, Pageable pageable) {
 
-        Page<CommentResponseDTO> responseDTOS = commentRepository.findAllParentCommentByBoard(boardId, pageable);
+        Page<CommentResponseDTO> responseDTOS = commentRepository.findAllParentCommentByBoard(boardId, pageable, ContextHolder.getUserLoginId());
 
         return ResponseEntity.ok(responseDTOS);
     }
 
     @Override
     public ResponseEntity<?> findAllChildCommentsOfBoard(Long boardId, Long parentCommentId, Pageable pageable) {
-        Page<CommentResponseDTO> responseDTOS = commentRepository.findAllChildCommentByBoard(boardId, parentCommentId, pageable);
+        Page<CommentResponseDTO> responseDTOS = commentRepository.findAllChildCommentByBoard(ContextHolder.getUserLoginId(), boardId, parentCommentId, pageable);
 
         return ResponseEntity.ok(responseDTOS);
     }

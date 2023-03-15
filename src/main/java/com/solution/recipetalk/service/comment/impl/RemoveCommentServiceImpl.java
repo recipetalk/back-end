@@ -45,7 +45,7 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
 
         validateWhoIsRemovingComment(comment.getWriter(), currentLoginUser);
 
-        commentRepository.deleteById(commentId);
+        commentRepository.delete(comment);
 
         return ResponseEntity.ok(null);
     }
@@ -68,7 +68,7 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
     }
 
     private void validateWhoIsRemovingComment(UserDetail writer, UserDetail currentLoginUser) {
-        if(currentLoginUser.equals(writer)) {
+        if(!currentLoginUser.equals(writer)) {
             throw new NotAuthorizedToModifyCommentException();
         }
     }

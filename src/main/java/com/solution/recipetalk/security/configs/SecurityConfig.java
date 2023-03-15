@@ -12,8 +12,10 @@ import com.solution.recipetalk.security.provider.JWTAuthenticationProvider;
 import com.solution.recipetalk.security.provider.JsonAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -31,6 +33,8 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 @Configuration
@@ -124,11 +128,13 @@ public class SecurityConfig{
         return http
                 .formLogin().disable()
                 .httpBasic().disable()
-
+                .logout().disable()
+                .csrf().disable()
                 // `api/` 이하 URL에 한해서 설정 클래스 동작
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+
                 .anyRequest().authenticated()
                 .and()
                 .addFilterAt(jsonLoginProcessingFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class)
@@ -139,8 +145,8 @@ public class SecurityConfig{
                 .accessDeniedHandler(jsonAccessDeniedHandler())
                 .authenticationEntryPoint(jsonLoginAuthEntryPoint())
                 .and()
-                .addFilter(corsConfig.corsFilter()).csrf().disable() // Enable CORS and disable CSRF //TODO: 왜 CORS는 활성화 하라는 것 ?
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().build(); // Set session management to stateless
+                .addFilter(corsConfig.corsFilter()) // Enable CORS and disable CSRF //TODO: 왜 CORS는 활성화 하라는 것 ?
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and().build(); // Set session management to stateless
 
 
     }
