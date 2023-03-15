@@ -13,11 +13,12 @@ import lombok.*;
 @Builder
 public class RecipeIngredientRegisterDTO {
     private Long ingredientId;
-    private Long quantity;
+    private String quantity;
 
     public RecipeIngredient toRecipeIngredientEntity(Ingredient ingredient, Recipe recipe){
         return RecipeIngredient.builder()
                 .ingredient(ingredient)
+                .quantity(quantity)
                 .recipe(recipe)
                 .build();
     }

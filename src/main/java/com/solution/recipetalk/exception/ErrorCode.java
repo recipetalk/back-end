@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     // common
     NOT_FOUND(HttpStatus.NOT_FOUND, "C001", "페이지를 찾을 수 없습니다"),
-    NOT_AUTHORIZED_TO_MODIFY(HttpStatus.FORBIDDEN, "C003", "수정할 권한이 없습니다"),
+    NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "C003", "권한이 없습니다"),
 
     // signup
     SMS_API_REQUEST_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "U002", "인증번호를 다시 한번 요청해 주세요."),
@@ -20,8 +20,8 @@ public enum ErrorCode {
     DUPLICATED_USER_EXIST(HttpStatus.BAD_REQUEST, "U007", "중복된 아이디가 존재합니다."),
     PHONE_UNVERIFIED_EXCEPTION(HttpStatus.BAD_REQUEST, "U008", "인증되지 않았습니다."),
     PHONE_VERIFIED_EXCEPTION(HttpStatus.BAD_REQUEST, "U009", "이미 인증되었습니다."),
-    AUTH_REQUEST_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "U002", "인증번호를 다시 한번 요청해 주세요"),
-
+    AUTH_REQUEST_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "U002", "인증을 다시 한번 요청해 주세요"),
+    VERIFICATION_FAILED_EXCEPTION(HttpStatus.BAD_REQUEST, "U003", "인증을 요청해 주세요"),
     // board
     BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "C001", "게시물이 삭제되었거나 찾을 수 없습니다"),
 
@@ -41,7 +41,9 @@ public enum ErrorCode {
     // ingredient_trimming_row
     INGREDIENT_TRIMMING_ROW_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "INTR001", "손질 순서 정보를 찾을 수 없습니다."),
 
+    INGREDIENT_DESCRIPTION_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "IND001", "식재료 효능을 찾을 수 없습니다."),
 
+    INGREDIENT_DESCRIPTION_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "IND002", "해당 식재료의 효능 정보가 이미 등록되어 있습니다."),
     // recipe
     RECIPE_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "R001", "레시피를 찾을 수 없습니다."),
 
@@ -49,7 +51,11 @@ public enum ErrorCode {
     USER_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "U001", "유저를 찾을 수 없습니다."),
 
     // user Follow
-    USER_FOLLOW_NOT_FOUND(HttpStatus.NOT_FOUND, "UF001", "팔로우 되어 있지 않습니다.");
+    USER_FOLLOW_NOT_FOUND(HttpStatus.NOT_FOUND, "UF001", "팔로우 되어 있지 않습니다."),
+
+    // user Block
+    USER_BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "UB001", "차단 되어 있지 않습니다."),
+    USER_BLOCK_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "UB002", "이미 차단되어 있습니다.");
     private HttpStatus httpStatus;
     private String message;
     private String code;

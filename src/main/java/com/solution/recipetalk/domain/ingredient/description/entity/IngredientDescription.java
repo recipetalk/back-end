@@ -34,5 +34,16 @@ public class IngredientDescription extends AuditingEntity {
     @Column(nullable = false)
     private String description;
 
+    public void updateIngredient(Ingredient ingredient) {
+        this.ingredient = ingredient;
+    }
+
+    public void updateImgURI(String imgURI) {
+        this.imgURI = imgURI;
+    }
+
+    public void updateDescription(String description) {
+        this.description = description;
+    }
 }
 
