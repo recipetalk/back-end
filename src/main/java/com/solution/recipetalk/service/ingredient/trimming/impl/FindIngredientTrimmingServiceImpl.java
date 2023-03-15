@@ -32,7 +32,9 @@ public class FindIngredientTrimmingServiceImpl implements FindIngredientTrimming
     public ResponseEntity<?> findIngredientTrimmingDetail(Long ingredientId, Long trimmingId){
         IngredientTrimmingDetailResult ingredientTrimmingDetail = ingredientTrimmingRepository.findIngredientTrimmingDetailResultById(ingredientId, trimmingId).orElseThrow(IngredientTrimmingNotFoundException::new);
 
-        List<IngredientTrimmingRow> trimmingRows = ingredientTrimmingRowRepository.findAllByIngredientTrimming(ingredientTrimmingRepository.findById(trimmingId).orElseThrow(IngredientTrimmingNotFoundException::new)).orElseThrow();
+        List<IngredientTrimmingRow> trimmingRows = ingredientTrimmingRowRepository
+                .findAllByIngredientTrimming(ingredientTrimmingRepository
+                        .findById(trimmingId).orElseThrow(IngredientTrimmingNotFoundException::new));
 
         return ResponseEntity.ok(IngredientTrimmingFindResDTO.fromIngredientTrimmingDetailResultAndTrimmingRows(ingredientTrimmingDetail, trimmingRows));
     }

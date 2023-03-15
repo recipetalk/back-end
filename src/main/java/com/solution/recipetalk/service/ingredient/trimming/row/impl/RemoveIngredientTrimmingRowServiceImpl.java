@@ -21,7 +21,7 @@ public class RemoveIngredientTrimmingRowServiceImpl implements RemoveIngredientT
 
     @Override
     public void removeIngredientTrimmingRowByIngredientTrimming(IngredientTrimming ingredientTrimming){
-        List<IngredientTrimmingRow> ingredientTrimmingRows = ingredientTrimmingRowRepository.findAllByIngredientTrimming(ingredientTrimming).orElseThrow();
+        List<IngredientTrimmingRow> ingredientTrimmingRows = ingredientTrimmingRowRepository.findAllByIngredientTrimming(ingredientTrimming);
 
         ingredientTrimmingRows.forEach(row -> {
             s3Uploader.deleteFile(row.getImgURI(), S3dir.INGREDIENT_TRIMMING_ROW_IMG_DIR);

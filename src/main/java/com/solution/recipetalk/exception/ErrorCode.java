@@ -23,7 +23,7 @@ public enum ErrorCode {
     AUTH_REQUEST_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "U002", "인증번호를 다시 한번 요청해 주세요"),
 
     // board
-    CANNOT_FIND_BOARD(HttpStatus.NOT_FOUND, "C001", "게시물이 삭제되었거나 찾을 수 없습니다"),
+    BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "C001", "게시물이 삭제되었거나 찾을 수 없습니다"),
 
     // comment
     NO_COMMENT_FOUND(HttpStatus.NOT_FOUND, "C101", "존재하지 않는 댓글입니다"),
@@ -37,6 +37,9 @@ public enum ErrorCode {
 
     // ingredient_trimming
     INGREDIENT_TRIMMING_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "INT001", "손질법을 찾을 수 없습니다."),
+
+    // ingredient_trimming_row
+    INGREDIENT_TRIMMING_ROW_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "INTR001", "손질 순서 정보를 찾을 수 없습니다."),
 
 
     // recipe

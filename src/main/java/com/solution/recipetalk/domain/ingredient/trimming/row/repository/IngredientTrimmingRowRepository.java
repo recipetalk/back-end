@@ -11,6 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IngredientTrimmingRowRepository extends JpaRepository<IngredientTrimmingRow, Long> {
-    Optional<List<IngredientTrimmingRow>> findAllByIngredientTrimming(IngredientTrimming ingredientTrimming);
+    List<IngredientTrimmingRow> findAllByIngredientTrimming(IngredientTrimming ingredientTrimming);
     Optional<IngredientTrimmingRow> findByIngredientTrimmingAndTrimmingSeqAndTrimmingSubSeq(IngredientTrimming ingredientTrimming, Long trimmingSeq, Long trimmingSubSeq);
 }
