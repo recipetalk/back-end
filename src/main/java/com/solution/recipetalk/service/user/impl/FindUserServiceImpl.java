@@ -37,8 +37,8 @@ public class FindUserServiceImpl implements FindUserService {
 
     @Override
     public ResponseEntity<?> findDuplicatedNicknameInUserLogin(String nickname) {
-        DuplicateUserDTO.builder().isValid(isDuplicatedNicknameExceptionHandler(nickname)).build();
-        return null;
+        DuplicateUserDTO dto = DuplicateUserDTO.builder().isValid(isDuplicatedNicknameExceptionHandler(nickname)).build();
+        return ResponseEntity.ok(dto);
     }
 
     private Boolean isDuplicatedNicknameExceptionHandler(String nickname) {
