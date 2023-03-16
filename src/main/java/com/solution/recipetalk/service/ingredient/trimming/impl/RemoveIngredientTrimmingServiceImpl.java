@@ -35,7 +35,7 @@ public class RemoveIngredientTrimmingServiceImpl implements RemoveIngredientTrim
         
         IngredientTrimming ingredientTrimming = ingredientTrimmingRepository.findById(trimmingId).orElseThrow(IngredientTrimmingNotFoundException::new);
         if (!ingredientTrimming.getBoard().getWriter().equals(currentUser)){
-            throw new CustomException(ErrorCode.NOT_AUTHORIZED_TO_MODIFY);
+            throw new CustomException(ErrorCode.NOT_AUTHORIZED);
         }
         
         String ingredientTrimmingUri = ingredientTrimming.getThumbnailUri();
