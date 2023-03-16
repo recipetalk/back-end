@@ -30,7 +30,7 @@ public interface IngredientTrimmingRepository extends JpaRepository<IngredientTr
         Board getBoard();
     }
 
-    @Query("SELECT B.id AS id, B.title AS title, count(BL.user.id) AS likeCount, count(C.id) AS commentCount, IT.thumbnailUri AS thumbnailUri, B.writer.nickname AS nickname " +
+    @Query("SELECT B.id AS id, B.title AS title, count(DISTINCT BL.user.id) AS likeCount, count(DISTINCT C.id) AS commentCount, IT.thumbnailUri AS thumbnailUri, B.writer.nickname AS nickname " +
             "FROM IngredientTrimming AS IT " +
             "JOIN Board AS B ON B = IT.board " +
             "LEFT JOIN BoardLike AS BL ON BL.board = B " +
