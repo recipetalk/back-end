@@ -2,6 +2,7 @@ package com.solution.recipetalk.domain.verification.token.entity;
 
 import com.solution.recipetalk.domain.common.AuditingEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -24,6 +25,7 @@ public class VerificationToken extends AuditingEntity {
     private String token;
 
     @Column(name = "email", nullable = false)
+    @Email
     private String email;
 
     @Column(name = "expiry_date", nullable = false)

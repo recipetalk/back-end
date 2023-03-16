@@ -98,13 +98,13 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
 
     private void loadUserData() {
         //테스트를 위해 id : 2L로 시작함.
-        createUserDataIfNotNull(1L, "hyunkim", "khj745700", "testtest", "01031798788", false);
+        createUserDataIfNotNull(1L, "hyunkim", "khj745700", "testtest", "01031798788", false, "rlaguswls1234@naver.com");
     }
 
     private void loadTestUserData() {
-        createUserDataIfNotNull(2L, "test", "test", "test", "01012341234", false);
-        createUserDataIfNotNull(3L, "test1", "test1", "test", "01012344321", true);
-        createUserDataIfNotNull(4L, "test2", "test2", "test", "01012344321", false);
+        createUserDataIfNotNull(2L, "test", "test", "test", "01012341234", false, "ghdwlgns1234@gmail.com");
+        createUserDataIfNotNull(3L, "test1", "test1", "test", "01012344321", true, "atene1408@naver.com");
+        createUserDataIfNotNull(4L, "test2", "test2", "test", "01012344321", false, "ghdwlgns1234@naver.com");
     }
 
     private void loadBoardData() {
@@ -158,7 +158,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     }
 
 
-    private void createUserDataIfNotNull(Long id, String nickname, String username, String password, String phoneNum, Boolean isBlocked){
+    private void createUserDataIfNotNull(Long id, String nickname, String username, String password, String phoneNum, Boolean isBlocked, String email){
         Optional<UserDetail> byId = userDetailRepository.findById(id);
         if(byId.isPresent()){
             return;
@@ -174,6 +174,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
 
         UserLogin userLogin = UserLogin.builder()
                 .userDetail(userDetail)
+                .email(email)
                 .password(bCryptPasswordEncoder.encode(password))
                 .username(username)
                 .provider(UserProvider.NONE)
