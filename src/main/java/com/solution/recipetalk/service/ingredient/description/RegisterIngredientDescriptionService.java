@@ -4,5 +4,5 @@ import com.solution.recipetalk.dto.ingredient.description.IngredientDescriptionR
 import org.springframework.http.ResponseEntity;
 
 public interface RegisterIngredientDescriptionService {
-    ResponseEntity<?> registerIngredientDescription(IngredientDescriptionRegisterDTO dto, Long ingredientId);
+    ResponseEntity<?> addIngredientDescription(IngredientDescriptionRegisterDTO dto, Long ingredientId);
 }

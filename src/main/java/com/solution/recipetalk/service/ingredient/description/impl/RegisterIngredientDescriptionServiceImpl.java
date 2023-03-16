@@ -41,7 +41,7 @@ public class RegisterIngredientDescriptionServiceImpl implements RegisterIngredi
     private final S3Uploader s3Uploader;
 
     @Override
-    public ResponseEntity<?> registerIngredientDescription(IngredientDescriptionRegisterDTO dto, Long ingredientId) {
+    public ResponseEntity<?> addIngredientDescription(IngredientDescriptionRegisterDTO dto, Long ingredientId) {
         UserDetail writer = userDetailRepository.findById(ContextHolder.getUserLoginId()).orElseThrow(UserNotFoundException::new);
         validateWriterIsAdmin(writer);
 
@@ -65,9 +65,9 @@ public class RegisterIngredientDescriptionServiceImpl implements RegisterIngredi
         Ingredient ingredient = ingredientRepository.findById(ingredientId).orElseThrow(IngredientNotFoundException::new);
         IngredientDescription ingredientDescription = dto.toIngredientDescription(createdBoard, ingredient, dir, dto.getDescription());
 
-        Long ingredientDescriptionId = ingredientDescriptionRepository.save(ingredientDescription).getId();
+        ingredientDescriptionRepository.save(ingredientDescription);
 
-        return ResponseEntity.ok(ingredientDescriptionId);
+        return ResponseEntity.ok(null);
     }
 
     private void validateWriterIsAdmin(UserDetail writer) {
