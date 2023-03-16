@@ -40,7 +40,7 @@ public class EditIngredientTrimmingServiceImpl implements EditIngredientTrimming
            throw new CustomException(ErrorCode.NOT_AUTHORIZED);
         }
 
-        Board board = boardRepository.findById(ingredientTrimming.getId()).orElseThrow(BoardNotFoundException::new);
+        Board board = boardRepository.findById(ingredientTrimming.getBoard().getId()).orElseThrow(BoardNotFoundException::new);
 
         String dir = "";
         if( null != dto.getThumbnail() ){

@@ -33,7 +33,6 @@ public class FindIngredientTrimmingServiceImpl implements FindIngredientTrimming
     private final IngredientTrimmingRowRepository ingredientTrimmingRowRepository;
     private final UserDetailRepository userDetailRepository;
     private final UserBlockRepository userBlockRepository;
-    private final BoardRepository boardRepository;
 
     @Override
     public ResponseEntity<?> findIngredientTrimming(Long ingredientId, Pageable pageable){
