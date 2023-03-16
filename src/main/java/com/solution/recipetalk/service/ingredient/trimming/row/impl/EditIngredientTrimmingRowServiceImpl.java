@@ -41,7 +41,7 @@ public class EditIngredientTrimmingRowServiceImpl implements EditIngredientTrimm
         IngredientTrimming ingredientTrimming = ingredientTrimmingRepository.findById(trimmingId).orElseThrow(IngredientTrimmingNotFoundException::new);
 
         if (!ingredientTrimming.getBoard().getWriter().equals(currentUser)){
-            throw new CustomException(ErrorCode.NOT_AUTHORIZED_TO_MODIFY);
+            throw new CustomException(ErrorCode.NOT_AUTHORIZED);
         }
         List<IngredientTrimmingRow> ingredientTrimmingRows = dtoList.stream().map(dto -> {
             IngredientTrimmingRow ingredientTrimmingRow = ingredientTrimmingRowRepository

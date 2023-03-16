@@ -46,7 +46,7 @@ public class ModifyIngredientDescriptionServiceImpl implements ModifyIngredientD
         IngredientDescription ingredientDescription = ingredientDescriptionRepository.findByIngredient(ingredient).orElseThrow(IngredientDescriptionNotFoundException::new);
 
         if(dto.getTitle() != null)
-            ingredientDescription.getBoard().updateTitle(dto.getTitle());
+            ingredientDescription.getBoard().changeTitle(dto.getTitle());
 
         if(dto.getDescription() != null)
             ingredientDescription.updateDescription(dto.getDescription());

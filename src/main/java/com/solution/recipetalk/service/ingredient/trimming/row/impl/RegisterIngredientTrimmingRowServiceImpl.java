@@ -5,11 +5,17 @@ import com.solution.recipetalk.domain.ingredient.trimming.entity.IngredientTrimm
 import com.solution.recipetalk.domain.ingredient.trimming.repository.IngredientTrimmingRepository;
 import com.solution.recipetalk.domain.ingredient.trimming.row.entity.IngredientTrimmingRow;
 import com.solution.recipetalk.domain.ingredient.trimming.row.repository.IngredientTrimmingRowRepository;
+import com.solution.recipetalk.domain.user.entity.UserDetail;
+import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.dto.ingredient.trimming.row.IngredientTrimmingRowRegisterDTO;
+import com.solution.recipetalk.exception.CustomException;
+import com.solution.recipetalk.exception.ErrorCode;
 import com.solution.recipetalk.exception.ingredient.trimming.IngredientTrimmingNotFoundException;
 import com.solution.recipetalk.exception.s3.ImageUploadFailedException;
+import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.s3.upload.S3Uploader;
 import com.solution.recipetalk.service.ingredient.trimming.row.RegisterIngredientTrimmingRowService;
+import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,11 +33,17 @@ public class RegisterIngredientTrimmingRowServiceImpl implements RegisterIngredi
     private final IngredientTrimmingRepository ingredientTrimmingRepository;
     private final S3Uploader s3Uploader;
     private final IngredientTrimmingRowRepository ingredientTrimmingRowRepository;
+    private final UserDetailRepository userDetailRepository;
 
 
     @Override
     public ResponseEntity<?> registerIngredientTrimmingRow(List<IngredientTrimmingRowRegisterDTO> dtoList, Long ingredientTrimmingId) {
         IngredientTrimming findIngredientTrimming = ingredientTrimmingRepository.findById(ingredientTrimmingId).orElseThrow(IngredientTrimmingNotFoundException::new);
+        UserDetail currentUser = userDetailRepository.findById(ContextHolder.getUserLoginId()).orElseThrow(UserNotFoundException::new);
+
+        if (!findIngredientTrimming.getBoard().getWriter().equals(currentUser)){
+            throw new CustomException(ErrorCode.NOT_AUTHORIZED);
+        }
 
         List<IngredientTrimmingRow> createdIngredientTrimmingRows = dtoList.stream()
                 .map(dto -> {

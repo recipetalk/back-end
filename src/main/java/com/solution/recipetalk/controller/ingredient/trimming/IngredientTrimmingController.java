@@ -8,6 +8,8 @@ import com.solution.recipetalk.service.ingredient.trimming.RegisterIngredientTri
 import com.solution.recipetalk.service.ingredient.trimming.RemoveIngredientTrimmingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +31,8 @@ public class IngredientTrimmingController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> ingredientTrimmingList(@PathVariable(name = "ingredientId") Long ingredientId) {
-        return findIngredientTrimmingService.findIngredientTrimming(ingredientId);
+    public ResponseEntity<?> ingredientTrimmingList(@PathVariable(name = "ingredientId") Long ingredientId, @PageableDefault(size = 20) Pageable pageable) {
+        return findIngredientTrimmingService.findIngredientTrimming(ingredientId, pageable);
     }
 
     @GetMapping("/{trimmingId}")
