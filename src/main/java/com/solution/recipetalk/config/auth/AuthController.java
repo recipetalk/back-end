@@ -9,6 +9,7 @@ import com.solution.recipetalk.service.sms.SMSRequestService;
 import com.solution.recipetalk.service.user.FindUserService;
 import com.solution.recipetalk.service.user.RegisterUserService;
 import com.solution.recipetalk.service.user.VerifyAuthenticationService;
+import com.solution.recipetalk.service.user.login.FindUserLoginService;
 import com.solution.recipetalk.service.verification.token.VerificationTokenService;
 import jakarta.validation.Valid;
 import lombok.NonNull;
@@ -36,7 +37,7 @@ public class AuthController {
     @Autowired
     private final VerifyAuthenticationService verifyAuthenticationService;
 
-
+    private final FindUserLoginService findUserLoginService;
 
     private final SendMailService sendMailService;
 
@@ -63,6 +64,11 @@ public class AuthController {
     @GetMapping("/signup/nickname/{nickname}")
     public ResponseEntity<?> duplicatedNicknameCheck(@PathVariable(name = "nickname") @NonNull String nickname) {
         return findUserService.findDuplicatedNicknameInUserLogin(nickname);
+    }
+
+    @GetMapping("/signup/email/{email}")
+    public ResponseEntity<?> duplicatedEmailCheck(@PathVariable(name = "email") @NonNull String email) {
+        return findUserLoginService.findDuplicatedEmailInUserLogin(email);
     }
 
     @GetMapping("/verify/{email}")

@@ -23,6 +23,7 @@ public enum ErrorCode {
     AUTH_REQUEST_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "U002", "인증을 다시 한번 요청해 주세요"),
     VERIFICATION_FAILED_EXCEPTION(HttpStatus.BAD_REQUEST, "U003", "인증을 요청해 주세요"),
     DUPLICATED_NICKNAME_EXIST(HttpStatus.BAD_REQUEST, "U010", "중복된 닉네임이 존재합니다."),
+    DUPLICATED_EMAIL_EXISTS(HttpStatus.BAD_REQUEST, "U011", "중복된 이메일이 존재합니다."),
     // board
     CANNOT_FIND_BOARD(HttpStatus.NOT_FOUND, "C001", "게시물이 삭제되었거나 찾을 수 없습니다"),
 
