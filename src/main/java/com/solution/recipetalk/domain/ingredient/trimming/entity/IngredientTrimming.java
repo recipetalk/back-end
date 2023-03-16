@@ -16,7 +16,7 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor
 @Entity
 @Table(name="ingredient_trimming")
-@SQLDelete(sql = "UPDATE ingredient_trimming SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE ingredient_trimming SET is_deleted = true WHERE ingredient_trimming_id = ?")
 @Where(clause = "is_deleted = false")
 public class IngredientTrimming extends SoftDeleteEntity {
     @Id
@@ -34,4 +34,13 @@ public class IngredientTrimming extends SoftDeleteEntity {
 
     @Column(name = "thumb_nail_uri")
     private String thumbnailUri;
+
+    @Column(name = "description")
+    private String description;
+
+    public void changeThumbnailUri(String thumbnailUri){
+        if (thumbnailUri != null){
+            this.thumbnailUri = thumbnailUri;
+        }
+    }
 }

@@ -5,6 +5,6 @@ import com.solution.recipetalk.exception.ErrorCode;
 
 public class BoardNotFoundException extends CustomException {
     public BoardNotFoundException() {
-        super(ErrorCode.CANNOT_FIND_BOARD);
+        super(ErrorCode.BOARD_NOT_FOUND);
     }
 }

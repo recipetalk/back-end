@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.AmazonS3;
 
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.solution.recipetalk.config.properties.S3dir;
 import com.solution.recipetalk.util.UUIDGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,30 @@ public class S3Uploader {
                         .withCannedAcl(CannedAccessControlList.PublicRead)	// PublicRead 권한으로 업로드 됨
         );
         return amazonS3Client.getUrl(bucket, fileName).toString();
+    }
+
+    public void deleteFile(String uri, String dirPath){
+        String key = getKey(uri, dirPath);
+        deleteS3(key);
+    }
+
+    private String getKey(String uri, String dirPath){
+        try{
+            String uuid = uri.split(dirPath)[1];
+            return dirPath + uuid;
+        }catch (ArrayIndexOutOfBoundsException e){
+            log.error("S3 delete object Failed (uri form issue)", e);
+            return "";
+        }
+    }
+
+    // S3 에서 delete 에 실패한 것은 critical 한 오류가 아니므로 logging 진행 이후 처리
+    private void deleteS3(String key){
+        try{
+            amazonS3Client.deleteObject(bucket, key);
+        }catch (Exception e){
+            log.error("S3 delete object Failed", e);
+        }
     }
 
     private void removeNewFile(File targetFile) {

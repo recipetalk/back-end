@@ -45,7 +45,9 @@ public class Board extends SoftDeleteEntity {
         view_count ++;
     }
 
-    public void updateTitle(String title) {
-        this.title = title;
+    public void changeTitle(String title){
+        if (title != null){
+            this.title = title;
+        }
     }
 }

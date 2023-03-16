@@ -50,6 +50,23 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
         return ResponseEntity.ok(null);
     }
 
+    @Override
+    public ResponseEntity<?> removeAllCommentsOfBoard(Long boardId) {
+
+        Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
+        commentRepository.deleteAllByBoard(board);
+
+        return ResponseEntity.ok("게시물의 댓글이 모두 삭제되었습니다");
+    }
+
+    @Override
+    public ResponseEntity<?> removeAllComments() {
+
+        commentRepository.deleteAll();
+
+        return ResponseEntity.ok("모든 댓글이 삭제되었습니다");
+    }
+
     private void validateWhoIsRemovingComment(UserDetail writer, UserDetail currentLoginUser) {
         if(!currentLoginUser.equals(writer)) {
             throw new NotAuthorizedToModifyCommentException();

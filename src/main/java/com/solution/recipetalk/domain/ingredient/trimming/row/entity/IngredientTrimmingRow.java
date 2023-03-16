@@ -27,4 +27,22 @@ public class IngredientTrimmingRow extends AuditingEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredient_trimming_id", nullable = false)
     private IngredientTrimming ingredientTrimming;
+
+    @Column(name = "trimming_seq")
+    private Long trimmingSeq;
+
+    @Column(name = "trimming_sub_seq")
+    private Long trimmingSubSeq;
+
+    public void changeImageURI(String imgURI){
+        if (imgURI != null){
+            this.imgURI = imgURI;
+        }
+    }
+
+    public void changeDescription(String description){
+        if (description != null){
+            this.description = description;
+        }
+    }
 }
