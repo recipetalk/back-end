@@ -19,4 +19,5 @@ public interface UserBlockRepository extends JpaRepository<UserBlock, UserBlockI
     Page<UserSimpleProfileDTO> findByUserId(Long userId, Pageable pageable);
 
     Optional<UserBlock> findByUserAndBlockedUser(UserDetail user, UserDetail blockedUser);
+    Boolean existsByUserAndBlockedUser(UserDetail user, UserDetail blockedUser);
 }

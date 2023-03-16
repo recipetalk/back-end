@@ -35,7 +35,7 @@ public class IngredientTrimmingRegisterDTO {
 
     public Board toBoardEntity(UserDetail writer){
         return Board.builder()
-                .title("test")
+                .title(title)
                 .writer(writer)
                 .view_count(0L)
                 .build();
