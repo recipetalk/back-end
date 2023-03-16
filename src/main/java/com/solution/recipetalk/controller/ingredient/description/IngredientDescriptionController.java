@@ -26,7 +26,7 @@ public class IngredientDescriptionController {
             @PathVariable(name = "ingredientId") Long ingredientId,
             @Valid IngredientDescriptionRegisterDTO dto
             ) {
-        return registerIngredientDescriptionService.registerIngredientDescription(dto, ingredientId);
+        return registerIngredientDescriptionService.addIngredientDescription(dto, ingredientId);
     }
 
     @GetMapping("/details")

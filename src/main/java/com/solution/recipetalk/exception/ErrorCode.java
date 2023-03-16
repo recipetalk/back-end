@@ -55,7 +55,8 @@ public enum ErrorCode {
 
     // user Block
     USER_BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "UB001", "차단 되어 있지 않습니다."),
-    USER_BLOCK_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "UB002", "이미 차단되어 있습니다.");
+    USER_BLOCK_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "UB002", "이미 차단되어 있습니다."),
+    REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "REP001", "신고내역을 찾을 수 없습니다.");
     private HttpStatus httpStatus;
     private String message;
     private String code;
