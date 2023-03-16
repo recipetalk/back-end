@@ -60,6 +60,11 @@ public class AuthController {
         return findUserService.findDuplicatedUsernameInUserLogin(userName);
     }
 
+    @GetMapping("/signup/nickname/{nickname}")
+    public ResponseEntity<?> duplicatedNicknameCheck(@PathVariable(name = "nickname") @NonNull String nickname) {
+        return findUserService.findDuplicatedNicknameInUserLogin(nickname);
+    }
+
     @GetMapping("/verify/{email}")
     public ResponseEntity<?> tokenRequest(@PathVariable(name = "email")String email){
         return sendMailService.sendEmail(email);

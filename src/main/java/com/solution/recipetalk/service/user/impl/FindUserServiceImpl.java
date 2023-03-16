@@ -7,6 +7,7 @@ import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.dto.user.DuplicateUserDTO;
 import com.solution.recipetalk.dto.user.UserDetailProfileDTO;
+import com.solution.recipetalk.exception.signup.DuplicatedNicknameException;
 import com.solution.recipetalk.exception.signup.DuplicatedUserException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.user.FindUserService;
@@ -32,6 +33,24 @@ public class FindUserServiceImpl implements FindUserService {
     public ResponseEntity<?> findDuplicatedUsernameInUserLogin(String userName) {
         DuplicateUserDTO dto = DuplicateUserDTO.builder().isValid(isDuplicatedUsernameExceptionHandler(userName)).build();
         return ResponseEntity.ok(dto);
+    }
+
+    @Override
+    public ResponseEntity<?> findDuplicatedNicknameInUserLogin(String nickname) {
+        DuplicateUserDTO.builder().isValid(isDuplicatedNicknameExceptionHandler(nickname)).build();
+        return null;
+    }
+
+    private Boolean isDuplicatedNicknameExceptionHandler(String nickname) {
+        if(!isDuplicatedNickname(nickname)) {
+            throw new DuplicatedNicknameException();
+        }
+        return true;
+    }
+
+    private Boolean isDuplicatedNickname(String nickname) {
+        Optional<UserDetail> byNickname = userDetailRepository.findByNickname(nickname);
+        return byNickname.isEmpty();
     }
 
     private Boolean isDuplicatedUsernameExceptionHandler(String userName){
