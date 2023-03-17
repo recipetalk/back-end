@@ -3,7 +3,9 @@ package com.solution.recipetalk.service.user.login.impl;
 import com.solution.recipetalk.domain.user.login.entity.UserLogin;
 import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
 import com.solution.recipetalk.dto.user.DuplicateUserDTO;
+import com.solution.recipetalk.dto.user.ForgottenUsernameFindResponseDTO;
 import com.solution.recipetalk.exception.signup.DuplicatedEmailException;
+import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.user.login.FindUserLoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,13 @@ public class FindUserLoginServiceImpl implements FindUserLoginService {
     @Override
     public ResponseEntity<?> findDuplicatedEmailInUserLogin(String email) {
         DuplicateUserDTO dto = DuplicateUserDTO.builder().isValid(isDuplicatedEmailExceptionHandler(email)).build();
+        return ResponseEntity.ok(dto);
+    }
+
+    @Override
+    public ResponseEntity<?> findUsernameByEmailAddress(String email) {
+        UserLogin byEmail = userLoginRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        ForgottenUsernameFindResponseDTO dto = ForgottenUsernameFindResponseDTO.builder().username(byEmail.getUsername()).build();
         return ResponseEntity.ok(dto);
     }
 

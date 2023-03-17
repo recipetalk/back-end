@@ -10,13 +10,11 @@ import com.solution.recipetalk.service.user.FindUserService;
 import com.solution.recipetalk.service.user.RegisterUserService;
 import com.solution.recipetalk.service.user.VerifyAuthenticationService;
 import com.solution.recipetalk.service.user.login.FindUserLoginService;
-import com.solution.recipetalk.service.verification.token.VerificationTokenService;
 import jakarta.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -76,4 +74,13 @@ public class AuthController {
         return sendMailService.sendEmail(email);
     }
 
+    @GetMapping("/find/id/{email}")
+    public ResponseEntity<?> forgottenUsernameDetailByEmailAddress(@PathVariable(name = "email") String email) {
+        return findUserLoginService.findUsernameByEmailAddress(email);
+    }
+
+    @PatchMapping("/find/password")
+    public ResponseEntity<?> forgottenPasswordModify() {
+        return null;
+    }
 }
