@@ -4,6 +4,7 @@ package com.solution.recipetalk.config.auth;
 import com.solution.recipetalk.dto.user.PhoneAuthRequestDTO;
 import com.solution.recipetalk.dto.user.PhoneAuthVerificationRequestDTO;
 import com.solution.recipetalk.dto.user.SignUpUserReqDto;
+import com.solution.recipetalk.service.mail.SendMailForTemporaryPasswordService;
 import com.solution.recipetalk.service.mail.SendMailService;
 import com.solution.recipetalk.service.sms.SMSRequestService;
 import com.solution.recipetalk.service.user.FindUserService;
@@ -38,6 +39,8 @@ public class AuthController {
     private final FindUserLoginService findUserLoginService;
 
     private final SendMailService sendMailService;
+
+    private final SendMailForTemporaryPasswordService sendMailForTemporaryPasswordService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUpUser(@RequestBody @NonNull SignUpUserReqDto signUpUserReqDto){
@@ -79,8 +82,11 @@ public class AuthController {
         return findUserLoginService.findUsernameByEmailAddress(email);
     }
 
-    @PatchMapping("/find/password")
-    public ResponseEntity<?> forgottenPasswordModify() {
-        return null;
+    @GetMapping("/find/password/{username}")
+    public ResponseEntity<?> forgottenPasswordModify(@PathVariable(name = "username") @NonNull String username) {
+        // 아이디, 즉 username을 PathVariable로 받고 그걸 사용해서 userLogin 정보를 찾은 뒤,
+        // 거기 담긴 이메일 주소로 임시 비밀번호를 만들어 발송한 뒤, 해당 userLogin의 비밀번호도 수정한다.
+        // 나중에 사용자가 임시 비번을 다시 바꿔놔야 함
+        return sendMailForTemporaryPasswordService.sendEmail(username);
     }
 }

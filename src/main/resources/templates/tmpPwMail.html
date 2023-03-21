@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+<div th:style="${'display:flex; width: 750px; height: 432px; background-color:#f8f8f8; border: 1px solid #F09311; padding-left: 40px; padding-top: 40px; gap: 30px'}">
+
+  <div th:style="${'margin-top: 30px'}">
+    <img src="https://recipe-prod-s3.s3.ap-northeast-2.amazonaws.com/img/mail/logo_o.png" width="110.94" th:style="${''}" alt="로고" />
+
+    <div th:style="${'margin-top:35px'}">
+      <h1 th:style="${'color: black;'}">안녕하세요!</h1>
+      <p th:style="${'font-style: normal; font-weight: 500; font-size: 18px;line-height: 150%; color: black;'}">임시 비밀번호를 발급해드렸습니다!</p>
+    </div>
+    <div th:style="${'margin-top: 50px'}">
+      <p th:style="${'color: #F0964A; font-weight:bolder; font-size:32px; line-height:150%;'}" th:text="${temporaryPassword}"></p>
+    </div>
+  </div>
+  <img src="https://recipe-prod-s3.s3.ap-northeast-2.amazonaws.com/img/mail/whitebearCake.png" width="199.39" height="238" th:style="${'margin-left: 50px; margin-top:170px'}" alt=""/>
+</div>
+</body>
+
+
+
+
+
+</html>
