@@ -1,9 +1,11 @@
 package com.solution.recipetalk.config.auth;
 
 
+import com.solution.recipetalk.dto.fcm.temp.TempFcmTokenRegisterDTO;
 import com.solution.recipetalk.dto.user.PhoneAuthRequestDTO;
 import com.solution.recipetalk.dto.user.PhoneAuthVerificationRequestDTO;
 import com.solution.recipetalk.dto.user.SignUpUserReqDto;
+import com.solution.recipetalk.service.fcm.temp.RegisterTempFcmTokenService;
 import com.solution.recipetalk.service.mail.SendMailService;
 import com.solution.recipetalk.service.sms.SMSRequestService;
 import com.solution.recipetalk.service.user.FindUserService;
@@ -38,6 +40,8 @@ public class AuthController {
     private final FindUserLoginService findUserLoginService;
 
     private final SendMailService sendMailService;
+
+    private RegisterTempFcmTokenService registerTempFcmTokenService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUpUser(@RequestBody @NonNull SignUpUserReqDto signUpUserReqDto){
@@ -77,6 +81,11 @@ public class AuthController {
     @GetMapping("/find/id/{email}")
     public ResponseEntity<?> forgottenUsernameDetailByEmailAddress(@PathVariable(name = "email") String email) {
         return findUserLoginService.findUsernameByEmailAddress(email);
+    }
+
+    @PostMapping("/connect")
+    public ResponseEntity<?> tempFcmTokenAdd(@RequestBody TempFcmTokenRegisterDTO dto){
+        return registerTempFcmTokenService.registerTempFcmTokenService(dto);
     }
 
     @PatchMapping("/find/password")
