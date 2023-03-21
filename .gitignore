@@ -36,5 +36,9 @@ out/
 /nbdist/
 /.nb-gradle/
 
+
+### fcm Secrete key ###
+/src/main/resources/firebase/fcm-private-key.json
+
 ### VS Code ###
 .vscode/
