@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table
+@Table(name = "fcm_token")
 @SuperBuilder
 @NoArgsConstructor
 @Getter
@@ -24,6 +24,9 @@ public class FcmToken extends AuditingEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_detail_id", nullable = false)
     private UserDetail user;
+
+    @Column(name = "is_listenable", nullable = false)
+    private Boolean isListenable;
 
     public void updateFcmToken(String fcmToken) { this.fcmToken = fcmToken;}
 }

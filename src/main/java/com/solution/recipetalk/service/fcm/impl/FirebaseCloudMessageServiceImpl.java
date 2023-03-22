@@ -12,6 +12,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ public class FirebaseCloudMessageServiceImpl implements FirebaseCloudMessageServ
     }
 
     @Override
-    public String sendMessageTo(Long notificationId, String targetToken, String title, String body) {
+    public String sendMessageTo(Long notificationId, String targetToken, String title, String body) throws FirebaseMessagingException {
         Message msg = Message.builder()
                 .putData("time", LocalDateTime.now().toString())
                 .putData("notification_id", notificationId.toString())
@@ -57,13 +58,15 @@ public class FirebaseCloudMessageServiceImpl implements FirebaseCloudMessageServ
                         .build()
                 ).build();
 
-        try{
-            return FirebaseMessaging.getInstance().send(msg);
-        } catch (FirebaseMessagingException e) {
-            // target Token이 전송되지 않았으므로 만료된 토큰 클라이언트가 다시 얻어도는 방식 필요.
-            throw new RuntimeException(e);
-        }
+        return sendMessageTo(msg);
     }
+
+    @Override
+    public String sendMessageTo(Message message) throws FirebaseMessagingException {
+
+        return FirebaseMessaging.getInstance().send(message);
+    }
+}
 
     //    @Override
 //    public ResponseEntity<?> sendMessageTo(String targetToken, String title, String body) {
@@ -120,4 +123,4 @@ public class FirebaseCloudMessageServiceImpl implements FirebaseCloudMessageServ
 //        return googleCredentials.getAccessToken().getTokenValue();
 //    }
 
-}
+
