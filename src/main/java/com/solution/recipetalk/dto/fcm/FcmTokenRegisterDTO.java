@@ -11,11 +11,13 @@ import lombok.*;
 @Builder
 public class FcmTokenRegisterDTO {
     private String fcmToken;
+    private Boolean isListenable;
 
     public FcmToken toEntity(UserDetail user){
         return FcmToken.builder()
                 .user(user)
                 .fcmToken(fcmToken)
+                .isListenable(isListenable)
                 .build();
     }
 }

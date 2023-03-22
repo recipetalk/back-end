@@ -8,7 +8,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.OnDelete;
 
 @Entity
-@Table
+@Table(name = "temp_fcm_token")
 @Getter
 @SuperBuilder
 @NoArgsConstructor
