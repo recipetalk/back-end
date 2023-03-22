@@ -16,11 +16,11 @@ public enum ErrorCode {
     PHONE_AUTH_ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND, "U003", "인증번호를 요청해 주세요."),
     PHONE_AUTH_COUNT_OVER_EXCEPTION(HttpStatus.FORBIDDEN, "U004", "인증횟수를 초과하였습니다"),
     PHONE_AUTH_NOT_EQUAL_EXCEPTION(HttpStatus.FORBIDDEN, "U005", "인증번호가 맞지 않습니다."),
-    PHONE_AUTH_REQUEST_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "U006", "인증시간이 초과되었습니다."),
+
     DUPLICATED_USER_EXIST(HttpStatus.BAD_REQUEST, "U007", "중복된 아이디가 존재합니다."),
-    PHONE_UNVERIFIED_EXCEPTION(HttpStatus.BAD_REQUEST, "U008", "인증되지 않았습니다."),
-    PHONE_VERIFIED_EXCEPTION(HttpStatus.BAD_REQUEST, "U009", "이미 인증되었습니다."),
-    AUTH_REQUEST_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "U002", "인증을 다시 한번 요청해 주세요"),
+    UNVERIFIED_EXCEPTION(HttpStatus.BAD_REQUEST, "U008", "인증되지 않았습니다."),
+    VERIFIED_EXCEPTION(HttpStatus.BAD_REQUEST, "U009", "이미 인증되었습니다."),
+    AUTH_REQUEST_EXPIRED_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "U002", "인증이 되지 않았습니다."),
     VERIFICATION_FAILED_EXCEPTION(HttpStatus.BAD_REQUEST, "U003", "인증을 요청해 주세요"),
     DUPLICATED_NICKNAME_EXIST(HttpStatus.BAD_REQUEST, "U010", "중복된 닉네임이 존재합니다."),
     DUPLICATED_EMAIL_EXISTS(HttpStatus.BAD_REQUEST, "U011", "중복된 이메일이 존재합니다."),
@@ -58,7 +58,12 @@ public enum ErrorCode {
     // user Block
     USER_BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "UB001", "차단 되어 있지 않습니다."),
     USER_BLOCK_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "UB002", "이미 차단되어 있습니다."),
-    REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "REP001", "신고내역을 찾을 수 없습니다.");
+    REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "REP001", "신고내역을 찾을 수 없습니다."),
+
+
+    // FCM Token
+    FCM_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "FC001", "FCM 토큰을 찾을 수 없습니다.");
+
     private HttpStatus httpStatus;
     private String message;
     private String code;

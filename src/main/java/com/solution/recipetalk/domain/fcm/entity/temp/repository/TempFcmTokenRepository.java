@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface TempFcmTokenRepository extends JpaRepository<TempFcmToken, Long> {
 
     Optional<TempFcmToken> findTempFcmTokenByEmail(String email);
+
+    void deleteTempFcmTokenByEmail(String email);
 }

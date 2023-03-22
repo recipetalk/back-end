@@ -3,6 +3,7 @@ package com.solution.recipetalk.domain.user.entity;
 import com.solution.recipetalk.domain.common.SoftDeleteEntity;
 import com.solution.recipetalk.domain.user.login.entity.UserLogin;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,10 +30,6 @@ public class UserDetail extends SoftDeleteEntity {
 
     @Column(name = "profile_image_uri", nullable = false)
     private String profileImageURI;
-
-    @Column(name = "phone_num", nullable = false)
-    @Pattern(regexp = "(01[016789])(\\d{3,4})(\\d{4})")
-    private String phoneNum;
 
     @Column(name = "description")
     private String description;

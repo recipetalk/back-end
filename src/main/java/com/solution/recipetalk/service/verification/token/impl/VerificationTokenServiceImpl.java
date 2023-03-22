@@ -4,13 +4,10 @@ import com.solution.recipetalk.domain.fcm.entity.temp.entity.TempFcmToken;
 import com.solution.recipetalk.domain.fcm.entity.temp.repository.TempFcmTokenRepository;
 import com.solution.recipetalk.domain.verification.token.entity.VerificationToken;
 import com.solution.recipetalk.domain.verification.token.repository.VerificationTokenRepository;
-import com.solution.recipetalk.exception.signup.EmailVerificationFailedException;
-import com.solution.recipetalk.exception.signup.PhoneAuthRequestTimeoutException;
 import com.solution.recipetalk.service.verification.token.VerificationTokenService;
 import com.solution.recipetalk.util.UUIDGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

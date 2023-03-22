@@ -29,4 +29,12 @@ public class FcmToken extends AuditingEntity {
     private Boolean isListenable;
 
     public void updateFcmToken(String fcmToken) { this.fcmToken = fcmToken;}
+
+    public void canListen() {
+        isListenable = true;
+    }
+
+    public void cantListen() {
+        isListenable = false;
+    }
 }
