@@ -41,7 +41,7 @@ public class AuthController {
 
     private final SendMailService sendMailService;
 
-    private RegisterTempFcmTokenService registerTempFcmTokenService;
+    private final RegisterTempFcmTokenService registerTempFcmTokenService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUpUser(@RequestBody @NonNull SignUpUserReqDto signUpUserReqDto){

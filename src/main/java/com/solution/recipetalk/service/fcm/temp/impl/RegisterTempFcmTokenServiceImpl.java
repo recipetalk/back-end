@@ -16,7 +16,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RegisterTempFcmTokenServiceImpl implements RegisterTempFcmTokenService {
     private final TempFcmTokenRepository fcmTokenRepository;
-
     @Override
     public ResponseEntity<?> registerTempFcmTokenService(TempFcmTokenRegisterDTO dto) {
         Optional<TempFcmToken> tempFcmTokenByEmail = fcmTokenRepository.findTempFcmTokenByEmail(dto.getEmail());

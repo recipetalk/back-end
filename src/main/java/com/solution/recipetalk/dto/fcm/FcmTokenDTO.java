@@ -9,8 +9,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FcmTokenRegisterDTO {
+public class FcmTokenDTO {
+
+    @NonNull
     private String fcmToken;
+
+    @NonNull
     private Boolean isListenable;
 
     public FcmToken toEntity(UserDetail user){

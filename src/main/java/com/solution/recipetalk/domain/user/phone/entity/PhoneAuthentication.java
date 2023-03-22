@@ -2,8 +2,8 @@ package com.solution.recipetalk.domain.user.phone.entity;
 
 import com.solution.recipetalk.domain.common.AuditingEntity;
 import com.solution.recipetalk.exception.signup.PhoneAuthNotEqualException;
-import com.solution.recipetalk.exception.signup.PhoneAuthRequestTimeoutException;
-import com.solution.recipetalk.exception.signup.PhoneVerifiedException;
+import com.solution.recipetalk.exception.signup.AuthRequestTimeoutException;
+import com.solution.recipetalk.exception.signup.VerifiedException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
@@ -60,13 +60,13 @@ public class PhoneAuthentication extends AuditingEntity {
             throw new PhoneAuthNotEqualException();
         }
         if(isAuthentication != null && isAuthentication){
-            throw new PhoneVerifiedException();
+            throw new VerifiedException();
         }
     }
 
     public void verifyHandlerWithLastModifiedDate() {
         if (!getModifiedDate().isAfter(LocalDateTime.now().minusMonths(4))) {
-            throw new PhoneAuthRequestTimeoutException();
+            throw new AuthRequestTimeoutException();
         }
     }
 
