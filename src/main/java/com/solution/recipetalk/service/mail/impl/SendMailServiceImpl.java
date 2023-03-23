@@ -56,7 +56,7 @@ public class SendMailServiceImpl implements SendMailService {
     private String setContext(String verificationToken){
         Context context = new Context();
         context.setVariable("token", host+"auth/verify?token="+verificationToken);
-        return templateEngine.process("mail", context);
+        return templateEngine.process("mail.html", context);
     }
 
 }
