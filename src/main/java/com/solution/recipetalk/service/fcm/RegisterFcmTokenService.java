@@ -6,3 +6,5 @@ import org.springframework.http.ResponseEntity;
 public interface RegisterFcmTokenService {
     ResponseEntity<?> registerFcmToken(FcmTokenDTO dto);
 }
+
+//

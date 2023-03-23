@@ -33,10 +33,17 @@ public class RegisterFcmTokenServiceImpl implements RegisterFcmTokenService {
         if(fcmTokenOptional.isPresent()){
             fcmTokenOptional.get().updateFcmToken(dto.getFcmToken());
 
+            if (dto.getIsListenable()) {
+                fcmTokenOptional.get().canListen();
+            } else {
+                fcmTokenOptional.get().cantListen();
+            }
+
         }else{
             fcmToken = dto.toEntity(session);
             fcmTokenRepository.save(fcmToken);
         }
+
         return ResponseEntity.ok(null);
     }
 }

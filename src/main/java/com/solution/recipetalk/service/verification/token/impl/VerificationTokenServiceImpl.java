@@ -58,7 +58,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
 
 
 
-        eventPublisher.publishEvent(tempFcmTokenByEmail.get().getFcmToken());
+        eventPublisher.publishEvent(tempFcmTokenByEmail.get());
 
         return "redirect:/auth/verified";
     }
