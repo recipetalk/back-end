@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "fcm_token")
 @SuperBuilder
@@ -36,5 +38,12 @@ public class FcmToken extends AuditingEntity {
 
     public void cantListen() {
         isListenable = false;
+    }
+
+    public boolean isValid() {
+        if(getModifiedDate().isBefore(LocalDateTime.now().plusDays(5))){
+            return false;
+        }
+        return isListenable;
     }
 }
