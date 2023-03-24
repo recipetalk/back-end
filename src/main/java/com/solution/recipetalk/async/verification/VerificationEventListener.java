@@ -27,7 +27,7 @@ public class VerificationEventListener {
             if( !fcmToken.isValid()) {
                 throw new RuntimeException("don't used FcmToken");
             }
-            log.info("send FCM Notification {}", fcmToken);
+            System.out.println("fcmToken: " + fcmToken);
             firebaseCloudMessageService.sendMessageTo(null, fcmToken.getFcmToken(), "verified", "ok");
         } catch (RuntimeException | FirebaseMessagingException e) {
             fcmTokenRepository.delete(fcmToken);
