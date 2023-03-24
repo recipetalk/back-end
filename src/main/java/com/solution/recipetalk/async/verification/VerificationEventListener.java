@@ -2,6 +2,8 @@ package com.solution.recipetalk.async.verification;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.solution.recipetalk.domain.fcm.entity.FcmToken;
+import com.solution.recipetalk.domain.fcm.entity.temp.entity.TempFcmToken;
+import com.solution.recipetalk.domain.fcm.entity.temp.repository.TempFcmTokenRepository;
 import com.solution.recipetalk.domain.fcm.repository.FcmTokenRepository;
 import com.solution.recipetalk.service.fcm.FirebaseCloudMessageService;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class VerificationEventListener {
 
     private final FirebaseCloudMessageService firebaseCloudMessageService;
-    private final FcmTokenRepository fcmTokenRepository;
+    private final TempFcmTokenRepository fcmTokenRepository;
 
     @EventListener
-    public void handleVerifiedCompleteEvent(final FcmToken fcmToken) {
+    public void handleVerifiedCompleteEvent(final TempFcmToken fcmToken) {
         try {
             if( !fcmToken.isValid()) {
                 throw new RuntimeException("don't used FcmToken");

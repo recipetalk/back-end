@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.OnDelete;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "temp_fcm_token")
 @Getter
@@ -25,4 +27,8 @@ public class TempFcmToken extends AuditingEntity {
     private String email;
 
     public void updateFcmToken(String fcmToken) { this.fcmToken = fcmToken; }
+
+    public boolean isValid() {
+        return true;
+    }
 }
