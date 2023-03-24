@@ -102,7 +102,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     }
 
     private void loadTestUserData() {
-        createUserDataIfNotNull(2L, "test", "test", "test", false, "ghdwlgns1234@gmail.com");
+        createUserDataIfNotNull(2L, "test", "test", "test", false, "atene1408@gmail.com");
         createUserDataIfNotNull(3L, "test1", "test1", "test", true, "atene1408@naver.com");
         createUserDataIfNotNull(4L, "test2", "test2", "test", false, "ghdwlgns1234@naver.com");
     }
