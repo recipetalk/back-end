@@ -20,6 +20,9 @@ public class TemporaryPasswordServiceImpl implements TemporaryPasswordService {
 
     @Override
     public String createTemporaryPassword(UserLogin userLogin) {
+        if(temporaryPasswordRepository.findByUserLogin(userLogin).isPresent()) {
+            temporaryPasswordRepository.deleteById(userLogin);
+        }
         String temporaryPassword = UUIDGenerator.getUUID().substring(0, 8);
 
         String encryptedTempPw = bCryptPasswordEncoder.encode(temporaryPassword);
