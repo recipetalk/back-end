@@ -51,7 +51,7 @@ public class FirebaseCloudMessageServiceImpl implements FirebaseCloudMessageServ
     public String sendMessageTo(Long notificationId, String targetToken, String title, String body) throws FirebaseMessagingException {
         Message msg = Message.builder()
                 .putData("time", LocalDateTime.now().toString())
-                .putData("notification_id", notificationId.toString())
+                .putData("notification_id", notificationId != null ? notificationId.toString() : "null")
                 .setToken(targetToken)
                 .setNotification(Notification.builder()
                         .setTitle(title).setBody(body)
