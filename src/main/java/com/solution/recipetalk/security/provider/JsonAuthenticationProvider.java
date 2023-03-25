@@ -21,7 +21,7 @@ public class JsonAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
-        String loginId = (String)authentication.getPrincipal(); //loginId == phoneNumber
+        String loginId = (String)authentication.getPrincipal();
         String password = (String)authentication.getCredentials();
 
 
