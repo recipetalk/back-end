@@ -27,12 +27,21 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     public VerificationToken createVerificationToken(String email) {
         String token = UUIDGenerator.getUUID();
         LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(30);
-        VerificationToken verificationToken = VerificationToken.builder()
-                .token(token)
-                .expiryDate(expiryDate)
-                .email(email)
-                .isVerified(false)
-                .build();
+        Optional<VerificationToken> byEmail = verificationTokenRepository.findByEmail(email);
+        VerificationToken verificationToken;
+        if(byEmail.isEmpty()){
+            verificationToken = VerificationToken.builder()
+                    .token(token)
+                    .expiryDate(expiryDate)
+                    .email(email)
+                    .isVerified(false)
+                    .build();
+        }else{
+            verificationToken = byEmail.get();
+            verificationToken.updateToken(token);
+            verificationToken.updateExpiryDate(expiryDate);
+        }
+
         return verificationTokenRepository.save(verificationToken);
     }
 
