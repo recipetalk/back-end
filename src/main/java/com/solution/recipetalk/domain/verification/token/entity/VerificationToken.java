@@ -34,6 +34,14 @@ public class VerificationToken extends AuditingEntity {
     @Column(name = "is_verified", nullable = false)
     private Boolean isVerified;
 
+    public void updateToken(String token) {
+        this.token = token;
+    }
+
+    public void updateExpiryDate(LocalDateTime localDateTime){
+        this.expiryDate = localDateTime;
+    }
+
     public void ok(){
         isVerified = true;
     }
