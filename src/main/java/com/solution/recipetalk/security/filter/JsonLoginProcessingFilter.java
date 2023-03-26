@@ -5,6 +5,7 @@ import com.solution.recipetalk.dto.user.UserLoginDTO;
 import com.solution.recipetalk.security.token.JsonAuthenticationToken;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -26,7 +27,7 @@ public class JsonLoginProcessingFilter extends AbstractAuthenticationProcessingF
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
 
         if(!isJson(request)){ // 필터 동작 조건 2
-            throw new IllegalStateException("Authentication is not supported");
+            throw new BadCredentialsException("is not json");
         }
 
         // 두 조건 모두 통과 시 id/pw 통해 인증
@@ -34,7 +35,7 @@ public class JsonLoginProcessingFilter extends AbstractAuthenticationProcessingF
 
         //빈 문자열 체크
         if(ObjectUtils.isEmpty(userLoginDTO.getUsername()) || ObjectUtils.isEmpty(userLoginDTO.getPassword())){
-            throw new IllegalArgumentException("username or Password is empty");
+            throw new BadCredentialsException("id, password is null");
         }
 
         // 토큰 만들고 AuthenticationManager에 위임하여 인증 처리 진행
