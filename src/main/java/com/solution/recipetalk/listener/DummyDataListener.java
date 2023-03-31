@@ -95,6 +95,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         loadUserFollowData();
         loadCommentData();
         loadBookmarkData();
+        loadIngredientDescriptionData();
     }
 
     private void loadUserData() {
