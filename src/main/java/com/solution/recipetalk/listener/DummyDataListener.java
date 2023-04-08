@@ -12,6 +12,7 @@ import com.solution.recipetalk.domain.board.repository.BoardRepository;
 import com.solution.recipetalk.domain.comment.entity.Comment;
 import com.solution.recipetalk.domain.comment.repository.CommentRepository;
 import com.solution.recipetalk.domain.image.repository.ImageRepository;
+import com.solution.recipetalk.domain.ingredient.description.entity.IngredientDescription;
 import com.solution.recipetalk.domain.ingredient.description.repository.IngredientDescriptionRepository;
 import com.solution.recipetalk.domain.ingredient.entity.Ingredient;
 import com.solution.recipetalk.domain.ingredient.entity.IngredientSort;
@@ -94,6 +95,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         loadUserFollowData();
         loadCommentData();
         loadBookmarkData();
+        loadIngredientDescriptionData();
     }
 
     private void loadUserData() {
@@ -110,6 +112,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private void loadBoardData() {
         createBoardData(1L, "test", "test board", 0L);
         createBoardData(2L, "test1", "test board2", 0L);
+        createBoardData(3L, "test1", "test board2", 0L);
     }
 
     private void loadIngredientData() {
@@ -144,6 +147,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private void loadBoardLikeData(){
         createBoardLikeIfNotNull(1L, 1L );
         createBoardLikeIfNotNull(2L, 1L);
+        createBoardLikeIfNotNull(3L, 1L);
     }
 
     private void loadCommentData() {
@@ -155,6 +159,10 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private void loadBookmarkData() {
         createBookmarkIfNotNull(1L, 1L);
         createBookmarkIfNotNull(1L, 2L);
+    }
+
+    private void loadIngredientDescriptionData() {
+        createIngredientDescriptionIfNotNull(1L, 3L, 1L, "test1");
     }
 
 
@@ -353,6 +361,23 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         }
         else{
             bookmarkRepository.save(Bookmark.builder().user(user).board(board).build());
+        }
+    }
+
+    private void createIngredientDescriptionIfNotNull(Long id, Long boardId, Long ingredientId, String description){
+        Optional<IngredientDescription> byId = ingredientDescriptionRepository.findById(id);
+
+        if(byId.isPresent()){
+            return;
+        }else{
+            Ingredient ingredient = ingredientRepository.findById(ingredientId).orElseThrow(IngredientNotFoundException::new);
+            Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
+            IngredientDescription build = IngredientDescription.builder().description(description)
+                    .board(board)
+                    .ingredient(ingredient)
+                    .imgURI("")
+                    .build();
+            ingredientDescriptionRepository.save(build);
         }
     }
 }
