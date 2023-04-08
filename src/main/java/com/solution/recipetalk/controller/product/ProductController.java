@@ -1,7 +1,8 @@
 package com.solution.recipetalk.controller.product;
 
 import com.solution.recipetalk.dto.product.request.ProductRequestRegisterDTO;
-import com.solution.recipetalk.service.product.ProductService;
+import com.solution.recipetalk.service.product.FindProductService;
+import com.solution.recipetalk.service.product.RegisterProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,15 +14,16 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class ProductController {
-    private final ProductService productService;
+    private final FindProductService findProductService;
+    private final RegisterProductService registerProductService;
 
     @GetMapping("/product/{barcode}")
     public ResponseEntity<?> productDetails(@PathVariable(name = "barcode") String barcode) {
-        return productService.findProduct(barcode);
+        return findProductService.findProduct(barcode);
     }
 
     @PostMapping("/product")
     public ResponseEntity<?> productAdd(@RequestBody @Valid ProductRequestRegisterDTO dto) {
-        return productService.registerRequestProduct(dto);
+        return registerProductService.registerRequestProduct(dto);
     }
 }
