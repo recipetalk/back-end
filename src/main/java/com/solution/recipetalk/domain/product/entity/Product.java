@@ -20,8 +20,7 @@ public class Product {
     @Column(name = "product_name", nullable = false)
     private String productName;
 
-    @ManyToOne
-    @JoinColumn(name = "ingredient_id")
-    @Column(name = "ingredient", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ingredient_id", nullable = false)
     private Ingredient ingredient;
 }
