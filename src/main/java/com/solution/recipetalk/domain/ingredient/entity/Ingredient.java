@@ -24,10 +24,6 @@ public class Ingredient extends AuditingEntity {
     @Column(name = "ingredient_sort_id", nullable = false)
     private IngredientSort sort;
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "ingredient_state_id", nullable = false)
-    private IngredientState state;
-
     @Column(nullable = false)
     private Integer calorie;
 

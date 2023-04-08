@@ -1,11 +1,7 @@
 package com.solution.recipetalk.dto.ingredient.trimming;
 
-import com.solution.recipetalk.domain.comment.entity.Comment;
-import com.solution.recipetalk.domain.ingredient.entity.IngredientSort;
-import com.solution.recipetalk.domain.ingredient.entity.IngredientState;
 import com.solution.recipetalk.domain.ingredient.trimming.repository.IngredientTrimmingRepository.IngredientTrimmingDetailResult;
 import com.solution.recipetalk.domain.ingredient.trimming.row.entity.IngredientTrimmingRow;
-import com.solution.recipetalk.dto.comment.CommentResponseDTO;
 import com.solution.recipetalk.dto.ingredient.trimming.row.IngredientTrimmingRowResDTO;
 import lombok.*;
 

@@ -3,6 +3,7 @@ package com.solution.recipetalk.domain.ingredient.userhas.entity;
 import com.solution.recipetalk.domain.common.AuditingEntity;
 import com.solution.recipetalk.domain.ingredient.entity.Ingredient;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
+import com.solution.recipetalk.dto.ingredient.userhas.UserHasIngredientModifyDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,8 +32,26 @@ public class UserHasIngredient extends AuditingEntity {
     private Ingredient ingredient;
 
     @Column
-    private Integer quantity;
+    private IngredientState state;
+
+    @Column
+    private String quantity;
 
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
+
+    public void updateUserHasIngredient(UserHasIngredientModifyDTO dto, Ingredient ingredient) {
+        if(ingredient != null)
+            this.ingredient = ingredient;
+
+        if(dto.getState() != null)
+            this.state = dto.getState();
+
+        if(dto.getQuantity() != null)
+            this.quantity = dto.getQuantity();
+
+        if(dto.getExpirationDate() != null) {
+            this.expirationDate = dto.getExpirationDate();
+        }
+    }
 }
