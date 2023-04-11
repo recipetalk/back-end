@@ -31,7 +31,7 @@ public class RemoveUserFollowServiceImpl implements RemoveUserFollowService {
         UserDetail followingUser = userDetailRepository.findUserDetailByUsername(followingUsername)
                 .orElseThrow(UserNotFoundException::new);
 
-        UserFollow findFollowing = userFollowRepository.findById(new UserFollowId(loginSession, followingUser))
+        UserFollow findFollowing = userFollowRepository.findUserFollowByUserAndFollowing(loginSession, followingUser)
                 .orElseThrow(UserFollowNotFoundException::new);
 
         userFollowRepository.delete(findFollowing);

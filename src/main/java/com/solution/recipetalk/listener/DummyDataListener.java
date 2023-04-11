@@ -133,8 +133,8 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     }
 
     private void loadUserFollowData() {
-        createUserFollowIfNotNull(1L, 2L);
-        createUserFollowIfNotNull(1L, 3L);
+        createUserFollowIfNotNull(1L,1L, 2L);
+        createUserFollowIfNotNull(2L,1L, 3L);
     }
 
     private void loadUserBlockData() {
@@ -310,13 +310,13 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         }
     }
 
-    private void createUserFollowIfNotNull(Long userId, Long followingId){
+    private void createUserFollowIfNotNull(Long id, Long userId, Long followingId){
         UserDetail user = userDetailRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         UserDetail followingUser = userDetailRepository.findById(followingId).orElseThrow(UserNotFoundException::new);
 
-        UserFollowId userFollowId = new UserFollowId(user, followingUser);
 
-        Optional<UserFollow> find = userFollowRepository.findById(userFollowId);
+
+        Optional<UserFollow> find = userFollowRepository.findById(id);
 
         if(find.isPresent()){
             return;

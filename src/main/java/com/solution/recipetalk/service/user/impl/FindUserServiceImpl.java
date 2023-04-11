@@ -1,5 +1,6 @@
 package com.solution.recipetalk.service.user.impl;
 
+import com.solution.recipetalk.domain.recipe.repository.RecipeRepository;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.domain.user.follow.repository.UserFollowRepository;
 import com.solution.recipetalk.domain.user.login.entity.UserLogin;
@@ -29,6 +30,7 @@ public class FindUserServiceImpl implements FindUserService {
 
     private final UserFollowRepository userFollowRepository;
 
+    private final RecipeRepository recipeRepository;
     @Override
     public ResponseEntity<?> findDuplicatedUsernameInUserLogin(String userName) {
         DuplicateUserDTO dto = DuplicateUserDTO.builder().isValid(isDuplicatedUsernameExceptionHandler(userName)).build();
@@ -70,9 +72,11 @@ public class FindUserServiceImpl implements FindUserService {
     public ResponseEntity<?> findUserProfile(String username) {
         UserDetail findUserDetail = userDetailRepository.findUserDetailByUsername(username).orElseThrow(UserNotFoundException::new);
 
-        Long followCount = userFollowRepository.countByUser(findUserDetail);
+        Long followingCount = userFollowRepository.countByUser(findUserDetail);
+        Long followerCount = userFollowRepository.countByFollowing(findUserDetail);
+        Long recipeNum = recipeRepository.countByBoard_Writer(findUserDetail);
 
-        UserDetailProfileDTO findUserProfileDTO = UserDetailProfileDTO.toDTO(findUserDetail, followCount);
+        UserDetailProfileDTO findUserProfileDTO = UserDetailProfileDTO.toDTO(findUserDetail, followingCount, followerCount, recipeNum);
 
         return ResponseEntity.ok(findUserProfileDTO);
     }
