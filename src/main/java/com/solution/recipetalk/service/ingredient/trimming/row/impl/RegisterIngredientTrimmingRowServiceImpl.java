@@ -49,7 +49,7 @@ public class RegisterIngredientTrimmingRowServiceImpl implements RegisterIngredi
                 .map(dto -> {
                     try {
                         return dto.toIngredientTrimmingRow(findIngredientTrimming,
-                                s3Uploader.upload(dto.getImg(), S3dir.INGREDIENT_TRIMMING_ROW_IMG_DIR));
+                                dto.getImg() != null ? s3Uploader.upload(dto.getImg(), S3dir.INGREDIENT_TRIMMING_ROW_IMG_DIR) : null);
                     } catch (IOException e) {
                         throw new ImageUploadFailedException();
                     }
