@@ -1,6 +1,7 @@
 package com.solution.recipetalk.dto.recipe;
 
 import com.solution.recipetalk.domain.board.entity.Board;
+import com.solution.recipetalk.domain.board.entity.BoardSort;
 import com.solution.recipetalk.domain.recipe.entity.Recipe;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import lombok.*;
@@ -28,6 +29,7 @@ public class RecipeRegisterDTO {
                 .title(title)
                 .writer(writer)
                 .view_count(0L)
+                .boardSort(BoardSort.RECIPE)
                 .build();
     }
 

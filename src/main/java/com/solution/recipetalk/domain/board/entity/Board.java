@@ -33,6 +33,10 @@ public class Board extends SoftDeleteEntity {
     private String title;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BoardSort boardSort;
+
+    @Column(nullable = false)
     private Long view_count;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)

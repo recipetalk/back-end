@@ -5,6 +5,7 @@ import com.solution.recipetalk.domain.board.bookmark.entity.Bookmark;
 import com.solution.recipetalk.domain.board.bookmark.id.BookmarkId;
 import com.solution.recipetalk.domain.board.bookmark.repository.BookmarkRepository;
 import com.solution.recipetalk.domain.board.entity.Board;
+import com.solution.recipetalk.domain.board.entity.BoardSort;
 import com.solution.recipetalk.domain.board.like.entity.BoardLike;
 import com.solution.recipetalk.domain.board.like.id.BoardLikeId;
 import com.solution.recipetalk.domain.board.like.repository.BoardLikeRepository;
@@ -109,9 +110,9 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     }
 
     private void loadBoardData() {
-        createBoardData(1L, "test", "test board", 0L);
-        createBoardData(2L, "test1", "test board2", 0L);
-        createBoardData(3L, "test1", "test board2", 0L);
+        createBoardData(1L, "test", "test board", 0L, BoardSort.RECIPE);
+        createBoardData(2L, "test1", "test board2", 0L, BoardSort.TRIMMING);
+        createBoardData(3L, "test1", "test board2", 0L,BoardSort.DESCRIPTION);
     }
 
     private void loadIngredientData() {
@@ -191,7 +192,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         userDetailRepository.save(userDetail);
     }
 
-    private void createBoardData(Long id, String writerNickname, String title, Long viewCount) {
+    private void createBoardData(Long id, String writerNickname, String title, Long viewCount, BoardSort boardSort) {
         Optional<Board> byId = boardRepository.findById(id);
         if(byId.isPresent()) {
             return;
@@ -203,6 +204,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
                 .writer(writer)
                 .title(title)
                 .view_count(viewCount)
+                .boardSort(boardSort)
                 .build();
 
         boardRepository.save(board);

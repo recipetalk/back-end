@@ -25,7 +25,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     )
     Page<CommentResponseDTO> findAllChildCommentByBoard(Long viewerId, Long boardId, Long parentCommentId, Pageable pageable);
 
-    @Query(value = "SELECT new com.solution.recipetalk.dto.comment.CommentResponseDTO(c.id, c.board.id,  c.description, c.createdDate, c.createdDate <> c.modifiedDate as Modified) FROM Comment c JOIN UserDetail writer ON c.writer = writer WHERE writer.id = :userId AND c.isDeleted = false ORDER BY c.id",
+    @Query(value = "SELECT new com.solution.recipetalk.dto.comment.CommentResponseDTO(c.id, b.id,  c.description, c.createdDate, c.createdDate <> c.modifiedDate as Modified, b.boardSort ) FROM Comment c JOIN UserDetail writer ON c.writer = writer JOIN Board b ON c.board = b WHERE writer.id = :userId AND c.isDeleted = false ORDER BY c.id",
             countQuery = "SELECT COUNT(*) FROM Comment c JOIN UserDetail writer ON c.writer = writer WHERE writer.id = :userId AND c.isDeleted = false"
     )
     Page<CommentResponseDTO> findAllByWriter(Long userId, Pageable pageable);

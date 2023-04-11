@@ -21,13 +21,15 @@ public class CommentResponseDTO {
     private LocalDateTime createdDate;
     private Boolean isModified;
     private Boolean childExist;
+    private String boardSort;
 
-    public CommentResponseDTO(Long commentId, Long boardId, String description, LocalDateTime createdDate, Boolean isModified ){
+    public CommentResponseDTO(Long commentId, Long boardId, String description, LocalDateTime createdDate, Boolean isModified, String boardSort ){
         this.boardId = boardId;
         this.commentId = commentId;
         this.description = description;
         this.createdDate = createdDate;
         this.isModified = isModified;
+        this.boardSort = boardSort;
     }
 
     public CommentResponseDTO(String username, String nickname, String profileImageURI, Long commentId,
