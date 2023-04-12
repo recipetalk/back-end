@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
     Long countByUser(UserDetail userDetail);
     Long countByFollowing(UserDetail userDetail);
-    @Query(value = "SELECT new com.solution.recipetalk.dto.user.UserSimpleProfileDTO(u.username, u.nickname, u.profileImageURI) FROM UserFollow uf JOIN UserDetail u ON uf.following = u WHERE uf.user.id = :id AND u.isDeleted = false AND u.isBlocked = false AND u NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewer)",
+    @Query(value = "SELECT new com.solution.recipetalk.dto.user.UserSimpleProfileDTO(u.username, u.nickname, u.profileImageURI, u.description) FROM UserFollow uf JOIN UserDetail u ON uf.following = u WHERE uf.user.id = :id AND u.isDeleted = false AND u.isBlocked = false AND u NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewer)",
 
             countQuery = "SELECT COUNT(*) FROM UserFollow f JOIN UserDetail u WHERE f.following = u AND u.id = :id AND u.isDeleted = false AND u.isBlocked = false AND u NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewer)"
     )
@@ -23,7 +23,7 @@ public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
 
     Optional<UserFollow> findUserFollowByUserAndFollowing(UserDetail user, UserDetail following);
 
-    @Query(value = "SELECT new com.solution.recipetalk.dto.user.UserSimpleProfileDTO(u.username, u.nickname, u.profileImageURI) FROM UserFollow uf JOIN UserDetail u ON uf.user = u WHERE uf.following.id = :id AND u.isDeleted = false AND u.isBlocked = false AND u.isDeleted = false AND u NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewer)",
+    @Query(value = "SELECT new com.solution.recipetalk.dto.user.UserSimpleProfileDTO(u.username, u.nickname, u.profileImageURI, u.description) FROM UserFollow uf JOIN UserDetail u ON uf.user = u WHERE uf.following.id = :id AND u.isDeleted = false AND u.isBlocked = false AND u.isDeleted = false AND u NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewer)",
 
             countQuery = "SELECT COUNT(*) FROM UserFollow f JOIN UserDetail u WHERE f.following = u AND u.id = :id AND u.isDeleted = false AND u.isBlocked = false  AND u NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :id)"
     )

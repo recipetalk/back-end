@@ -11,11 +11,19 @@ public class UserSimpleProfileDTO {
     private String username;
     private String nickname;
     private String profileImageURI;
+    private String description;
 
     public UserSimpleProfileDTO(String username, String nickname, String profileImageURI){
         this.username = username;
         this.nickname = nickname;
         this.profileImageURI = profileImageURI;
+    }
+
+    public UserSimpleProfileDTO(String username, String nickname, String profileImageURI, String description){
+        this.username = username;
+        this.nickname = nickname;
+        this.profileImageURI = profileImageURI;
+        this.description = description;
     }
 
     public static UserSimpleProfileDTO toDTO(UserDetail userDetail) {
