@@ -12,6 +12,7 @@ import com.solution.recipetalk.exception.signup.DuplicatedNicknameException;
 import com.solution.recipetalk.exception.signup.DuplicatedUserException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.user.FindUserService;
+import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -71,9 +72,9 @@ public class FindUserServiceImpl implements FindUserService {
     @Override
     public ResponseEntity<?> findUserProfile(String username) {
         UserDetail findUserDetail = userDetailRepository.findUserDetailByUsername(username).orElseThrow(UserNotFoundException::new);
-
-        Long followingCount = userFollowRepository.countByUser(findUserDetail);
-        Long followerCount = userFollowRepository.countByFollowing(findUserDetail);
+        Long sessionId = ContextHolder.getUserLoginId();
+        Long followingCount = userFollowRepository.countByUser(findUserDetail, sessionId);
+        Long followerCount = userFollowRepository.countByFollowing(findUserDetail, sessionId);
         Long recipeNum = recipeRepository.countByBoard_Writer(findUserDetail);
 
         UserDetailProfileDTO findUserProfileDTO = UserDetailProfileDTO.toDTO(findUserDetail, followingCount, followerCount, recipeNum);

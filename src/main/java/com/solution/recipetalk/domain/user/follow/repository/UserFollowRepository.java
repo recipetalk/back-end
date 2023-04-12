@@ -13,8 +13,10 @@ import java.util.Optional;
 
 
 public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
-    Long countByUser(UserDetail userDetail);
-    Long countByFollowing(UserDetail userDetail);
+    @Query(value = "SELECT COUNT(*) FROM UserFollow WHERE user = :userDetail AND following.isDeleted = false AND following.isBlocked = false AND following NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewerId)")
+    Long countByUser(UserDetail userDetail, Long viewerId);
+    @Query(value = "SELECT COUNT(*) FROM UserFollow WHERE following = :userDetail AND user.isDeleted = false AND user.isBlocked = false AND user NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewerId)")
+    Long countByFollowing(UserDetail userDetail, Long viewerId);
     @Query(value = "SELECT new com.solution.recipetalk.dto.user.UserSimpleProfileDTO(u.username, u.nickname, u.profileImageURI, u.description) FROM UserFollow uf JOIN UserDetail u ON uf.following = u WHERE uf.user.id = :id AND u.isDeleted = false AND u.isBlocked = false AND u NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewer)",
 
             countQuery = "SELECT COUNT(*) FROM UserFollow f JOIN UserDetail u WHERE f.following = u AND u.id = :id AND u.isDeleted = false AND u.isBlocked = false AND u NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewer)"
