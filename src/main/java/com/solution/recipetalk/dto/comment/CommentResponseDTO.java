@@ -1,6 +1,7 @@
 package com.solution.recipetalk.dto.comment;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.solution.recipetalk.domain.board.entity.BoardSort;
 import com.solution.recipetalk.dto.user.UserSimpleProfileDTO;
 import lombok.*;
 
@@ -24,14 +25,14 @@ public class CommentResponseDTO {
     private String boardSort;
     private String title;
 
-    public CommentResponseDTO(Long commentId, Long boardId, String description, LocalDateTime createdDate, Boolean isModified, String boardSort, String title){
+    public CommentResponseDTO(Long commentId, Long boardId, String description, LocalDateTime createdDate, Boolean isModified, BoardSort boardSort, String title){
         this.title = title;
         this.boardId = boardId;
         this.commentId = commentId;
         this.description = description;
         this.createdDate = createdDate;
         this.isModified = isModified;
-        this.boardSort = boardSort;
+        this.boardSort = boardSort.toString();
     }
 
     public CommentResponseDTO(String username, String nickname, String profileImageURI, Long commentId,
