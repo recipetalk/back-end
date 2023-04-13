@@ -28,10 +28,17 @@ public class UserFollowController {
         return registerUserFollowService.registerUserFollow(following);
     }
 
+    @GetMapping("/follow/{username}")
+    public ResponseEntity<?> followFind(@PathVariable(name="username") String username) {
+        return findUserFollowService.findUserFollow(username);
+    }
+
     @GetMapping("/following/{following}")
     public ResponseEntity<?> followingList(@PathVariable(name = "following") String following, @PageableDefault(size = 20) Pageable pageable){
         return findUserFollowService.findUserFolloweeList(following, pageable);
     }
+
+
 
     @GetMapping("/follower/{follower}")
     public ResponseEntity<?> followerList(@PathVariable(name = "follower") String follower, @PageableDefault(size = 20) Pageable pageable){
