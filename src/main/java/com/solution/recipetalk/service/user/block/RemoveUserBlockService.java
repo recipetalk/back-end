@@ -5,5 +5,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface RemoveUserBlockService {
 
-    ResponseEntity<?> removeUserBlock(UserBlockRemoveDTO dto);
+    ResponseEntity<?> removeUserBlock(String blockedUsername);
 }
