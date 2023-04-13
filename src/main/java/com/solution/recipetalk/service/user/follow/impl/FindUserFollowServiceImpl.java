@@ -46,7 +46,7 @@ public class FindUserFollowServiceImpl implements FindUserFollowService {
         return ResponseEntity.ok(
                 FollowingDTO.builder().isFollowing(
                         followRepository.findUserFollowByUserAndFollowing(session,target).isPresent()
-                )
+                ).build()
         );
     }
 }
