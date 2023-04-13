@@ -45,7 +45,7 @@ public class UserFollowController {
         return findUserFollowService.findUserFollowerList(follower, pageable);
     }
 
-    @DeleteMapping("/{following}")
+    @DeleteMapping("/follow/{following}")
     public ResponseEntity<?> followingRemove(@PathVariable(name = "following") String following) {
         return removeUserFollowService.removeUserFollow(following);
     }
