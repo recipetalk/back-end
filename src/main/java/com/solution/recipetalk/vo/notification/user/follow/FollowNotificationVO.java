@@ -25,6 +25,9 @@ public class FollowNotificationVO implements NotificationVO {
 
     @Override
     public Message toMessage() {
+        if(fcmTarget == null){
+            return null;
+        }
         return Message.builder().setNotification(
                         Notification.builder()
                                 .setTitle(NOTIFICATION_TITLE)

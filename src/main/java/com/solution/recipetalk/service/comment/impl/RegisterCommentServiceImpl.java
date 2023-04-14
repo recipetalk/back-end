@@ -65,16 +65,14 @@ public class RegisterCommentServiceImpl implements RegisterCommentService {
 
         Optional<FcmToken> fcmTokenByUser = fcmTokenRepository.findFcmTokenByUser(writer);
 
-        if(fcmTokenByUser.isPresent()){
-            CommentNotificationVO commentNotificationVO = CommentNotificationVO.builder()
-                    .parentCommentId(comment.getParentCommentId())
-                    .fcmTarget(fcmTokenByUser.get())
-                    .board(board)
-                    .comment(newComment)
-                    .build();
-
-            eventPublisher.publishEvent(commentNotificationVO);
-        }
+        CommentNotificationVO commentNotificationVO = CommentNotificationVO.builder()
+                .parentCommentId(comment.getParentCommentId())
+                .fcmTarget(fcmTokenByUser.orElse(null))
+                .board(board)
+                .comment(newComment)
+                .writer(writer)
+                .build();
+        eventPublisher.publishEvent(commentNotificationVO);
 
         return ResponseEntity.ok(null);
     }

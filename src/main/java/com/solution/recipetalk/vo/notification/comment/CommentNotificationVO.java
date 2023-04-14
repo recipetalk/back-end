@@ -31,6 +31,9 @@ public class CommentNotificationVO implements NotificationVO {
 
     @Override
     public Message toMessage() {
+        if(fcmTarget == null){
+            return null;
+        }
         if(isChildComment())
             return toChildMessage();
         else{

@@ -46,14 +46,13 @@ public class RegisterUserFollowServiceImpl implements RegisterUserFollowService 
 
         Optional<FcmToken> fcmTokenByUser = fcmTokenRepository.findFcmTokenByUser(followingDetail);
 
-        if(fcmTokenByUser.isPresent()){
-            FollowNotificationVO followNotificationVO = FollowNotificationVO.builder()
-                    .fcmTarget(fcmTokenByUser.get())
-                    .user(followerDetail)
-                    .build();
+        FollowNotificationVO followNotificationVO = FollowNotificationVO.builder()
+                .fcmTarget(fcmTokenByUser.orElse(null))
+                .user(followerDetail)
+                .build();
 
-            eventPublisher.publishEvent(followNotificationVO);
-        }
+        eventPublisher.publishEvent(followNotificationVO);
+
 
         return ResponseEntity.ok(null);
     }
