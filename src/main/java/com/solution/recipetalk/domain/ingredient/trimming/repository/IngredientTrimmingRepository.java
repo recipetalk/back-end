@@ -37,7 +37,7 @@ public interface IngredientTrimmingRepository extends JpaRepository<IngredientTr
             "LEFT JOIN Comment AS C ON C.board = B " +
             "LEFT JOIN UserBlock AS UB ON UB.user = B.writer AND UB.blockedUser = :currentUser " +
             "WHERE IT.ingredient.id = :ingredientId AND UB.blockedUser IS NULL " +
-            "GROUP BY B.id")
+            "GROUP BY IT.id")
     Optional<Page<IngredientTrimmingResult>> findIngredientTrimmingResultByIdExceptBlockedUser(@Param("ingredientId") Long ingredientId,@Param("currentUser") UserDetail currentUser, Pageable pageable);
 
     @Query("SELECT IT.description AS description, B AS board " +
