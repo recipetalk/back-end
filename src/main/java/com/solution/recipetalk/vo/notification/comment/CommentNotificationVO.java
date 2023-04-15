@@ -27,7 +27,7 @@ public class CommentNotificationVO implements NotificationVO {
     private static final String CHILD_COMMENT_ADD_MESSAGE_PATTERN = "%s님이 회원님의 댓글에 답글을 남겼습니다. %s";
     private static final String NOTIFICATION_TITLE = "레시피톡";
 
-    private static final String NOTICATION_ID_PATTERN = "parentCommentId=%s&boardId=%s";
+    private static final String NAVIGATION_ID_PATTERN = "parentCommentId=%s&boardId=%s";
 
     @Override
     public Message toMessage() {
@@ -105,6 +105,6 @@ public class CommentNotificationVO implements NotificationVO {
     }
 
     private String toNavigationId(Long parentCommentId, Long boardId) {
-        return String.format(NOTICATION_ID_PATTERN,parentCommentId == null ? "null" : parentCommentId, boardId);
+        return String.format(NAVIGATION_ID_PATTERN,parentCommentId == null ? "null" : parentCommentId, boardId);
     }
 }

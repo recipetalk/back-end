@@ -23,6 +23,8 @@ public class FollowNotificationVO implements NotificationVO {
     private static final String NOTIFICATION_TITLE = "레시피톡";
     private static final String NAVIGATION = "PROFILE";
 
+    private static final String NAVIGATION_ID_PATTERN = "username=%s";
+
     @Override
     public Message toMessage() {
         if(fcmTarget == null){
