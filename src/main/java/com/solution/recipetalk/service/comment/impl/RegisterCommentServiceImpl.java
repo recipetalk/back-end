@@ -71,6 +71,7 @@ public class RegisterCommentServiceImpl implements RegisterCommentService {
                 .board(board)
                 .comment(newComment)
                 .writer(writer)
+                .target(parentComment != null ? parentComment.getWriter() : board.getWriter())
                 .build();
         eventPublisher.publishEvent(commentNotificationVO);
 

@@ -49,6 +49,7 @@ public class RegisterUserFollowServiceImpl implements RegisterUserFollowService 
         FollowNotificationVO followNotificationVO = FollowNotificationVO.builder()
                 .fcmTarget(fcmTokenByUser.orElse(null))
                 .user(followerDetail)
+                .target(followingDetail)
                 .build();
 
         eventPublisher.publishEvent(followNotificationVO);

@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 public class FollowNotificationVO implements NotificationVO {
     private FcmToken fcmTarget;
     private UserDetail user;
+    private UserDetail target;
     private static final String FOLLOWING_ADD_MESSAGE_PATTERN = "%s님이 팔로잉하기 시작했습니다.";
     private static final String NOTIFICATION_TITLE = "레시피톡";
     private static final String NAVIGATION = "PROFILE";
@@ -49,6 +50,7 @@ public class FollowNotificationVO implements NotificationVO {
                 .sort(NotificationSort.FOLLOWING)
                 .state(NotificationState.NOT_OPEN)
                 .navigationId(user.getUsername())
+                .user(target)
                 .build();
     }
 

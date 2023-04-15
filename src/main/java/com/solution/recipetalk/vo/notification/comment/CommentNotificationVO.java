@@ -23,6 +23,7 @@ public class CommentNotificationVO implements NotificationVO {
     private Long parentCommentId;
     private Board board;
     private FcmToken fcmTarget;
+    private UserDetail target;
     private static final String PARENT_COMMENT_ADD_MESSAGE_PATTERN = "%s님이 게시글에 댓글을 남겼습니다. %s";
     private static final String CHILD_COMMENT_ADD_MESSAGE_PATTERN = "%s님이 회원님의 댓글에 답글을 남겼습니다. %s";
     private static final String NOTIFICATION_TITLE = "레시피톡";
@@ -91,6 +92,7 @@ public class CommentNotificationVO implements NotificationVO {
                 .sort(NotificationSort.CHILD_COMMENT)
                 .state(NotificationState.NOT_OPEN)
                 .navigationId(toNavigationId(parentCommentId, board.getId()))
+                .user(target)
                 .build();
     }
 
