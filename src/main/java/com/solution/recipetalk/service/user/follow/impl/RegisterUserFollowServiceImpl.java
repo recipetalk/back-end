@@ -35,7 +35,7 @@ public class RegisterUserFollowServiceImpl implements RegisterUserFollowService 
 
         UserLogin followerLogin = ContextHolder.getUserLogin();
 
-        UserDetail followerDetail = userDetailRepository.getReferenceById(followerLogin.getId());
+        UserDetail followerDetail = userDetailRepository.findById(followerLogin.getId()).orElseThrow(UserNotFoundException::new);
 
         UserFollow userFollow = UserFollow.builder().user(followerDetail)
                 .following(followingDetail)

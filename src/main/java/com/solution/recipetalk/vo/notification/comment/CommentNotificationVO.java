@@ -103,6 +103,7 @@ public class CommentNotificationVO implements NotificationVO {
                 .sort(NotificationSort.CHILD_COMMENT)
                 .state(NotificationState.NOT_OPEN)
                 .navigationId(toNavigationId(null, board.getId()))
+                .user(target)
                 .build();
     }
 
