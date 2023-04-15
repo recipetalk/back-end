@@ -1,8 +1,8 @@
 package com.solution.recipetalk.service.notification;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
-import java.awt.print.Pageable;
 
 public interface FindNotificationService {
 

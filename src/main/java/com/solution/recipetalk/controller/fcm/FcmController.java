@@ -22,7 +22,7 @@ public class FcmController {
         return registerFcmTokenService.registerFcmToken(dto);
     }
 
-    @PatchMapping("/notification")
+    @PatchMapping("/connect")
     public ResponseEntity<?> fcmTokenModify(FcmTokenDTO dto){
         return modifyFcmTokenService.modifyFcmToken(dto);
     }

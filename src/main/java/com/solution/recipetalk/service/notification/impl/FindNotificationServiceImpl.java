@@ -6,11 +6,12 @@ import com.solution.recipetalk.dto.notification.NotificationDTO;
 import com.solution.recipetalk.service.notification.FindNotificationService;
 import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,8 +25,9 @@ public class FindNotificationServiceImpl implements FindNotificationService {
     @Override
     public ResponseEntity<?> findNotifications(Pageable pageable) {
         Long session = ContextHolder.getUserLoginId();
-        List<Notification> notificationsByUser_id = notificationRepository.findNotificationsByUser_Id(session, pageable);
-        List<NotificationDTO> notificationDTOS = notificationsByUser_id.stream().map(Notification::toDTO).collect(Collectors.toList());
+        Page<Notification> notificationsByUser_id = notificationRepository.findNotificationsByUser_Id(session, pageable);
+
+        Page<NotificationDTO> notificationDTOS = notificationsByUser_id.map(Notification::toDTO);
         return ResponseEntity.ok(notificationDTOS);
     }
 }
