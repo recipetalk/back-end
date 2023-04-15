@@ -4,10 +4,13 @@ import com.solution.recipetalk.domain.common.AuditingEntity;
 import com.solution.recipetalk.domain.notification.state.NotificationSort;
 import com.solution.recipetalk.domain.notification.state.NotificationState;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
+import com.solution.recipetalk.dto.notification.NotificationDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.HashMap;
 
 @Entity
 @Table(name = "notification")
@@ -24,7 +27,7 @@ public class Notification extends AuditingEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserDetail user;
 
-    @Enumerated( value = EnumType.STRING)
+    @Enumerated( value = EnumType.ORDINAL)
     @Column(name = "state")
     private NotificationState state;
 
@@ -40,4 +43,31 @@ public class Notification extends AuditingEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "sort")
     private NotificationSort sort;
+
+    public HashMap<String, String> navigationIdToHashmap() {
+        HashMap<String, String> data = new HashMap<>();
+        String[] navigationSplit = navigationId.split("&");
+        for (String s : navigationSplit) {
+            String[] map = s.split("-");
+            data.put(map[0], map[1]);
+        }
+        return data;
+    }
+
+    public NotificationDTO toDTO() {
+        return NotificationDTO.builder()
+                .id(id)
+                .notificationSort(sort.toString())
+                .createdDate(getCreatedDate())
+                .navigations(navigationIdToHashmap())
+                .isOpened(isOpened())
+                .body(body)
+                .title(title)
+                .notificationSort(sort.toString())
+        .build();
+    }
+
+    public Boolean isOpened() {
+        return state == NotificationState.OPEN;
+    }
 }
