@@ -30,10 +30,10 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             countQuery = "SELECT distinct count(c) "+
                     "FROM Comment c " +
                     "JOIN UserDetail writer ON c.writer = writer " +
-                    "LEFT JOIN Comment childComment ON childComment.parentComment = c " +
+                    "JOIN Comment childComment ON childComment.parentComment = c " +
                     "WHERE writer.isBlocked = FALSE " +
                     "AND c.board.id = :boardId " +
-                    "AND ((writer.isDeleted = FALSE AND NOT EXISTS(childComment)) OR (writer.isDeleted <> FALSE AND EXISTS(childComment)) OR (writer.isDeleted = FALSE AND EXISTS(childComment))) " +
+                    "AND NOT(c.isDeleted = TRUE AND (childComment.isDeleted = TRUE OR childComment IS NULL)) " +
                     "AND writer.id NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewerId) " +
                     "AND childComment.writer NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewerId) " +
                     "AND c.parentComment.id IS NULL "
