@@ -36,7 +36,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
                     "AND (c.isDeleted = FALSE or ( c.isDeleted = TRUE AND childComment.isDeleted = FALSE))" +
                     "AND writer.id NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewerId) " +
                     "AND childComment.writer NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewerId) " +
-                    "AND c.parentComment.id IS NULL " +
+                    "AND c.parentComment.id IS NULL "
     )
     Page<CommentResponseDTO> findAllParentCommentByBoard(Long boardId, Pageable pageable, Long viewerId);
 
