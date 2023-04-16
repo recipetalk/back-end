@@ -1,6 +1,8 @@
 package com.solution.recipetalk.controller.ingredient.trimming.row;
 
+import com.solution.recipetalk.domain.ingredient.trimming.row.entity.IngredientTrimmingRow;
 import com.solution.recipetalk.dto.ingredient.trimming.IngredientTrimmingModifyListDTO;
+import com.solution.recipetalk.dto.ingredient.trimming.row.IngredientTrimmingRowRegisterDTO;
 import com.solution.recipetalk.dto.ingredient.trimming.row.IngredientTrimmingRowRegisterListDTO;
 import com.solution.recipetalk.service.ingredient.trimming.row.EditIngredientTrimmingRowService;
 import com.solution.recipetalk.service.ingredient.trimming.row.RegisterIngredientTrimmingRowService;
@@ -19,8 +21,8 @@ public class IngredientTrimmingRowController {
     private final EditIngredientTrimmingRowService editIngredientTrimmingRowService;
 
     @PostMapping("")
-    public ResponseEntity<?> ingredientTrimmingRowAddAll(@PathVariable(name = "trimmingId")Long trimmingId, IngredientTrimmingRowRegisterListDTO dtos){
-        return ingredientTrimmingRowService.registerIngredientTrimmingRow(dtos.getDtos(),trimmingId);
+    public ResponseEntity<?> ingredientTrimmingRowAddAll(@PathVariable(name = "trimmingId")Long trimmingId, IngredientTrimmingRowRegisterDTO dto){
+        return ingredientTrimmingRowService.registerIngredientTrimmingRow(dto, trimmingId);
     }
 
     @PatchMapping("/row")
