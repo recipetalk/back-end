@@ -21,7 +21,7 @@ public class IngredientTrimmingRow extends AuditingEntity {
     @Column(nullable = false)
     private String description;
 
-    @Column(name = "img_uri", nullable = false)
+    @Column(name = "img_uri")
     private String imgURI;
 
     @ManyToOne(fetch = FetchType.LAZY)
