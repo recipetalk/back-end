@@ -111,7 +111,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
 
     private void loadBoardData() {
         createBoardData(1L, "test", "test board", 0L, BoardSort.RECIPE);
-        createBoardData(2L, "test1", "test board2", 0L, BoardSort.TRIMMING);
+        createBoardData(2L, "hyunkim", "test board2", 0L, BoardSort.TRIMMING);
         createBoardData(3L, "test1", "test board2", 0L,BoardSort.DESCRIPTION);
     }
 
