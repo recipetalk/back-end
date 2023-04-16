@@ -36,9 +36,10 @@ public class UserHasIngredientController {
     @GetMapping("/user/ingredient/page/{startId}")
     public ResponseEntity<?> userHasIngredientList(
             Pageable pageable,
-            @PathVariable(name = "startId") Long startId
+            @PathVariable(name = "startId") Long startId,
+            @RequestParam(name = "sort", defaultValue = "expiration_date_asc") String sortElement
     ) {
-        return findUserHasIngredientService.findUserHasIngredients(pageable, startId);
+        return findUserHasIngredientService.findUserHasIngredients(pageable, startId, sortElement);
     }
 
     @PatchMapping("/user/ingredient/{id}")

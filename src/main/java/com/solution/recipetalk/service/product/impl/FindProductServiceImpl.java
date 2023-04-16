@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ProductServiceImpl implements FindProductService {
+public class FindProductServiceImpl implements FindProductService {
     private final ProductRepository productRepository;
 
     @Override
