@@ -19,9 +19,10 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query(value = "SELECT distinct new com.solution.recipetalk.dto.comment.CommentResponseDTO(writer.username, writer.nickname, writer.profileImageURI, c.id, c.description, c.createdDate, c.createdDate <> c.modifiedDate as Modified, childComment is not null, c.isDeleted, writer.isDeleted) " +
             "FROM Comment c " +
                 "JOIN UserDetail writer ON c.writer = writer " +
-                "LEFT JOIN Comment childComment ON childComment.parentComment = c " +
+                "JOIN Comment childComment ON childComment.parentComment = c " +
             "WHERE writer.isBlocked = FALSE " +
                 "AND c.board.id = :boardId " +
+                "AND NOT(c.isDeleted = TRUE AND (childComment.isDeleted = TRUE OR childComment IS NULL)) " +
                 "AND writer.id NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewerId) " +
                 "AND childComment.writer NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewerId) " +
                 "AND c.parentComment.id IS NULL " +
