@@ -151,9 +151,10 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     }
 
     private void loadCommentData() {
-        createCommentIfNotNull(1L, 1L, 1L, null, "test");
-        createCommentIfNotNull(2L, 1L, 1L, 1L, "testtest");
-        createCommentIfNotNull(3L, 1L, 1L, 1L, "testtest");
+        createCommentIfNotNull(1L, 1L, 1L, null, "test", false);
+        createCommentIfNotNull(2L, 1L, 1L, 1L, "testtest", false);
+        createCommentIfNotNull(3L, 1L, 1L, 1L, "testtest", false);
+        createCommentIfNotNull(4L, 1L, 1L, null, "testtest", true);
     }
 
     private void loadBookmarkData() {
@@ -328,7 +329,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         }
     }
 
-    private void createCommentIfNotNull(Long commentId, Long boardId, Long userId, Long parentCommentId, String description){
+    private void createCommentIfNotNull(Long commentId, Long boardId, Long userId, Long parentCommentId, String description, Boolean isDeleted){
         Optional<Comment> findComment = commentRepository.findById(commentId);
 
         if(findComment.isPresent()){
@@ -344,7 +345,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
              parentComment = commentRepository.findById(parentCommentId).orElseThrow(CommentNotFoundException::new);
         }
 
-        Comment comment = Comment.builder().parentComment(parentComment).description(description).writer(writer).board(board).build();
+        Comment comment = Comment.builder().parentComment(parentComment).description(description).writer(writer).board(board).isDeleted(isDeleted).build();
 
         commentRepository.save(comment);
 
