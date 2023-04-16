@@ -15,7 +15,6 @@ import com.solution.recipetalk.domain.image.repository.ImageRepository;
 import com.solution.recipetalk.domain.ingredient.description.entity.IngredientDescription;
 import com.solution.recipetalk.domain.ingredient.description.repository.IngredientDescriptionRepository;
 import com.solution.recipetalk.domain.ingredient.entity.Ingredient;
-import com.solution.recipetalk.domain.ingredient.entity.IngredientSort;
 import com.solution.recipetalk.domain.ingredient.repository.IngredientRepository;
 import com.solution.recipetalk.domain.ingredient.trimming.entity.IngredientTrimming;
 import com.solution.recipetalk.domain.ingredient.trimming.repository.IngredientTrimmingRepository;
@@ -115,8 +114,8 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     }
 
     private void loadIngredientData() {
-        createTestIngredient("ingredient1", IngredientSort.마늘, 10);
-        createTestIngredient("ingredient2", IngredientSort.마늘, 6);
+        createTestIngredient("ingredient1");
+        createTestIngredient("ingredient2");
     }
 
     private void loadRecipeData() {
@@ -209,7 +208,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     }
 
 
-    private void createTestIngredient(String name, IngredientSort sort, Integer calorie) {
+    private void createTestIngredient(String name) {
         Optional<Ingredient> byName = ingredientRepository.findByName(name);
 
         if(byName.isPresent()) {
@@ -218,8 +217,6 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
 
         Ingredient testIngredient = Ingredient.builder()
                 .name(name)
-                .sort(sort)
-                .calorie(calorie)
                 .build();
 
         ingredientRepository.save(testIngredient);
