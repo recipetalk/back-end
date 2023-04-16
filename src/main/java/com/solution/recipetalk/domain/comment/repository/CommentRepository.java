@@ -30,13 +30,13 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             countQuery = "SELECT count(distinct c) "+
                     "FROM Comment c " +
                     "JOIN UserDetail writer ON c.writer = writer " +
-                    "JOIN Comment childComment ON childComment.parentComment = c " +
+                    "LEFT JOIN Comment childComment ON childComment.parentComment = c " +
                     "WHERE writer.isBlocked = FALSE " +
                     "AND c.board.id = :boardId " +
-                    "AND NOT (c.isDeleted = TRUE AND (childComment.isDeleted = TRUE OR childComment IS NULL)) " +
+                    "AND (c.isDeleted = FALSE or ( c.isDeleted = TRUE AND childComment.isDeleted = FALSE))" +
                     "AND writer.id NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewerId) " +
                     "AND childComment.writer NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewerId) " +
-                    "AND c.parentComment.id IS NULL "
+                    "AND c.parentComment.id IS NULL " +
     )
     Page<CommentResponseDTO> findAllParentCommentByBoard(Long boardId, Pageable pageable, Long viewerId);
 
@@ -45,7 +45,13 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     )
     Page<CommentResponseDTO> findAllChildCommentByBoard(Long viewerId, Long boardId, Long parentCommentId, Pageable pageable);
 
-    @Query(value = "SELECT new com.solution.recipetalk.dto.comment.CommentResponseDTO(c.id, b.id,  c.description, c.createdDate, c.createdDate <> c.modifiedDate as Modified, b.boardSort, b.title) FROM Comment c JOIN UserDetail writer ON c.writer = writer JOIN Board b ON c.board = b WHERE writer.id = :userId AND c.isDeleted = false ORDER BY c.id",
+    @Query(value = "SELECT new com.solution.recipetalk.dto.comment.CommentResponseDTO(c.id, b.id,  c.description, c.createdDate, c.createdDate <> c.modifiedDate as Modified, b.boardSort, b.title) " +
+            "FROM Comment c " +
+                "JOIN UserDetail writer ON c.writer = writer " +
+                "JOIN Board b ON c.board = b " +
+            "WHERE writer.id = :userId " +
+                "AND c.isDeleted = false " +
+                "ORDER BY c.id",
             countQuery = "SELECT COUNT(*) FROM Comment c JOIN UserDetail writer ON c.writer = writer WHERE writer.id = :userId AND c.isDeleted = false"
     )
     Page<CommentResponseDTO> findAllByWriter(Long userId, Pageable pageable);
