@@ -49,10 +49,27 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             "FROM Comment c " +
                 "JOIN UserDetail writer ON c.writer = writer " +
                 "JOIN Board b ON c.board = b " +
+                "LEFT JOIN Comment parentComment ON c.parentComment = parentComment " +
+            "LEFT JOIN UserDetail parentCommentWriter ON parentComment.writer = parentCommentWriter " +
             "WHERE writer.id = :userId " +
                 "AND c.isDeleted = false " +
+                "AND b.isDeleted = false " +
+            "AND (parentComment IS NULL OR (" +
+                "parentCommentWriter.isBlocked = FALSE " +
+                "AND parentCommentWriter NOT IN (SELECT blockedUser from UserBlock  WHERE user.id = :userId)))" +
                 "ORDER BY c.id",
-            countQuery = "SELECT COUNT(*) FROM Comment c JOIN UserDetail writer ON c.writer = writer WHERE writer.id = :userId AND c.isDeleted = false"
+            countQuery = "SELECT COUNT(*) " +
+                    "FROM Comment c " +
+                    "JOIN UserDetail writer ON c.writer = writer " +
+                    "JOIN Board b ON c.board = b " +
+                    "LEFT JOIN Comment parentComment ON c.parentComment = parentComment " +
+                    "LEFT JOIN UserDetail parentCommentWriter ON parentComment.writer = parentCommentWriter " +
+                    "WHERE writer.id = :userId " +
+                    "AND c.isDeleted = false " +
+                    "AND b.isDeleted = false " +
+                    "AND (parentComment IS NULL OR (" +
+                    "parentCommentWriter.isBlocked = FALSE " +
+                    "AND parentCommentWriter NOT IN (SELECT blockedUser from UserBlock  WHERE user.id = :userId)))"
     )
     Page<CommentResponseDTO> findAllByWriter(Long userId, Pageable pageable);
 
