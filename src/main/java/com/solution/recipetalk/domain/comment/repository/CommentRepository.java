@@ -45,7 +45,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     )
     Page<CommentResponseDTO> findAllChildCommentByBoard(Long viewerId, Long boardId, Long parentCommentId, Pageable pageable);
 
-    @Query(value = "SELECT new com.solution.recipetalk.dto.comment.CommentResponseDTO(c.id, c.parentComment,  b.id,  c.description, c.createdDate, c.createdDate <> c.modifiedDate as Modified, b.boardSort, b.title) " +
+    @Query(value = "SELECT new com.solution.recipetalk.dto.comment.CommentResponseDTO(c.id, c.parentComment.id,  b.id,  c.description, c.createdDate, c.createdDate <> c.modifiedDate as Modified, b.boardSort, b.title) " +
             "FROM Comment c " +
                 "JOIN UserDetail writer ON c.writer = writer " +
                 "JOIN Board b ON c.board = b " +
