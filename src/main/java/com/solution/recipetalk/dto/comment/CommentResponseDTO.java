@@ -25,10 +25,13 @@ public class CommentResponseDTO {
     private String boardSort;
     private String title;
 
-    public CommentResponseDTO(Long commentId, Long boardId, String description, LocalDateTime createdDate, Boolean isModified, BoardSort boardSort, String title){
+    private Long parentCommentId;
+
+    public CommentResponseDTO(Long commentId, Long parentCommentId, Long boardId, String description, LocalDateTime createdDate, Boolean isModified, BoardSort boardSort, String title){
         this.title = title;
         this.boardId = boardId;
         this.commentId = commentId;
+        this.parentCommentId = parentCommentId;
         this.description = description;
         this.createdDate = createdDate;
         this.isModified = isModified;
