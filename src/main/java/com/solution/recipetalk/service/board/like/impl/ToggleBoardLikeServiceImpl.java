@@ -36,7 +36,7 @@ public class ToggleBoardLikeServiceImpl implements ToggleBoardLikeService {
         Board findBoard = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
 
         BoardLikeId boardLikeId = new BoardLikeId(session, findBoard);
-        Optional<BoardLike> find = boardLikeRepository.findById(boardLikeId);
+        Optional<BoardLike> find = boardLikeRepository.findBoardLikeByBoardAndUser(findBoard,session);
 
         if(find.isPresent()){
             boardLikeRepository.delete(find.get());

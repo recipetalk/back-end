@@ -22,8 +22,7 @@ public class Product {
     private String productName;
 
     @ManyToOne
-    @JoinColumn(name = "ingredient_id")
-    @Column(name = "ingredient")
+    @JoinColumn(name = "ingredient_id", nullable = false)
     private Ingredient ingredient;
 
     @Column(name = "is_closed")

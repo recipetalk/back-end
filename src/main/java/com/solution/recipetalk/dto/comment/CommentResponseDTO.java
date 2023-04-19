@@ -35,11 +35,11 @@ public class CommentResponseDTO {
                               Boolean childExist, Boolean isDeleted, Boolean isUserDeleted){
 
         if(isDeleted){
-            userProfile = new UserSimpleProfileDTO(null, "(삭제)", "");
+            userProfile = UserSimpleProfileFactory.isDeleted();
             this.description = "삭제된 덧글입니다.";
         }
         if(isUserDeleted){
-            userProfile = new UserSimpleProfileDTO(null, "(알수 없음)", "");
+            userProfile = UserSimpleProfileFactory.isWithdraw();
         }
 
         if(!isDeleted && !isUserDeleted) userProfile = new UserSimpleProfileDTO(username, nickname, profileImageURI);
@@ -55,11 +55,11 @@ public class CommentResponseDTO {
                               Boolean isDeleted, Boolean isUserDeleted){
 
         if(isDeleted){
-            userProfile = new UserSimpleProfileDTO(null, "(삭제)", "");
+            userProfile = UserSimpleProfileFactory.isDeleted();
             this.description = "삭제된 덧글입니다.";
         }
         if(isUserDeleted){
-            userProfile = new UserSimpleProfileDTO(null, "(알수 없음)", "");
+            userProfile = UserSimpleProfileFactory.isWithdraw();
         }
 
         if(!isDeleted && !isUserDeleted) userProfile = new UserSimpleProfileDTO(username, nickname, profileImageURI);

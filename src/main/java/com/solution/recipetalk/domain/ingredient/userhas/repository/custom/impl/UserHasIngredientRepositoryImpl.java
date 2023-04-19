@@ -31,6 +31,7 @@ public class UserHasIngredientRepositoryImpl implements UserHasIngredientCustomR
             case "expiration_date_asc" -> new OrderSpecifier<>(Order.ASC, userHasIngredient.expirationDate);
             case "expiration_date_desc" -> new OrderSpecifier<>(Order.DESC, userHasIngredient.expirationDate);
             case "up_to_date" -> new OrderSpecifier<>(Order.ASC, userHasIngredient.createdDate);
+            default -> null;
         };
 
         JPAQuery<UserHasIngredientResponseDTO> query = queryFactory.select(Projections.bean(UserHasIngredientResponseDTO.class, userHasIngredient.ingredient.name, userHasIngredient.state, userHasIngredient.quantity, userHasIngredient.expirationDate, userHasIngredient.ingredient.id))

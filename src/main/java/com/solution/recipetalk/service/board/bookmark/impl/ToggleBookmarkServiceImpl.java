@@ -35,7 +35,7 @@ public class ToggleBookmarkServiceImpl implements ToggleBookmarkService {
         Board findBoard = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
 
         BookmarkId boardLikeId = new BookmarkId(session, findBoard);
-        Optional<Bookmark> find = bookmarkRepository.findById(boardLikeId);
+        Optional<Bookmark> find = bookmarkRepository.findBookmarkByUserAndBoard(session,findBoard);
 
         if(find.isPresent()){
             bookmarkRepository.delete(find.get());

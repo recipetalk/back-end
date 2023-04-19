@@ -2,6 +2,7 @@ package com.solution.recipetalk.dto.recipe;
 
 import com.solution.recipetalk.domain.board.entity.Board;
 import com.solution.recipetalk.domain.recipe.entity.Recipe;
+import com.solution.recipetalk.domain.recipe.entity.RecipeQuantityCategory;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,7 +22,7 @@ public class RecipeRegisterDTO {
     @NonNull
     private String description;
     @NonNull
-    private Long quantity;
+    private String quantity;
 
     public Board toBoardEntity(UserDetail writer) {
         return Board.builder()
@@ -35,7 +36,7 @@ public class RecipeRegisterDTO {
         return Recipe.builder()
                 .thumbnailImgURI(thumbnailURI)
                 .board(board)
-                .quantity(quantity)
+                .quantity(RecipeQuantityCategory.valueOf(quantity))
                 .description(description)
                 .build();
 

@@ -30,9 +30,8 @@ public class FindBoardLikeServiceImpl implements FindBoardLikeService {
         UserDetail session = userDetailRepository.getReferenceById(ContextHolder.getUserLoginId());
         Board findBoard = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
 
-        BoardLikeId boardLikeId = new BoardLikeId(session, findBoard);
 
-        BoardLikedDTO dto = new BoardLikedDTO(boardLikeRepository.findById(boardLikeId).isPresent());
+        BoardLikedDTO dto = new BoardLikedDTO(boardLikeRepository.findBoardLikeByBoardAndUser(findBoard, session).isPresent());
 
         return ResponseEntity.ok(dto);
     }

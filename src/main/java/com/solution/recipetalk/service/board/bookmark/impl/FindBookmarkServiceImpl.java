@@ -32,9 +32,8 @@ public class FindBookmarkServiceImpl implements FindBookmarkService {
         UserDetail session = userDetailRepository.getReferenceById(ContextHolder.getUserLoginId());
         Board findBoard = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
 
-        BookmarkId bookmarkId = new BookmarkId(session, findBoard);
 
-        BookmarkDTO dto = new BookmarkDTO(bookmarkRepository.findById(bookmarkId).isPresent());
+        BookmarkDTO dto = new BookmarkDTO(bookmarkRepository.findBookmarkByUserAndBoard(session,findBoard).isPresent());
 
         return ResponseEntity.ok(dto);
     }

@@ -19,7 +19,7 @@ import com.solution.recipetalk.domain.ingredient.repository.IngredientRepository
 import com.solution.recipetalk.domain.ingredient.trimming.entity.IngredientTrimming;
 import com.solution.recipetalk.domain.ingredient.trimming.repository.IngredientTrimmingRepository;
 import com.solution.recipetalk.domain.ingredient.trimming.row.repository.IngredientTrimmingRowRepository;
-import com.solution.recipetalk.domain.recipe.entity.Recipe;
+import com.solution.recipetalk.domain.recipe.entity.*;
 import com.solution.recipetalk.domain.recipe.ingredient.repository.RecipeIngredientRepository;
 import com.solution.recipetalk.domain.recipe.repository.RecipeRepository;
 import com.solution.recipetalk.domain.recipe.row.entity.RecipeRow;
@@ -119,7 +119,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     }
 
     private void loadRecipeData() {
-        createRecipeDataIfNotNull(1L, "", 1L, 1L, "sample");
+        createRecipeDataIfNotNull(1L, "", 1L, "ONE", "sample");
     }
 
     private void loadRecipeRowData() {
@@ -223,7 +223,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     }
 
 
-    private void createRecipeDataIfNotNull(Long id, String thumbnailImgURI, Long boardId, Long quantity, String description) {
+    private void createRecipeDataIfNotNull(Long id, String thumbnailImgURI, Long boardId, String quantity, String description) {
         Optional<Recipe> byId = recipeRepository.findById(id);
         if(byId.isPresent()) {
             return;
@@ -234,8 +234,11 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         Recipe recipe = Recipe.builder()
                 .thumbnailImgURI(thumbnailImgURI)
                 .board(board)
-                .quantity(quantity)
+                .quantity(RecipeQuantityCategory.valueOf(quantity))
                 .description(description)
+                .durationTime(RecipeDurationTime.TEN_MINUTES)
+                .level(RecipeLevel.보통)
+                .sort(RecipeSortCategory.기타)
                 .build();
 
         recipeRepository.save(recipe);
@@ -296,9 +299,8 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private void createBoardLikeIfNotNull(Long boardId, Long userId){
         UserDetail user = userDetailRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
-        BoardLikeId boardLikeId = new BoardLikeId(user,board);
 
-        Optional<BoardLike> find = boardLikeRepository.findById(boardLikeId);
+        Optional<BoardLike> find = boardLikeRepository.findBoardLikeByBoardAndUser(board,user);
         if(find.isPresent()){
             return;
         }
@@ -311,9 +313,8 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         UserDetail user = userDetailRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         UserDetail followingUser = userDetailRepository.findById(followingId).orElseThrow(UserNotFoundException::new);
 
-        UserFollowId userFollowId = new UserFollowId(user, followingUser);
 
-        Optional<UserFollow> find = userFollowRepository.findById(userFollowId);
+        Optional<UserFollow> find = userFollowRepository.findUserFollowByUserAndFollowing(user, followingUser);
 
         if(find.isPresent()){
             return;
@@ -350,7 +351,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
         BookmarkId bookmarkId = new BookmarkId(user,board);
 
-        Optional<Bookmark> find = bookmarkRepository.findById(bookmarkId);
+        Optional<Bookmark> find = bookmarkRepository.findBookmarkByUserAndBoard(user, board);
         if(find.isPresent()){
             return;
         }

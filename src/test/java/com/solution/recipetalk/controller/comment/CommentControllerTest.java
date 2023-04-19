@@ -60,21 +60,21 @@ class CommentControllerTest {
 
     @BeforeAll
     void setUserDetailAndLoginAndBoard() throws Exception {
-        mvc.perform(post("/auth/login")
-                        .content("{\"username\": \"khj745700\",\"password\": \"testtest\"}")
-                        .contentType(contentType))
-                .andExpect(status().isOk())
-                .andDo(result -> jwtToken = Objects.requireNonNull(result.getResponse().getHeader("Authorization")));
-
-        UserDetail userDetail = UserDetail.builder().id(1L).nickname("test1").phoneNum("01031798788").profileImageURI("testURI").build();
-        userDetailRepository.save(userDetail);
-
-        Board sample = Board.builder()
-                .writer(userDetail)
-                .title("sample")
-                .view_count(1L)
-                .build();
-        boardRepository.save(sample);
+//        mvc.perform(post("/auth/login")
+//                        .content("{\"username\": \"khj745700\",\"password\": \"testtest\"}")
+//                        .contentType(contentType))
+//                .andExpect(status().isOk())
+//                .andDo(result -> jwtToken = Objects.requireNonNull(result.getResponse().getHeader("Authorization")));
+//
+//        UserDetail userDetail = UserDetail.builder().id(1L).nickname("test1").phoneNum("01031798788").profileImageURI("testURI").build();
+//        userDetailRepository.save(userDetail);
+//
+//        Board sample = Board.builder()
+//                .writer(userDetail)
+//                .title("sample")
+//                .view_count(1L)
+//                .build();
+//        boardRepository.save(sample);
     }
 
     @Test

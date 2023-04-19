@@ -27,18 +27,36 @@ public class Recipe extends SoftDeleteEntity {
     @Column(name = "recipe_id", nullable = false)
     private Long id;
 
-    @Column(name = "thumbnail_img_uri", nullable = false)
+    @Column(name = "thumbnail_img_uri")
     private String thumbnailImgURI;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
-    @Column(name = "quantity", nullable = false)
-    private Long quantity;
-
     @Column(name = "description", nullable = false)
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "quantity", nullable = false)
+    private RecipeQuantityCategory quantity;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "level", nullable = false)
+    private RecipeLevel level;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "duration_time", nullable = false)
+    private RecipeDurationTime durationTime;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sort", nullable = false)
+    private RecipeSortCategory sort;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "situation")
+    private RecipeSituationCategory situation;
+
 
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
     private List<RecipeIngredient> recipeIngredients;
