@@ -21,7 +21,7 @@ public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
 
             countQuery = "SELECT COUNT(*) FROM UserFollow f JOIN UserDetail u WHERE f.following = u AND u.id = :id AND u.isDeleted = false AND u.isBlocked = false AND u NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :viewer)"
     )
-    Page<UserSimpleProfileDTO> findAllByUserPage(@Param("id") Long  id, Long viewer, Pageable pageable);
+    Page<UserSimpleProfileDTO> findAllByUserPage(@Param("id") Long id, @Param("viewer") Long viewer, Pageable pageable);
 
     Optional<UserFollow> findUserFollowByUserAndFollowing(UserDetail user, UserDetail following);
 
@@ -29,5 +29,5 @@ public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
 
             countQuery = "SELECT COUNT(*) FROM UserFollow f JOIN UserDetail u WHERE f.following = u AND u.id = :id AND u.isDeleted = false AND u.isBlocked = false  AND u NOT IN (SELECT blockedUser FROM UserBlock WHERE user.id = :id)"
     )
-    Page<UserSimpleProfileDTO> findAllByFollowingPage(@Param("id") Long  id, Long viewer, Pageable pageable);
+    Page<UserSimpleProfileDTO> findAllByFollowingPage(@Param("id") Long  id, @Param("viewer") Long viewer, Pageable pageable);
 }
