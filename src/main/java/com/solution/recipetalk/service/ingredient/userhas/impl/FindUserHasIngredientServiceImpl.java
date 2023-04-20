@@ -26,8 +26,8 @@ public class FindUserHasIngredientServiceImpl implements FindUserHasIngredientSe
     }
 
     @Override
-    public ResponseEntity<?> findUserHasIngredients(Pageable pageable, Long startId) {
-        Page<UserHasIngredientResponseDTO> allUserIngredient = userHasIngredientRepository.findAllUserIngredient(pageable, startId);
+    public ResponseEntity<?> findUserHasIngredients(Pageable pageable, Long startId, String sortElement) {
+        Page<UserHasIngredientResponseDTO> allUserIngredient = userHasIngredientRepository.findAllUserIngredient(pageable, startId, sortElement);
         return ResponseEntity.ok(allUserIngredient);
     }
 }

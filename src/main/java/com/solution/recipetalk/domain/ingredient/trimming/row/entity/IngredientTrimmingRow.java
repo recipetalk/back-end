@@ -21,7 +21,7 @@ public class IngredientTrimmingRow extends AuditingEntity {
     @Column(nullable = false)
     private String description;
 
-    @Column(name = "img_uri")
+    @Column(name = "img_uri", nullable = false)
     private String imgURI;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,6 +30,9 @@ public class IngredientTrimmingRow extends AuditingEntity {
 
     @Column(name = "trimming_seq")
     private Long trimmingSeq;
+
+    @Column(name = "trimming_sub_seq")
+    private Long trimmingSubSeq;
 
     public void changeImageURI(String imgURI){
         if (imgURI != null){
@@ -41,9 +44,5 @@ public class IngredientTrimmingRow extends AuditingEntity {
         if (description != null){
             this.description = description;
         }
-    }
-
-    public void changeTrimmingSeq(Long trimmingSeq){
-        this.trimmingSeq = trimmingSeq;
     }
 }

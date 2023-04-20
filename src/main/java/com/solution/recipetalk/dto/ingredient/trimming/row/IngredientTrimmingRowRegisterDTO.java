@@ -15,8 +15,12 @@ public class IngredientTrimmingRowRegisterDTO {
     private String description;
 
     private MultipartFile img;
+
     @NonNull
     private Long trimmingSeq;
+
+    @NonNull
+    private Long trimmingSubSeq;
 
     public IngredientTrimmingRow toIngredientTrimmingRow(IngredientTrimming ingredientTrimming, String imgUri){
         return IngredientTrimmingRow.builder()
@@ -24,6 +28,7 @@ public class IngredientTrimmingRowRegisterDTO {
                 .imgURI(imgUri)
                 .description(this.description)
                 .trimmingSeq(this.trimmingSeq)
+                .trimmingSubSeq(this.trimmingSubSeq)
                 .build();
     }
 }

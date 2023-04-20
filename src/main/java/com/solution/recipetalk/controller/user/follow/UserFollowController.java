@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @Validated
-@RequestMapping("/api/user")
+@RequestMapping("/api/user/follow")
 public class UserFollowController {
 
     private final RegisterUserFollowService registerUserFollowService;
@@ -23,29 +23,17 @@ public class UserFollowController {
 
     private final RemoveUserFollowService removeUserFollowService;
 
-    @PostMapping("/follow/{following}")
+    @PostMapping("/{following}")
     public ResponseEntity<?> followAdd(@PathVariable(name = "following") String following){
         return registerUserFollowService.registerUserFollow(following);
     }
 
-    @GetMapping("/follow/{username}")
-    public ResponseEntity<?> followFind(@PathVariable(name="username") String username) {
-        return findUserFollowService.findUserFollow(username);
-    }
-
-    @GetMapping("/following/{following}")
+    @GetMapping("/{following}")
     public ResponseEntity<?> followingList(@PathVariable(name = "following") String following, @PageableDefault(size = 20) Pageable pageable){
         return findUserFollowService.findUserFolloweeList(following, pageable);
     }
 
-
-
-    @GetMapping("/follower/{follower}")
-    public ResponseEntity<?> followerList(@PathVariable(name = "follower") String follower, @PageableDefault(size = 20) Pageable pageable){
-        return findUserFollowService.findUserFollowerList(follower, pageable);
-    }
-
-    @DeleteMapping("/follow/{following}")
+    @DeleteMapping("/{following}")
     public ResponseEntity<?> followingRemove(@PathVariable(name = "following") String following) {
         return removeUserFollowService.removeUserFollow(following);
     }

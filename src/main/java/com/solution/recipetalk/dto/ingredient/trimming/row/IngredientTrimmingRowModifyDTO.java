@@ -19,12 +19,16 @@ public class IngredientTrimmingRowModifyDTO {
     @NonNull
     private Long trimmingSeq;
 
+    @NonNull
+    private Long trimmingSubSeq;
+
     public IngredientTrimmingRow toIngredientTrimmingRow(IngredientTrimming ingredientTrimming, String imgUri){
         return IngredientTrimmingRow.builder()
                 .ingredientTrimming(ingredientTrimming)
                 .imgURI(imgUri)
                 .description(this.description)
                 .trimmingSeq(this.trimmingSeq)
+                .trimmingSubSeq(this.trimmingSubSeq)
                 .build();
     }
 }

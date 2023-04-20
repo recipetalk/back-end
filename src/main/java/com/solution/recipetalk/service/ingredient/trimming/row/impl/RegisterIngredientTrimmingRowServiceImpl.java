@@ -37,7 +37,7 @@ public class RegisterIngredientTrimmingRowServiceImpl implements RegisterIngredi
 
 
     @Override
-    public ResponseEntity<?> registerIngredientTrimmingRow(IngredientTrimmingRowRegisterDTO dto, Long ingredientTrimmingId) {
+    public ResponseEntity<?> registerIngredientTrimmingRow(List<IngredientTrimmingRowRegisterDTO> dtoList, Long ingredientTrimmingId) {
         IngredientTrimming findIngredientTrimming = ingredientTrimmingRepository.findById(ingredientTrimmingId).orElseThrow(IngredientTrimmingNotFoundException::new);
         UserDetail currentUser = userDetailRepository.findById(ContextHolder.getUserLoginId()).orElseThrow(UserNotFoundException::new);
 
@@ -45,15 +45,17 @@ public class RegisterIngredientTrimmingRowServiceImpl implements RegisterIngredi
             throw new CustomException(ErrorCode.NOT_AUTHORIZED);
         }
 
-        try {
-        IngredientTrimmingRow createdIngredientTrimmingRows = dto.toIngredientTrimmingRow(findIngredientTrimming,
-                dto.getImg() != null ? s3Uploader.upload(dto.getImg(), S3dir.INGREDIENT_TRIMMING_ROW_IMG_DIR) : null);
-            ingredientTrimmingRowRepository.save(createdIngredientTrimmingRows);
-        } catch (IOException e) {
-             throw new ImageUploadFailedException();
-         }
+        List<IngredientTrimmingRow> createdIngredientTrimmingRows = dtoList.stream()
+                .map(dto -> {
+                    try {
+                        return dto.toIngredientTrimmingRow(findIngredientTrimming,
+                                s3Uploader.upload(dto.getImg(), S3dir.INGREDIENT_TRIMMING_ROW_IMG_DIR));
+                    } catch (IOException e) {
+                        throw new ImageUploadFailedException();
+                    }
+                }).collect(Collectors.toList());
 
-
+        ingredientTrimmingRowRepository.saveAll(createdIngredientTrimmingRows);
         return ResponseEntity.ok(null);
     }
 }

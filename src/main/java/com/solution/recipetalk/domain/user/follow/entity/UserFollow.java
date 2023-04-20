@@ -18,6 +18,7 @@ public class UserFollow extends AuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_follow_id", nullable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

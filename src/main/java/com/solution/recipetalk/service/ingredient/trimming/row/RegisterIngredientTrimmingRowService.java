@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface RegisterIngredientTrimmingRowService {
 
-    ResponseEntity<?> registerIngredientTrimmingRow(IngredientTrimmingRowRegisterDTO dto, Long ingredientTrimmingId);
+    ResponseEntity<?> registerIngredientTrimmingRow(List<IngredientTrimmingRowRegisterDTO> dtoList, Long ingredientTrimmingId);
 
 }

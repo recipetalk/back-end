@@ -1,14 +1,9 @@
-package com.solution.recipetalk.async.notification;
+package com.solution.recipetalk.async.verification;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
-import com.solution.recipetalk.domain.fcm.entity.FcmToken;
 import com.solution.recipetalk.domain.fcm.entity.temp.entity.TempFcmToken;
 import com.solution.recipetalk.domain.fcm.entity.temp.repository.TempFcmTokenRepository;
-import com.solution.recipetalk.domain.fcm.repository.FcmTokenRepository;
-import com.solution.recipetalk.domain.notification.repository.NotificationRepository;
 import com.solution.recipetalk.service.fcm.FirebaseCloudMessageService;
-import com.solution.recipetalk.vo.notification.NotificationVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -21,13 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class NotificationEventListener {
+public class VerificationEventListener {
 
     private final FirebaseCloudMessageService firebaseCloudMessageService;
-    private final TempFcmTokenRepository tempFcmTokenRepository;
-    private final FcmTokenRepository fcmTokenRepository;
-
-    private final NotificationRepository notificationRepository;
+    private final TempFcmTokenRepository fcmTokenRepository;
 
     @EventListener
     public void handleVerifiedCompleteEvent(final TempFcmToken fcmToken) {
@@ -38,19 +30,8 @@ public class NotificationEventListener {
             System.out.println("fcmToken: " + fcmToken);
             firebaseCloudMessageService.sendMessageTo(null, fcmToken.getFcmToken(), "레시피톡 이메일 인증", "이메일 인증이 완료되었습니다.");
         } catch (RuntimeException | FirebaseMessagingException e) {
-            tempFcmTokenRepository.delete(fcmToken);
-        }
-    }
-
-    @EventListener
-    public void handleNotificationEvent(final NotificationVO notificationVO){
-        try {
-            if(notificationVO.getFcmtoken() != null)
-                firebaseCloudMessageService.sendMessageTo(notificationVO.toMessage());
-        } catch (RuntimeException | FirebaseMessagingException e) {
-            fcmTokenRepository.delete(notificationVO.getFcmtoken());
-        } finally {
-            notificationRepository.save(notificationVO.toEntity());
+            fcmTokenRepository.delete(fcmToken);
+            throw new RuntimeException(e);
         }
     }
 }

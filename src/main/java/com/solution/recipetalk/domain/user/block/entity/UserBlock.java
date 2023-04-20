@@ -13,14 +13,17 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Getter
 @SuperBuilder
-@IdClass(UserBlockId.class)
 public class UserBlock extends AuditingEntity {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="user_block_id", nullable = false)
+    private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_detail_id")
     private UserDetail user;
 
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "blocked_user_id", nullable = false, referencedColumnName = "user_detail_id")
     private UserDetail blockedUser;

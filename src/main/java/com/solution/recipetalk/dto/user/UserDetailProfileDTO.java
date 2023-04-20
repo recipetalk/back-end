@@ -14,18 +14,14 @@ public class UserDetailProfileDTO {
     private String username;
     private String description;
     private String profileImg;
-    private Long followingNum;
-    private Long followerNum;
-    private Long recipeNum;
+    private Long followNum;
 
-    public static UserDetailProfileDTO toDTO(UserDetail userDetail, Long followingNum, Long followerNum, Long recipeNum){
+    public static UserDetailProfileDTO toDTO(UserDetail userDetail, Long followNum){
         return UserDetailProfileDTO.builder()
                 .description(userDetail.getDescription())
                 .nickname(userDetail.getNickname())
                 .profileImg(userDetail.getProfileImageURI())
-                .followingNum(followingNum)
-                .followerNum(followerNum)
-                .recipeNum(recipeNum)
+                .followNum(followNum)
                 .username(userDetail.getUsername())
                 .build();
     }

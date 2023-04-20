@@ -9,10 +9,13 @@ import com.solution.recipetalk.dto.recipe.RecipeDTO;
 import com.solution.recipetalk.dto.user.UserSimpleProfileDTO;
 import com.solution.recipetalk.exception.recipe.RecipeNotFoundException;
 import com.solution.recipetalk.service.recipe.FindRecipeService;
+import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -23,21 +26,12 @@ public class FindRecipeServiceImpl implements FindRecipeService {
 
     @Override
     public ResponseEntity<?> findRecipeWithId(Long recipeId) {
-        Recipe findRecipe = recipeRepository.findById(recipeId).orElseThrow(RecipeNotFoundException::new);
-        Board findRecipeBoard = findRecipe.getBoard();
-        UserDetail recipeWriter = findRecipeBoard.getWriter();
+        Optional<RecipeDTO> recipeByViewerId = recipeRepository.findRecipeByViewerId(ContextHolder.getUserLoginId(), recipeId);
 
-        //증가하고 보여주는 걸로..?
-        findRecipeBoard.increaseViewCount();
-
-        UserSimpleProfileDTO profileDTO = UserSimpleProfileDTO.toDTO(recipeWriter);
-
-        BoardDTO boardDTO = BoardDTO.toDTO(findRecipeBoard, profileDTO);
-
-        RecipeDTO recipeDTO = RecipeDTO.toDTO(findRecipe, boardDTO);
-
-
-        return ResponseEntity.ok(recipeDTO);
+        if(recipeByViewerId.isPresent())
+            return ResponseEntity.ok(recipeByViewerId.get());
+        else
+            return ResponseEntity.notFound().build();
     }
 
 

@@ -5,8 +5,4 @@ import org.springframework.http.ResponseEntity;
 
 public interface FindUserFollowService {
     ResponseEntity<?> findUserFolloweeList(String username, Pageable pageable);
-
-    ResponseEntity<?> findUserFollowerList(String username, Pageable pageable);
-
-    ResponseEntity<?> findUserFollow(String username);
 }

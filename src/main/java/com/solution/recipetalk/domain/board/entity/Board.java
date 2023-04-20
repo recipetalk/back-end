@@ -17,7 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder
 @Entity
-@Table(name = "board")
+@Table(name = "board", indexes = {
+        @Index(name = "idx_like_count", columnList = "like_count", unique = false),
+        @Index(name = "idx_comment_count", columnList = "comment_count", unique = false)
+})
 @SQLDelete(sql = "UPDATE board SET is_deleted = true WHERE id = ?")
 @Where(clause = "is_deleted = false")
 public class Board extends SoftDeleteEntity {
@@ -32,6 +35,12 @@ public class Board extends SoftDeleteEntity {
     @Column(nullable = false)
     private String title;
 
+    @Column(name = "like_count", nullable = false)
+    private Long likeCount;
+
+    @Column(name = "comment_count", nullable = false)
+    private Long commentCount;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private BoardSort boardSort;
@@ -45,8 +54,20 @@ public class Board extends SoftDeleteEntity {
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
     private List<Comment> comments;
 
-    public void increaseViewCount() {
-        view_count ++;
+    public void decreaseLikeCount(){
+        --likeCount;
+    }
+
+    public void increaseLikeCount() {
+        ++likeCount;
+    }
+
+    public void decreaseCommentCount() {
+        --commentCount;
+    }
+
+    public void increaseCommentCount() {
+        ++commentCount;
     }
 
     public void changeTitle(String title){

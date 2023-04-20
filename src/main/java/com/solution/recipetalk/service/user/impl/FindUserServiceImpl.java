@@ -1,6 +1,5 @@
 package com.solution.recipetalk.service.user.impl;
 
-import com.solution.recipetalk.domain.recipe.repository.RecipeRepository;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.domain.user.follow.repository.UserFollowRepository;
 import com.solution.recipetalk.domain.user.login.entity.UserLogin;
@@ -12,7 +11,6 @@ import com.solution.recipetalk.exception.signup.DuplicatedNicknameException;
 import com.solution.recipetalk.exception.signup.DuplicatedUserException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.user.FindUserService;
-import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,7 +29,6 @@ public class FindUserServiceImpl implements FindUserService {
 
     private final UserFollowRepository userFollowRepository;
 
-    private final RecipeRepository recipeRepository;
     @Override
     public ResponseEntity<?> findDuplicatedUsernameInUserLogin(String userName) {
         DuplicateUserDTO dto = DuplicateUserDTO.builder().isValid(isDuplicatedUsernameExceptionHandler(userName)).build();
@@ -72,12 +69,10 @@ public class FindUserServiceImpl implements FindUserService {
     @Override
     public ResponseEntity<?> findUserProfile(String username) {
         UserDetail findUserDetail = userDetailRepository.findUserDetailByUsername(username).orElseThrow(UserNotFoundException::new);
-        Long sessionId = ContextHolder.getUserLoginId();
-        Long followingCount = userFollowRepository.countByUser(findUserDetail, sessionId);
-        Long followerCount = userFollowRepository.countByFollowing(findUserDetail, sessionId);
-        Long recipeNum = recipeRepository.countByBoard_Writer(findUserDetail);
 
-        UserDetailProfileDTO findUserProfileDTO = UserDetailProfileDTO.toDTO(findUserDetail, followingCount, followerCount, recipeNum);
+        Long followCount = userFollowRepository.countByUser(findUserDetail);
+
+        UserDetailProfileDTO findUserProfileDTO = UserDetailProfileDTO.toDTO(findUserDetail, followCount);
 
         return ResponseEntity.ok(findUserProfileDTO);
     }

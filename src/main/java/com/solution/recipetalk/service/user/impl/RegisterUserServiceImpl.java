@@ -49,6 +49,8 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 
         userLoginRepository.save(signUpUserReqDto.toUserLogin(userDetail, encryptedPassword));
 
+        tempFcmTokenRepository.deleteTempFcmTokenByEmail(signUpUserReqDto.getEmail());
+
         verificationTokenRepository.delete(verificationToken);
 
         return ResponseEntity.ok(null);
