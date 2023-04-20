@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface UserBlockRepository extends JpaRepository<UserBlock, UserBlockId> {
+public interface UserBlockRepository extends JpaRepository<UserBlock, Long> {
 
 
     @Query(value = "SELECT new com.solution.recipetalk.dto.user.UserSimpleProfileDTO(u.username, u.nickname, u.profileImageURI) FROM UserBlock ub JOIN UserDetail u ON ub.blockedUser = u WHERE ub.user.id = :userId",

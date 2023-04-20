@@ -35,15 +35,17 @@ public class ToggleBoardLikeServiceImpl implements ToggleBoardLikeService {
 
         Board findBoard = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
 
-        BoardLikeId boardLikeId = new BoardLikeId(session, findBoard);
+
         Optional<BoardLike> find = boardLikeRepository.findBoardLikeByBoardAndUser(findBoard,session);
 
         if(find.isPresent()){
+            findBoard.decreaseLikeCount();
             boardLikeRepository.delete(find.get());
             return ResponseEntity.ok(BoardLikedDTO.builder().isLiked(false).build());
         }
         else{
             BoardLike boardLike = BoardLike.builder().board(findBoard).user(session).build();
+            findBoard.increaseLikeCount();
             boardLikeRepository.save(boardLike);
             return ResponseEntity.ok(BoardLikedDTO.builder().isLiked(true).build());
         }

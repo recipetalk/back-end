@@ -35,7 +35,8 @@ public class IngredientDescriptionRegisterDTO {
         return Board.builder()
                 .title(title)
                 .writer(writer)
-                .view_count(0L)
+                .commentCount(0L)
+                .likeCount(0L)
                 .build();
     }
 }

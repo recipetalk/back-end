@@ -45,6 +45,7 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
 
         validateWhoIsRemovingComment(comment.getWriter(), currentLoginUser);
 
+        board.decreaseCommentCount();
         commentRepository.delete(comment);
 
         return ResponseEntity.ok(null);

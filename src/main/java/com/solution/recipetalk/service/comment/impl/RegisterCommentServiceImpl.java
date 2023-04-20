@@ -42,12 +42,13 @@ public class RegisterCommentServiceImpl implements RegisterCommentService {
         UserDetail writer = userDetailRepository.findById(currentLoginUserId).orElseThrow(UserNotFoundException::new);
 
         Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
-        
+
         Comment parentComment = comment.getParentCommentId() != null ?
                 commentRepository.findById(comment.getParentCommentId()).orElseThrow(CommentNotFoundException::new) : null;
 
         Comment newComment = comment.toEntity(writer, parentComment, board);
 
+        board.increaseCommentCount();
         commentRepository.save(newComment);
 
         return ResponseEntity.ok(null);

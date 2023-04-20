@@ -201,7 +201,8 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         Board board = Board.builder()
                 .writer(writer)
                 .title(title)
-                .view_count(viewCount)
+                .commentCount(0L)
+                .likeCount(0L)
                 .build();
 
         boardRepository.save(board);
@@ -285,8 +286,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private void createUserBlockIfNotNull(Long userId, Long blockUserId) {
         UserDetail user = userDetailRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         UserDetail blockedUser = userDetailRepository.findById(blockUserId).orElseThrow(UserNotFoundException::new);
-        UserBlockId userBlockId = new UserBlockId(user, blockedUser);
-        Optional<UserBlock> byId = userBlockRepository.findById(userBlockId);
+        Optional<UserBlock> byId = userBlockRepository.findByUserAndBlockedUser(user, blockedUser);
 
         if(byId.isPresent()){
             return;

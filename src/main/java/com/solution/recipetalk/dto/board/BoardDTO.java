@@ -31,15 +31,15 @@ public class BoardDTO {
                 .build();
     }
 
-    public static BoardDTO toDTO(Board board, UserSimpleProfileDTO writer, Boolean isLiked, Boolean isBookmarked, Long likeCount, Long commentCount) {
+    public static BoardDTO toDTO(Board board, UserSimpleProfileDTO writer, Boolean isLiked, Boolean isBookmarked) {
         return BoardDTO.builder()
                 .boardId(board.getId())
                 .writer(writer)
                 .isLiked(isLiked)
                 .isBookmarked(isBookmarked)
                 .createdDate(board.getCreatedDate())
-                .likeCount(likeCount)
-                .commentCount(commentCount)
+                .likeCount(board.getLikeCount())
+                .commentCount(board.getCommentCount())
                 .title(board.getTitle())
                 .build();
     }

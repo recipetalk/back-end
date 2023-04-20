@@ -30,7 +30,7 @@ public class RemoveUserBlockServiceImpl implements RemoveUserBlockService {
         UserDetail blockedUser = userDetailRepository.findUserDetailByUsername(dto.getBlockedUsername()).orElseThrow(UserNotFoundException::new);
         System.out.println(dto.getBlockedUsername());
         System.out.println(blockedUser);
-        UserBlock findById = userBlockRepository.findById(new UserBlockId(session, blockedUser)).orElseThrow(UserBlockNotFoundException::new);
+        UserBlock findById = userBlockRepository.findByUserAndBlockedUser(session,blockedUser).orElseThrow(UserBlockNotFoundException::new);
 
         userBlockRepository.delete(findById);
 

@@ -28,7 +28,8 @@ public class RecipeRegisterDTO {
         return Board.builder()
                 .title(title)
                 .writer(writer)
-                .view_count(0L)
+                .likeCount(0L)
+                .commentCount(0L)
                 .build();
     }
 

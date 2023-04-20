@@ -36,7 +36,7 @@ public class RegisterUserBlockServiceImpl implements RegisterUserBlockService {
         UserBlock userBlock = UserBlock.builder().user(session).blockedUser(blockedUser).build();
 
 
-        Optional<UserBlock> byId = userBlockRepository.findById(new UserBlockId(session, blockedUser));
+        Optional<UserBlock> byId = userBlockRepository.findByUserAndBlockedUser(session, blockedUser);
         if(byId.isPresent()){
             throw new UserBlockExistException();
         }

@@ -27,7 +27,7 @@ public class RecipeDTO {
                 .build();
     }
 
-    public RecipeDTO(Recipe recipe, UserDetail userDetail, Board board, Boolean isFollowing, Boolean isLiked, Boolean isBookmarked, Long likeCount, Long commentCount){
+    public RecipeDTO(Recipe recipe, UserDetail userDetail, Board board, Boolean isFollowing, Boolean isLiked, Boolean isBookmarked){
 
         UserSimpleProfileDTO userSimpleProfileDTO = UserSimpleProfileDTO.builder()
                 .profileImageURI(userDetail.getProfileImageURI())
@@ -36,7 +36,7 @@ public class RecipeDTO {
                 .username(userDetail.getUsername())
                 .build();
 
-        this.board = BoardDTO.toDTO(board, userSimpleProfileDTO, isLiked, isBookmarked, likeCount, commentCount);
+        this.board = BoardDTO.toDTO(board, userSimpleProfileDTO, isLiked, isBookmarked);
         this. description = recipe.getDescription();
         this.quantity = recipe.getQuantity().toString();
         this.thumbnailUri = recipe.getThumbnailImgURI();
