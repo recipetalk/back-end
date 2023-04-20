@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Product {
+public class Product extends AuditingEntity{
     @Id
     @Column(name = "barcode")
     private Long barcode;
@@ -21,7 +21,7 @@ public class Product {
     @Column(name = "product_name", nullable = false)
     private String productName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredient_id", nullable = false)
     private Ingredient ingredient;
 

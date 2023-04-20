@@ -1,6 +1,7 @@
 package com.solution.recipetalk.dto.recipe;
 
 import com.solution.recipetalk.domain.board.entity.Board;
+import com.solution.recipetalk.domain.board.entity.BoardSort;
 import com.solution.recipetalk.domain.recipe.entity.Recipe;
 import com.solution.recipetalk.domain.recipe.entity.RecipeQuantityCategory;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
@@ -28,6 +29,7 @@ public class RecipeRegisterDTO {
         return Board.builder()
                 .title(title)
                 .writer(writer)
+                .boardSort(BoardSort.RECIPE)
                 .likeCount(0L)
                 .commentCount(0L)
                 .build();

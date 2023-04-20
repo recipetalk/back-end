@@ -34,6 +34,7 @@ public class RecipeDTO {
                 .isFollowing(isFollowing)
                 .nickname(userDetail.getNickname())
                 .username(userDetail.getUsername())
+                .description(userDetail.getDescription())
                 .build();
 
         this.board = BoardDTO.toDTO(board, userSimpleProfileDTO, isLiked, isBookmarked);

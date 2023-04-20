@@ -25,11 +25,9 @@ public class RemoveUserBlockServiceImpl implements RemoveUserBlockService {
     private final UserDetailRepository userDetailRepository;
 
     @Override
-    public ResponseEntity<?> removeUserBlock(UserBlockRemoveDTO dto) {
+    public ResponseEntity<?> removeUserBlock(String blockedUsername) {
         UserDetail session = userDetailRepository.getReferenceById(ContextHolder.getUserLoginId());
-        UserDetail blockedUser = userDetailRepository.findUserDetailByUsername(dto.getBlockedUsername()).orElseThrow(UserNotFoundException::new);
-        System.out.println(dto.getBlockedUsername());
-        System.out.println(blockedUser);
+        UserDetail blockedUser = userDetailRepository.findUserDetailByUsername(blockedUsername).orElseThrow(UserNotFoundException::new);
         UserBlock findById = userBlockRepository.findByUserAndBlockedUser(session,blockedUser).orElseThrow(UserBlockNotFoundException::new);
 
         userBlockRepository.delete(findById);

@@ -32,9 +32,9 @@ public class UserBlockController {
         return registerUserBlockService.addUserBlock(dto);
     }
 
-    @DeleteMapping("/block")
-    public ResponseEntity<?> userBlockRemove(@RequestBody UserBlockRemoveDTO dto){
-        return removeUserBlockService.removeUserBlock(dto);
+    @DeleteMapping("/block/{blockedUsername}")
+    public ResponseEntity<?> userBlockRemove(@PathVariable(value = "blockedUsername") String blockedUsername){
+        return removeUserBlockService.removeUserBlock(blockedUsername);
     }
 
 }

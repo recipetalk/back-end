@@ -1,6 +1,7 @@
 package com.solution.recipetalk.dto.ingredient.description;
 
 import com.solution.recipetalk.domain.board.entity.Board;
+import com.solution.recipetalk.domain.board.entity.BoardSort;
 import com.solution.recipetalk.domain.ingredient.description.entity.IngredientDescription;
 import com.solution.recipetalk.domain.ingredient.entity.Ingredient;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
@@ -37,6 +38,7 @@ public class IngredientDescriptionRegisterDTO {
                 .writer(writer)
                 .commentCount(0L)
                 .likeCount(0L)
+                .boardSort(BoardSort.DESCRIPTION)
                 .build();
     }
 }

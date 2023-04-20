@@ -7,18 +7,27 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserSimpleProfileDTO {
     private String username;
     private String nickname;
     private String profileImageURI;
+    private String description;
     private Boolean isFollowing;
 
     public UserSimpleProfileDTO(String username, String nickname, String profileImageURI){
         this.username = username;
         this.nickname = nickname;
         this.profileImageURI = profileImageURI;
+    }
+
+    public UserSimpleProfileDTO(String username, String nickname, String profileImageURI, String description){
+        this.username = username;
+        this.nickname = nickname;
+        this.profileImageURI = profileImageURI;
+        this.description = description;
     }
 
     public UserSimpleProfileDTO(String username, String nickname, String profileImageURI, Boolean isFollowing) {
