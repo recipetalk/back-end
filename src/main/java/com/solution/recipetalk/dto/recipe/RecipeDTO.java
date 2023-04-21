@@ -17,6 +17,7 @@ public class RecipeDTO {
     private String description;
     private String thumbnailUri;
     private String quantity;
+    private Long recipeId;
 
     public static RecipeDTO toDTO(Recipe recipe, BoardDTO boardDTO){
         return RecipeDTO.builder()
@@ -41,6 +42,7 @@ public class RecipeDTO {
         this. description = recipe.getDescription();
         this.quantity = recipe.getQuantity().toString();
         this.thumbnailUri = recipe.getThumbnailImgURI();
+        this.recipeId = recipe.getId();
 
     }
 }

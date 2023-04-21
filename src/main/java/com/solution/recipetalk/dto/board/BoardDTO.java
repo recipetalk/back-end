@@ -21,6 +21,7 @@ public class BoardDTO {
     private Long likeCount;
     private Long commentCount;
     private Long boardId;
+    private String boardSort;
 
     public static BoardDTO toDTO(Board board, UserSimpleProfileDTO writerProfileDto) {
         return BoardDTO.builder()
@@ -41,6 +42,7 @@ public class BoardDTO {
                 .likeCount(board.getLikeCount())
                 .commentCount(board.getCommentCount())
                 .title(board.getTitle())
+                .boardSort(board.getBoardSort().toString())
                 .build();
     }
 }
