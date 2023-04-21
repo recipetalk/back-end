@@ -49,7 +49,7 @@ public class FollowNotificationVO implements NotificationVO {
                 .body(String.format(FOLLOWING_ADD_MESSAGE_PATTERN, user.getNickname()))
                 .sort(NotificationSort.FOLLOWING)
                 .state(NotificationState.NOT_OPEN)
-                .navigationId(user.getUsername())
+                .navigationId(String.format(NAVIGATION_ID_PATTERN, user.getUsername()))
                 .user(target)
                 .build();
     }
