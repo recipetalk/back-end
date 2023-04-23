@@ -1,6 +1,7 @@
 package com.solution.recipetalk.domain.notification.entity;
 
 import com.solution.recipetalk.domain.common.AuditingEntity;
+import com.solution.recipetalk.domain.common.SoftDeleteEntity;
 import com.solution.recipetalk.domain.notification.state.NotificationSort;
 import com.solution.recipetalk.domain.notification.state.NotificationState;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
@@ -9,6 +10,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.HashMap;
 
@@ -17,7 +20,9 @@ import java.util.HashMap;
 @Getter
 @NoArgsConstructor
 @SuperBuilder
-public class Notification extends AuditingEntity {
+@SQLDelete(sql = "UPDATE notification SET is_deleted = true WHERE id = ?")
+@Where(clause = "is_deleted = false")
+public class Notification extends SoftDeleteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notification_id")

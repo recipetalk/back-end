@@ -4,6 +4,7 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.solution.recipetalk.domain.fcm.entity.temp.entity.TempFcmToken;
 import com.solution.recipetalk.domain.fcm.entity.temp.repository.TempFcmTokenRepository;
 import com.solution.recipetalk.domain.fcm.repository.FcmTokenRepository;
+import com.solution.recipetalk.domain.notification.repository.NotificationRepository;
 import com.solution.recipetalk.service.fcm.FirebaseCloudMessageService;
 import com.solution.recipetalk.vo.notification.NotificationVO;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class NotificationEventListener {
     private final FirebaseCloudMessageService firebaseCloudMessageService;
     private final TempFcmTokenRepository tempFcmTokenRepository;
     private final FcmTokenRepository fcmTokenRepository;
-
+    private final NotificationRepository notificationRepository;
     @EventListener
     public void handleVerifiedCompleteEvent(final TempFcmToken fcmToken) {
         try {
@@ -43,6 +44,8 @@ public class NotificationEventListener {
             firebaseCloudMessageService.sendMessageTo(notificationVO.toMessage());
         } catch (RuntimeException | FirebaseMessagingException e) {
             fcmTokenRepository.delete(notificationVO.getFcmtoken());
+        } finally {
+            notificationRepository.save(notificationVO.toEntity());
         }
     }
 }
