@@ -4,6 +4,7 @@ package com.solution.recipetalk.controller.user;
 import com.solution.recipetalk.dto.user.UserDetailProfileModifyDTO;
 import com.solution.recipetalk.service.user.FindUserService;
 import com.solution.recipetalk.service.user.ModifyUserDetailService;
+import com.solution.recipetalk.service.user.RemoveUserService;
 import jakarta.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class UserController {
     private final FindUserService findUserService;
 
     private final ModifyUserDetailService modifyUserDetailService;
+    private final RemoveUserService removeUserService;
 
     @GetMapping("/profile/{username}")
     public ResponseEntity<?> profileDetails(@PathVariable @NonNull String username){
@@ -30,6 +32,11 @@ public class UserController {
     @PatchMapping("/profile")
     public ResponseEntity<?> profileModify(@Valid UserDetailProfileModifyDTO dto){
         return modifyUserDetailService.modifyUserDetail(dto);
+    }
+
+    @DeleteMapping("")
+    public ResponseEntity<?> profileRemove(){
+        return removeUserService.removeUserDetail();
     }
 
 }
