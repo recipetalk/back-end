@@ -1,26 +1,20 @@
 package com.solution.recipetalk.service.fcm.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
-import com.google.storage.v2.CreateNotificationRequest;
 import com.solution.recipetalk.service.fcm.FirebaseCloudMessageService;
 import jakarta.annotation.PostConstruct;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -49,11 +43,12 @@ public class FirebaseCloudMessageServiceImpl implements FirebaseCloudMessageServ
 
     @Override
     public String sendMessageTo(Long notificationId, String targetToken, String title, String body) throws FirebaseMessagingException {
+
         Message msg = Message.builder()
                 .putData("time", LocalDateTime.now().toString())
                 .putData("notification_id", notificationId != null ? notificationId.toString() : "null")
                 .setToken(targetToken)
-                .setApnsConfig(ApnsConfig.builder().putCustomData("payload", new HashMap<String, Integer>().put("content-available",1)).putHeader("apns-priority", "10").build())
+                .setApnsConfig(ApnsConfig.builder().putCustomData("content-available", 1).putHeader("apns-priority","10").build())
                 .setNotification(Notification.builder()
                         .setTitle(title).setBody(body)
                         .build()
