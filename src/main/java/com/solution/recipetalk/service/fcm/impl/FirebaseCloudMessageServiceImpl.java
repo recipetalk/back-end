@@ -53,7 +53,7 @@ public class FirebaseCloudMessageServiceImpl implements FirebaseCloudMessageServ
                 .putData("time", LocalDateTime.now().toString())
                 .putData("notification_id", notificationId != null ? notificationId.toString() : "null")
                 .setToken(targetToken)
-                .setApnsConfig(ApnsConfig.builder().putAllCustomData((Map<String, Object>) new HashMap<>().put("payload", new HashMap<String, Integer>().put("content-available",1))).build())
+                .setApnsConfig(ApnsConfig.builder().putCustomData("payload", new HashMap<String, Integer>().put("content-available",1)).putHeader("apns-priority", "10").build())
                 .setNotification(Notification.builder()
                         .setTitle(title).setBody(body)
                         .build()
