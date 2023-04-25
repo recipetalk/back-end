@@ -42,11 +42,13 @@ public class FirebaseCloudMessageServiceImpl implements FirebaseCloudMessageServ
     }
 
     @Override
-    public String sendMessageTo(Long notificationId, String targetToken, String title, String body) throws FirebaseMessagingException {
+    public String sendDataMessageTo(Long notificationId, String targetToken, String title, String body) throws FirebaseMessagingException {
 
         Message msg = Message.builder()
                 .putData("time", LocalDateTime.now().toString())
                 .putData("notification_id", notificationId != null ? notificationId.toString() : "null")
+                .putData("title", title)
+                .putData("body", body)
                 .setToken(targetToken)
                 .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).putHeader("apns-priority","10").build())
 //                .setNotification(Notification.builder()

@@ -32,7 +32,7 @@ public class NotificationEventListener {
                 throw new RuntimeException("don't used FcmToken");
             }
             System.out.println("fcmToken: " + fcmToken);
-            firebaseCloudMessageService.sendMessageTo(null, fcmToken.getFcmToken(), "레시피톡 이메일 인증", "이메일 인증이 완료되었습니다.");
+            firebaseCloudMessageService.sendDataMessageTo(null, fcmToken.getFcmToken(), "레시피톡 이메일 인증", "이메일 인증이 완료되었습니다.");
         } catch (RuntimeException | FirebaseMessagingException e) {
             tempFcmTokenRepository.delete(fcmToken);
         }
