@@ -48,7 +48,7 @@ public class FirebaseCloudMessageServiceImpl implements FirebaseCloudMessageServ
                 .putData("time", LocalDateTime.now().toString())
                 .putData("notification_id", notificationId != null ? notificationId.toString() : "null")
                 .setToken(targetToken)
-                .setApnsConfig(ApnsConfig.builder().putCustomData("content-available", true).putHeader("apns-priority","10").build())
+                .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).putHeader("apns-priority","10").build())
                 .build();
 
         return sendMessageTo(msg);
