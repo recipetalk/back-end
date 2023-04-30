@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    Page<Notification> findNotificationsByUser_Id(Long userId, Pageable pageable);
+    Page<Notification> findNotificationsByUser_IdOOrderByIdDesc(Long userId, Pageable pageable);
 
     @Modifying
     @Query(value = "UPDATE Notification n SET n.state = com.solution.recipetalk.domain.notification.state.NotificationState.OPEN WHERE n.id in :ids ")

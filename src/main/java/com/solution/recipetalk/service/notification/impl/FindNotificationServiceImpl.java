@@ -26,7 +26,7 @@ public class FindNotificationServiceImpl implements FindNotificationService {
     @Override
     public ResponseEntity<?> findNotifications(Pageable pageable) {
         Long session = ContextHolder.getUserLoginId();
-        Page<Notification> notificationsByUser_id = notificationRepository.findNotificationsByUser_Id(session, pageable);
+        Page<Notification> notificationsByUser_id = notificationRepository.findNotificationsByUser_IdOOrderByCreatedDateDesc(session, pageable);
         Page<NotificationDTO> notificationDTOS = notificationsByUser_id.map(Notification::toDTO);
         return ResponseEntity.ok(notificationDTOS);
     }
