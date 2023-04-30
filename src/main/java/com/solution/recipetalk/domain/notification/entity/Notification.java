@@ -53,7 +53,7 @@ public class Notification extends SoftDeleteEntity {
         HashMap<String, String> data = new HashMap<>();
         String[] navigationSplit = navigationId.split("&");
         for (String s : navigationSplit) {
-            String[] map = s.split("-");
+            String[] map = s.split("=");
             data.put(map[0], map[1]);
         }
         return data;
