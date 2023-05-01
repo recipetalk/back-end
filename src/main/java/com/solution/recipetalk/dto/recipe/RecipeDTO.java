@@ -23,8 +23,9 @@ public class RecipeDTO {
         return RecipeDTO.builder()
                 .board(boardDTO)
                 .description(recipe.getDescription())
-                .quantity(recipe.getQuantity()+"인분")
+                .quantity(recipe.getQuantity().getValue()+"인분")
                 .thumbnailUri(recipe.getThumbnailImgURI())
+                .recipeId(recipe.getId())
                 .build();
     }
 

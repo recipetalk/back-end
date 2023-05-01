@@ -11,4 +11,9 @@ public interface RecipeRowImgRepository extends JpaRepository<RecipeRowImg, Reci
 
     @Query("SELECT img.URI from RecipeRowImg rri JOIN Image img on rri.image.id = img.id WHERE rri.recipeRow.id = :recipeRowId" )
     List<String>  findImageURIByRecipeRowId(Long recipeRowId);
+
+    @Query("SELECT rri.image.id FROM RecipeRowImg rri WHERE rri.recipeRow.id = :recipeRowId")
+    List<Long> findImageIdByRecipeRowId(Long recipeRowId);
+
+    List<RecipeRowImg> findAllByRecipeRowId(Long recipeRowId);
 }

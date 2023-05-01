@@ -32,7 +32,7 @@ public class FindRecipeRowServiceImpl implements FindRecipeRowService {
 
             List<String> imgUris = recipeRowImgRepository.findImageURIByRecipeRowId(recipeRowId);
 
-            sendDto.add(RecipeRowDTO.toDTO(target, imgUris, (long)i));
+            sendDto.add(RecipeRowDTO.toDTO(target, imgUris, (long)i, recipeRowId));
         }
 
         return ResponseEntity.ok(sendDto);
