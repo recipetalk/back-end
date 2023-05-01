@@ -14,13 +14,15 @@ public class RecipeRowDTO {
     private Long sequenceNum;
     private String description;
     private List<String> imgUris;
+    private Long rowSeq;
 
 
-    public static RecipeRowDTO toDTO(RecipeRow recipeRow, List<String> imgUris, Long sequenceNum){
+    public static RecipeRowDTO toDTO(RecipeRow recipeRow, List<String> imgUris, Long sequenceNum, Long recipeRowId){
         return RecipeRowDTO.builder()
                 .description(recipeRow.getDescription())
                 .sequenceNum(sequenceNum)
                 .imgUris(imgUris)
+                .rowSeq(recipeRowId)
                 .build();
     }
 }

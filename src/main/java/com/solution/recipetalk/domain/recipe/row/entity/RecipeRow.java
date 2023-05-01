@@ -28,4 +28,16 @@ public class RecipeRow extends AuditingEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
+
+    public void changeTimer(Long timer){
+        if (timer != null){
+            this.timer = timer;
+        }
+    }
+
+    public void changeDescription(String description){
+        if (description != null){
+            this.description = description;
+        }
+    }
 }

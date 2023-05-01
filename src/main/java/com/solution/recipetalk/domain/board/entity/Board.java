@@ -21,7 +21,7 @@ import java.util.List;
         @Index(name = "idx_like_count", columnList = "like_count", unique = false),
         @Index(name = "idx_comment_count", columnList = "comment_count", unique = false)
 })
-@SQLDelete(sql = "UPDATE board SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE board SET is_deleted = true WHERE board_id = ?")
 @Where(clause = "is_deleted = false")
 public class Board extends SoftDeleteEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

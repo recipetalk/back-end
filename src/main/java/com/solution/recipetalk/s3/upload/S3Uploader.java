@@ -16,6 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @Slf4j
@@ -35,8 +39,8 @@ public class S3Uploader {
     }
 
 
-    private String upload(File uploadFile, String dirName) {
-        String fileName = dirName + "/" + UUIDGenerator.getUUID() + uploadFile.getName(); // UUID + fileName으로 작성
+    private String upload(File uploadFile, String dirName) throws UnsupportedEncodingException {
+        String fileName = dirName + "/" + UUIDGenerator.getUUID() + URLEncoder.encode(uploadFile.getName(), StandardCharsets.UTF_8); // UUID + fileName으로 작성
         String uploadImageUrl = putS3(uploadFile, fileName);
 
         removeNewFile(uploadFile);  // 로컬에 생성된 File 삭제 (MultipartFile -> File 전환 하며 로컬에 파일 생성됨)
@@ -60,7 +64,7 @@ public class S3Uploader {
     private String getKey(String uri, String dirPath){
         try{
             String uuid = uri.split(dirPath)[1];
-            return dirPath + uuid;
+            return URLDecoder.decode(dirPath + uuid, StandardCharsets.UTF_8);
         }catch (ArrayIndexOutOfBoundsException e){
             log.error("S3 delete object Failed (uri form issue)", e);
             return "";
