@@ -9,12 +9,14 @@ import com.solution.recipetalk.domain.recipe.row.img.repository.RecipeRowImgRepo
 import com.solution.recipetalk.domain.recipe.row.repository.RecipeRowRepository;
 import com.solution.recipetalk.s3.upload.S3Uploader;
 import com.solution.recipetalk.service.recipe.row.RemoveRecipeRowService;
+import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -27,10 +29,15 @@ public class RemoveRecipeRowServiceImpl implements RemoveRecipeRowService {
 
     @Override
     public ResponseEntity<?> removeRecipeRow(Long recipeId, Long recipeRowId){
-        // TODO: 삭제 권한 검증
-
+        Long loginUserId = ContextHolder.getUserLoginId();
         // TODO: exception(NotFoundRecipeRowException)
         RecipeRow recipeRow = recipeRowRepository.findById(recipeRowId).orElseThrow();
+
+        if (!Objects.equals(loginUserId, recipeRow.getRecipe().getBoard().getWriter().getId())){
+            // TODO: exception(삭제 권한 검증 실패)
+            throw new RuntimeException("삭제 권한이 없습니다.");
+        }
+
         List<RecipeRowImg> recipeRowImgs = recipeRowImgRepository.findAllByRecipeRowId(recipeRow.getId());
         List<Long> imgIds = recipeRowImgRepository.findImageIdByRecipeRowId(recipeRow.getId());
         List<Image> imgs = imageRepository.findAllById(imgIds);

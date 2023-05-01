@@ -12,6 +12,7 @@ import com.solution.recipetalk.dto.recipe.row.RecipeRowModifyDTOWrapper;
 import com.solution.recipetalk.exception.s3.ImageUploadFailedException;
 import com.solution.recipetalk.s3.upload.S3Uploader;
 import com.solution.recipetalk.service.recipe.row.ModifyRecipeRowService;
+import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import software.amazon.ion.IonException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -33,8 +35,21 @@ public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
 
     @Override
     public ResponseEntity<?> modifyRecipeRow(Long recipeId, RecipeRowModifyDTOWrapper wrapper){
-        // TODO : 수정 권한 검증
-        wrapper.getDtoList().forEach(recipeRowModifyDTO -> {
+        Long loginUserId = ContextHolder.getUserLoginId();
+        List<RecipeRowModifyDTO> dtoList = wrapper.getDtoList();
+
+        if (dtoList.size() > 0){
+            // TODO: Exception (NotFoundRecipeRowException)
+            Long recipeRowUserId = recipeRowRepository.findById(wrapper.getDtoList().get(0).getRowSeq()).orElseThrow()
+                    .getRecipe().getBoard().getWriter().getId();
+
+            // TODO: Exception (수정 권한 검증)
+            if (!Objects.equals(loginUserId, recipeRowUserId)){
+                throw new RuntimeException("수정 권한이 없습니다.");
+            }
+        }
+
+        dtoList.forEach(recipeRowModifyDTO -> {
             // TODO: Exception (NotFoundRecipeRowException)
             RecipeRow recipeRow = recipeRowRepository.findById(recipeRowModifyDTO.getRowSeq()).orElseThrow();
 
@@ -55,6 +70,7 @@ public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
 
             // 업로드 정상 확인
             if (newImgUri.size() != imgs.size()){
+                // TODO: Exception
                 throw new RuntimeException("파일 업로드 중 문제가 발생하였습니다. 재시도해주세요.");
             }
 
