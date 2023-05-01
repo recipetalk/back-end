@@ -42,7 +42,7 @@ public class UserHasIngredient extends AuditingEntity {
 
     public void updateUserHasIngredient(UserHasIngredientModifyDTO dto) {
         if(dto.getState() != null)
-            this.state = dto.getState();
+            this.state = IngredientState.valueOf(dto.getState());
 
         if(dto.getQuantity() != null)
             this.quantity = dto.getQuantity();
