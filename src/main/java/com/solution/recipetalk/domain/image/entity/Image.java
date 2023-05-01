@@ -20,4 +20,10 @@ public class Image extends AuditingEntity {
     @Column(name = "uri")
     private String URI;
 
+    public void changeUri(String uri){
+        if (uri != null){
+            this.URI = uri;
+        }
+    }
+
 }
