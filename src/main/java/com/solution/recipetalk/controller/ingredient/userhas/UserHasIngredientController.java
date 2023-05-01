@@ -38,7 +38,7 @@ public class UserHasIngredientController {
     public ResponseEntity<?> userHasIngredientList(
             Pageable pageable,
             @PathVariable(name = "startId") Long startId,
-            @RequestParam(name = "sort", defaultValue = "expiration_date_asc") String sortElement
+            @RequestParam(name = "sort", defaultValue = "expiry_date_immi") String sortElement
     ) {
         return findUserHasIngredientService.findUserHasIngredients(pageable, startId, sortElement);
     }

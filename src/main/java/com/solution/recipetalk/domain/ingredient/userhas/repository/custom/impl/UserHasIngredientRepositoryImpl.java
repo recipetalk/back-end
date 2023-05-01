@@ -27,10 +27,11 @@ public class UserHasIngredientRepositoryImpl implements UserHasIngredientCustomR
         QIngredient ingredient = QIngredient.ingredient;
 
         OrderSpecifier<?> orderSpecifier = switch (sortElement) {
-            case "name" -> new OrderSpecifier<>(Order.ASC, userHasIngredient.ingredient.name);
-            case "expiration_date_asc" -> new OrderSpecifier<>(Order.ASC, userHasIngredient.expirationDate);
-            case "expiration_date_desc" -> new OrderSpecifier<>(Order.DESC, userHasIngredient.expirationDate);
-            case "up_to_date" -> new OrderSpecifier<>(Order.ASC, userHasIngredient.createdDate);
+            case "alphabet_asc" -> new OrderSpecifier<>(Order.ASC, userHasIngredient.ingredient.name);
+            case "alphabet_desc" -> new OrderSpecifier<>(Order.DESC, userHasIngredient.ingredient.name);
+            case "expiry_date_immi" -> new OrderSpecifier<>(Order.ASC, userHasIngredient.expirationDate);
+            case "expiry_date_spare" -> new OrderSpecifier<>(Order.DESC, userHasIngredient.expirationDate);
+            case "new" -> new OrderSpecifier<>(Order.ASC, userHasIngredient.createdDate);
             default -> null;
         };
 
