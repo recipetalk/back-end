@@ -6,6 +6,7 @@ import com.solution.recipetalk.dto.recipe.RecipeRegisterDTO;
 import com.solution.recipetalk.service.recipe.FindRecipeService;
 import com.solution.recipetalk.service.recipe.ModifyRecipeService;
 import com.solution.recipetalk.service.recipe.RegisterRecipeService;
+import com.solution.recipetalk.service.recipe.RemoveRecipeService;
 import jakarta.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class RecipeController {
     private final RegisterRecipeService registerRecipeService;
     private final FindRecipeService findRecipeService;
     private final ModifyRecipeService modifyRecipeService;
+    private final RemoveRecipeService removeRecipeService;
 
     @PostMapping("")
     public ResponseEntity<?> recipeAdd(@Valid @NonNull RecipeRegisterDTO dto) {
@@ -45,5 +47,10 @@ public class RecipeController {
     @PutMapping("/{id}")
     public ResponseEntity<?> recipeModify(@PathVariable(name = "id") Long recipeId, @Valid @NonNull @RequestBody() RecipeModifyDTO recipeModifyDTO){
         return modifyRecipeService.modifyRecipe(recipeId, recipeModifyDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> recipeRemove(@PathVariable(name = "id") Long recipeId){
+        return removeRecipeService.removeRecipeById(recipeId);
     }
 }
