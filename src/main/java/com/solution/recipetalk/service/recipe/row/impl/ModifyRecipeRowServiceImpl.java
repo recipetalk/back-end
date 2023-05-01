@@ -31,7 +31,9 @@ public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
     private final ImageRepository imageRepository;
     private final S3Uploader s3Uploader;
 
+    @Override
     public ResponseEntity<?> modifyRecipeRow(Long recipeId, RecipeRowModifyDTOWrapper wrapper){
+        // TODO : 수정 권한 검증
         wrapper.getDtoList().forEach(recipeRowModifyDTO -> {
             // TODO: Exception (NotFoundRecipeRowException)
             RecipeRow recipeRow = recipeRowRepository.findById(recipeRowModifyDTO.getRowSeq()).orElseThrow();
