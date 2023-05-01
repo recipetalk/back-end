@@ -3,6 +3,7 @@ package com.solution.recipetalk.vo.notification.comment;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.solution.recipetalk.domain.board.entity.Board;
+import com.solution.recipetalk.domain.board.entity.BoardSort;
 import com.solution.recipetalk.domain.comment.entity.Comment;
 import com.solution.recipetalk.domain.fcm.entity.FcmToken;
 import com.solution.recipetalk.domain.notification.state.NotificationSort;
@@ -10,6 +11,7 @@ import com.solution.recipetalk.domain.notification.state.NotificationState;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.vo.notification.NotificationVO;
 import lombok.*;
+import org.aspectj.weaver.ast.Not;
 
 @Getter
 @AllArgsConstructor
@@ -28,7 +30,7 @@ public class CommentNotificationVO implements NotificationVO {
     private static final String CHILD_COMMENT_ADD_MESSAGE_PATTERN = "%s님이 회원님의 댓글에 답글을 남겼습니다. %s";
     private static final String NOTIFICATION_TITLE = "레시피톡";
 
-    private static final String NAVIGATION_ID_PATTERN = "parentCommentId=%s&boardId=%s";
+    private static final String NAVIGATION_ID_PATTERN = "parentCommentId=%s&boardId=%s&boardSort=%s";
 
     @Override
     public Message toMessage() {
@@ -91,7 +93,7 @@ public class CommentNotificationVO implements NotificationVO {
                 .body(String.format(CHILD_COMMENT_ADD_MESSAGE_PATTERN, writer.getNickname(), comment.getDescription()))
                 .sort(NotificationSort.CHILD_COMMENT)
                 .state(NotificationState.NOT_OPEN)
-                .navigationId(toNavigationId(parentCommentId, board.getId()))
+                .navigationId(toNavigationId(parentCommentId, board.getId(),board.getBoardSort().toString()))
                 .user(target)
                 .build();
     }
@@ -100,14 +102,14 @@ public class CommentNotificationVO implements NotificationVO {
         return com.solution.recipetalk.domain.notification.entity.Notification.builder()
                 .title(NOTIFICATION_TITLE)
                 .body(String.format(PARENT_COMMENT_ADD_MESSAGE_PATTERN, writer.getNickname(), comment.getDescription()))
-                .sort(NotificationSort.CHILD_COMMENT)
+                .sort(NotificationSort.COMMENT)
                 .state(NotificationState.NOT_OPEN)
-                .navigationId(toNavigationId(null, board.getId()))
+                .navigationId(toNavigationId(null, board.getId(), board.getBoardSort().toString()))
                 .user(target)
                 .build();
     }
 
-    private String toNavigationId(Long parentCommentId, Long boardId) {
-        return String.format(NAVIGATION_ID_PATTERN,parentCommentId == null ? "null" : parentCommentId, boardId);
+    private String toNavigationId(Long parentCommentId, Long boardId, String boardSort) {
+        return String.format(NAVIGATION_ID_PATTERN,parentCommentId == null ? "null" : parentCommentId, boardId, boardSort);
     }
 }

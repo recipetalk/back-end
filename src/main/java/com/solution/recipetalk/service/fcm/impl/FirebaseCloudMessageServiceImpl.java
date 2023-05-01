@@ -1,22 +1,16 @@
 package com.solution.recipetalk.service.fcm.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.*;
 import com.solution.recipetalk.service.fcm.FirebaseCloudMessageService;
 import jakarta.annotation.PostConstruct;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import com.google.firebase.messaging.Notification;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -48,15 +42,20 @@ public class FirebaseCloudMessageServiceImpl implements FirebaseCloudMessageServ
     }
 
     @Override
-    public String sendMessageTo(Long notificationId, String targetToken, String title, String body) throws FirebaseMessagingException {
+    public String sendDataMessageTo(Long notificationId, String targetToken, String title, String body) throws FirebaseMessagingException {
+
         Message msg = Message.builder()
                 .putData("time", LocalDateTime.now().toString())
                 .putData("notification_id", notificationId != null ? notificationId.toString() : "null")
+                .putData("title", title)
+                .putData("body", body)
                 .setToken(targetToken)
-                .setNotification(Notification.builder()
-                        .setTitle(title).setBody(body)
-                        .build()
-                ).build();
+                .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).putHeader("apns-priority","10").build())
+//                .setNotification(Notification.builder()
+//                        .setBody(body).setTitle(title)
+//                        .build())
+                .setAndroidConfig(AndroidConfig.builder().setPriority(AndroidConfig.Priority.HIGH).build())
+                .build();
 
         return sendMessageTo(msg);
     }

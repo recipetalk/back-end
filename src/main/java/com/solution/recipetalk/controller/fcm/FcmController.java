@@ -18,7 +18,7 @@ public class FcmController {
     private final ModifyFcmTokenService modifyFcmTokenService;
 
     @PostMapping("/connect")
-    public ResponseEntity<?> fcmTokenAdd(@ModelAttribute FcmTokenDTO dto){
+    public ResponseEntity<?> fcmTokenAdd(@RequestBody FcmTokenDTO dto){
         return registerFcmTokenService.registerFcmToken(dto);
     }
 
