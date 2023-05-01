@@ -2,6 +2,7 @@ package com.solution.recipetalk.controller.recipe;
 
 
 import com.solution.recipetalk.dto.recipe.ingredient.RecipeIngredientDTOWrapper;
+import com.solution.recipetalk.service.recipe.ingredient.FindRecipeIngredientService;
 import com.solution.recipetalk.service.recipe.ingredient.ModifyRecipeIngredientService;
 import com.solution.recipetalk.service.recipe.ingredient.RegisterRecipeIngredientService;
 import jakarta.validation.Valid;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class RecipeIngredientController {
     private final RegisterRecipeIngredientService registerRecipeIngredientService;
     private final ModifyRecipeIngredientService modifyRecipeIngredientService;
+    private final FindRecipeIngredientService findRecipeIngredientService;
 
     @PostMapping("/{recipeId}/recipeIngredient")
     public ResponseEntity<?> recipeIngredientAdd(@PathVariable(name = "recipeId") Long recipeId, @Valid @RequestBody RecipeIngredientDTOWrapper wrapper){
@@ -26,5 +28,10 @@ public class RecipeIngredientController {
     @PutMapping("/{recipeId}/recipeIngredient")
     public ResponseEntity<?> recipeIngredientModify(@PathVariable(name = "recipeId") Long recipeId, @Valid @RequestBody RecipeIngredientDTOWrapper wrapper){
         return modifyRecipeIngredientService.modifyRecipeIngredient(recipeId, wrapper.getRecipeIngredientRegisterDTOS());
+    }
+
+    @GetMapping("/{recipeId}/recipeIngredient")
+    public ResponseEntity<?> recipeIngredientList(@PathVariable(name = "recipeId") Long recipeId){
+        return findRecipeIngredientService.findRecipeIngredient(recipeId);
     }
 }

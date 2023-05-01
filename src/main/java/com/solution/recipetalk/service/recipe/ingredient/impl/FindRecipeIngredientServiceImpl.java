@@ -1,13 +1,10 @@
 package com.solution.recipetalk.service.recipe.ingredient.impl;
 
-import com.solution.recipetalk.domain.ingredient.repository.IngredientRepository;
-import com.solution.recipetalk.domain.recipe.ingredient.entity.RecipeIngredient;
 import com.solution.recipetalk.domain.recipe.ingredient.repository.RecipeIngredientRepository;
-import com.solution.recipetalk.domain.recipe.repository.RecipeRepository;
-import com.solution.recipetalk.dto.recipe.ingredient.RecipeIngredientRegisterDTO;
-import com.solution.recipetalk.exception.ingredient.IngredientNotFoundException;
-import com.solution.recipetalk.exception.recipe.RecipeNotFoundException;
-import com.solution.recipetalk.service.recipe.ingredient.RegisterRecipeIngredientService;
+import com.solution.recipetalk.domain.recipe.ingredient.repository.RecipeIngredientRepository.RecipeIngredientResult;
+import com.solution.recipetalk.dto.recipe.ingredient.RecipeIngredientListResDTO;
+import com.solution.recipetalk.service.recipe.ingredient.FindRecipeIngredientService;
+import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,15 +15,14 @@ import java.util.List;
 @Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
-public class FindRecipeIngredientServiceImpl {
-
-    private final RecipeRepository recipeRepository;
-    private final IngredientRepository ingredientRepository;
+public class FindRecipeIngredientServiceImpl implements FindRecipeIngredientService {
     private final RecipeIngredientRepository recipeIngredientRepository;
 
-    public ResponseEntity<?> FindRecipeIngredient(Long recipeId) {
+    public ResponseEntity<?> findRecipeIngredient(Long recipeId) {
+        Long loginUserId = ContextHolder.getUserLoginId();
+        List<RecipeIngredientResult> recipeIngredientResults = recipeIngredientRepository.findRecipeIngredientByUserIdAndRecipeId(loginUserId, recipeId);
 
 
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(recipeIngredientResults.stream().map(RecipeIngredientListResDTO::ToResDTO));
     }
 }
