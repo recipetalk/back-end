@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class ProductRequestRegisterDTO {
     @NonNull
-    private Long Barcode;
+    private Long barcode;
     @NonNull
     private String productName;
 

@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class UserHasIngredientModifyDTO {
-    private String ingredientName;
     private IngredientState state;
     private String quantity;
     private LocalDate expirationDate;
