@@ -44,7 +44,6 @@ public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
             // 이미지 업로드 및 recipeRow 수정
             recipeRowModifyDTO.getImgs().forEach(img -> {
                 try{
-                    System.out.println(img.getOriginalFilename());
                     newImgUri.add(s3Uploader.upload(img, S3dir.RECIPE_ROW_IMG_DIR));
                 }catch (IOException e){
                     throw new ImageUploadFailedException();
