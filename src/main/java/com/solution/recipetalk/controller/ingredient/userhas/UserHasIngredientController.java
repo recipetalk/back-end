@@ -1,17 +1,18 @@
 package com.solution.recipetalk.controller.ingredient.userhas;
 
 import com.solution.recipetalk.dto.ingredient.userhas.UserHasIngredientModifyDTO;
-import com.solution.recipetalk.dto.ingredient.userhas.UserHasIngredientRegisterDtoWrapper;
+import com.solution.recipetalk.dto.ingredient.userhas.UserHasIngredientRegisterDTO;
 import com.solution.recipetalk.service.ingredient.userhas.EditUserHasIngredientService;
 import com.solution.recipetalk.service.ingredient.userhas.FindUserHasIngredientService;
 import com.solution.recipetalk.service.ingredient.userhas.RegisterUserHasIngredientService;
 import com.solution.recipetalk.service.ingredient.userhas.RemoveUserHasIngredientService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +25,7 @@ public class UserHasIngredientController {
     private final RemoveUserHasIngredientService removeUserHasIngredientService;
 
     @PostMapping("/user/ingredient")
-    public ResponseEntity<?> userHasIngredientAdd(@RequestBody @Valid UserHasIngredientRegisterDtoWrapper dtos) {
+    public ResponseEntity<?> userHasIngredientAdd(@RequestBody List<UserHasIngredientRegisterDTO> dtos) {
         return registerUserHasIngredientService.addUserHasIngredient(dtos);
     }
 
