@@ -59,7 +59,7 @@ public class FindRecipeServiceImpl implements FindRecipeService {
     public ResponseEntity<?> findRecipeWithUsername(String username){
         UserDetail user = userDetailRepository.findUserDetailByUsername(username).orElseThrow(UserNotFoundException::new);
         // TODO: exception (RecipeNotFoundException)
-        List<RecipeByUsername> recipes = recipeRepository.findRecipeByUsername(user.getId()).orElseThrow(UserNotFoundException::new);
+        List<RecipeByUsername> recipes = recipeRepository.findRecipeByUserId(user.getId()).orElseThrow(UserNotFoundException::new);
 
         List<RecipeByUserResDTO> recipeByUserResDTOList = recipes.stream().map(recipe -> {
             BoardRecipeDTO boardRecipeDTO = BoardRecipeDTO.toDTO(recipe);

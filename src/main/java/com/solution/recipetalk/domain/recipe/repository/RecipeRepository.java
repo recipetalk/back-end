@@ -37,6 +37,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long>, RecipeQue
             "B.likeCount AS likeCount, B.commentCount AS commentCount, R.thumbnailImgURI AS thumbnailImgURI, R.quantity as quantity, " +
             "R.id as recipeId, B.boardSort AS boardSort FROM Recipe AS R " +
             "JOIN Board AS B ON R.board.id = B.id " +
-            "LEFT JOIN BoardLike AS UBL ON UBL.user.id = :userId AND UBL.board.id = B.id")
-    Optional<List<RecipeByUsername>> findRecipeByUsername(@Param("userId") Long userId);
+            "LEFT JOIN BoardLike AS UBL ON UBL.user.id = :userId AND UBL.board.id = B.id " +
+            "WHERE B.writer.id = :userId")
+    Optional<List<RecipeByUsername>> findRecipeByUserId(@Param("userId") Long userId);
 }
