@@ -4,12 +4,16 @@ import com.solution.recipetalk.domain.recipe.entity.Recipe;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.dto.recipe.RecipeDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
-public interface RecipeRepository extends JpaRepository<Recipe, Long> {
+
+public interface RecipeRepository extends JpaRepository<Recipe, Long>, RecipeQueryDslRepository {
 
     Long countByBoard_Writer(UserDetail writer);
 
@@ -28,4 +32,11 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             "AND recipe.id = :recipeId " +
             "GROUP BY recipe, writer, board, userFollow.id, isBoardLiked.id, isBookmark.id")
     Optional<RecipeDTO> findRecipeByViewerId(@Param("viewerId")Long viewerId, @Param("recipeId")Long recipeId);
+
+    @Query("SELECT B.id AS boardId, B.title AS title, B.createdDate AS createdDate, (UBL.user.id IS NOT NULL or true) AS isLiked, " +
+            "B.likeCount AS likeCount, B.commentCount AS commentCount, R.thumbnailImgURI AS thumbnailImgURI, R.quantity as quantity, " +
+            "R.id as recipeId, B.boardSort AS boardSort FROM Recipe AS R " +
+            "JOIN Board AS B ON R.board.id = B.id " +
+            "LEFT JOIN BoardLike AS UBL ON UBL.user.id = :userId AND UBL.board.id = B.id")
+    Optional<List<RecipeByUsername>> findRecipeByUsername(@Param("userId") Long userId);
 }

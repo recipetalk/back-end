@@ -4,6 +4,7 @@ import com.solution.recipetalk.domain.board.entity.Board;
 import com.solution.recipetalk.domain.common.SoftDeleteEntity;
 import com.solution.recipetalk.domain.recipe.ingredient.entity.RecipeIngredient;
 import com.solution.recipetalk.domain.recipe.row.entity.RecipeRow;
+import com.solution.recipetalk.dto.recipe.RecipeModifyDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -63,4 +64,17 @@ public class Recipe extends SoftDeleteEntity {
 
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
     private List<RecipeRow> recipeRows;
+
+
+    // dto 내 null check 를 진행하므로 null check 생략
+    public void changeByRecipeModifyDTO(RecipeModifyDTO dto, Board board){
+        this.thumbnailImgURI = dto.getThumbnailImgUri();
+        this.board = board;
+        this.description = dto.getDescription();
+        this.durationTime = dto.getDurationTime();
+        this.level = dto.getLevel();
+        this.quantity = dto.getQuantity();
+        this.situation = dto.getSituation();
+        this.sort = dto.getSort();
+    }
 }
