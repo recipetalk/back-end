@@ -1,5 +1,6 @@
 package com.solution.recipetalk.controller.product;
 
+import com.solution.recipetalk.annotation.CustomLength;
 import com.solution.recipetalk.dto.product.request.ProductRequestRegisterDTO;
 import com.solution.recipetalk.service.product.FindProductService;
 import com.solution.recipetalk.service.product.RegisterProductService;
@@ -18,7 +19,7 @@ public class ProductController {
     private final RegisterProductService registerProductService;
 
     @GetMapping("/product/{barcode}")
-    public ResponseEntity<?> productDetails(@PathVariable(name = "barcode") String barcode) {
+    public ResponseEntity<?> productDetails(@PathVariable(name = "barcode") @CustomLength(equals = 13, message = "barcode") Long barcode) {
         return findProductService.findProduct(barcode);
     }
 
