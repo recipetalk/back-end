@@ -35,13 +35,13 @@ public class RegisterUserServiceImpl implements RegisterUserService {
         if(userDetailRepository.findUserDetailByUsername(signUpUserReqDto.getUsername()).isPresent())
             throw new DuplicatedUserException();
 
-//        // 인증 시도조차 없다면 에러
-//        VerificationToken verificationToken = verificationTokenRepository.findByEmail(signUpUserReqDto.getEmail()).orElseThrow(UnverifiedException::new);
-//
-//        //인증 되지 않은 유저라면
-//        if(!verificationToken.getIsVerified()){
-//            throw new UnverifiedException();
-//        }
+        // 인증 시도조차 없다면 에러
+        VerificationToken verificationToken = verificationTokenRepository.findByEmail(signUpUserReqDto.getEmail()).orElseThrow(UnverifiedException::new);
+
+        //인증 되지 않은 유저라면
+        if(!verificationToken.getIsVerified()){
+            throw new UnverifiedException();
+        }
 
         UserDetail userDetail = userDetailRepository.save(signUpUserReqDto.toUserDetail());
 
@@ -51,7 +51,7 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 
         tempFcmTokenRepository.deleteTempFcmTokenByEmail(signUpUserReqDto.getEmail());
 
-//        verificationTokenRepository.delete(verificationToken);
+        verificationTokenRepository.delete(verificationToken);
 
         return ResponseEntity.ok(null);
     }
