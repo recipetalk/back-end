@@ -17,7 +17,7 @@ public class UserHasIngredientRegisterDTO {
     @NonNull
     private Long ingredientId;
 
-    private Long barcode;
+    private String barcode;
 
     @NonNull
     private String ingredientState;
