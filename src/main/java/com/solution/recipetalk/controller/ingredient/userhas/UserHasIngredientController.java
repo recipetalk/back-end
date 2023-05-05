@@ -44,7 +44,7 @@ public class UserHasIngredientController {
     }
 
     @PatchMapping("/user/ingredient/{id}")
-    public ResponseEntity<?> userHasIngredientModify(@PathVariable(name = "id") Long userHasIngredientId, UserHasIngredientModifyDTO dto) {
+    public ResponseEntity<?> userHasIngredientModify(@PathVariable(name = "id") Long userHasIngredientId, @RequestBody UserHasIngredientModifyDTO dto) {
         return editUserHasIngredientService.modifyUserHasIngredient(userHasIngredientId, dto);
     }
 
