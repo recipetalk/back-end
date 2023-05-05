@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(indexes = {@Index(name = "product_index", columnList = "barcode")})
 public class Product extends AuditingEntity{
     @Id
     @Column(name = "barcode")
