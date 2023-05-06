@@ -8,4 +8,6 @@ public interface FindCommentService {
 
     ResponseEntity<?> findAllChildCommentsOfBoard(Long boardId, Long parentCommentId, Pageable pageable);
     ResponseEntity<?> findCommentsByUser(Pageable pageable);
+
+    ResponseEntity<?> findCommentById(Long commentId);
 }
