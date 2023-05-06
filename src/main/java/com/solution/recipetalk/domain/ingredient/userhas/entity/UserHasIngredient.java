@@ -40,12 +40,9 @@ public class UserHasIngredient extends AuditingEntity {
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
 
-    public void updateUserHasIngredient(UserHasIngredientModifyDTO dto, Ingredient ingredient) {
-        if(ingredient != null)
-            this.ingredient = ingredient;
-
+    public void updateUserHasIngredient(UserHasIngredientModifyDTO dto) {
         if(dto.getState() != null)
-            this.state = dto.getState();
+            this.state = IngredientState.valueOf(dto.getState());
 
         if(dto.getQuantity() != null)
             this.quantity = dto.getQuantity();

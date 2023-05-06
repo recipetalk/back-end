@@ -18,18 +18,9 @@ public class FindProductServiceImpl implements FindProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public ResponseEntity<?> findProduct(String barcode) {
-        validateBarcodeLength(barcode);
-
-        Long barcodeStringToLong = Long.parseLong(barcode);
-        Product product = productRepository.findById(barcodeStringToLong).orElseThrow(ProductNotFoundException::new);
+    public ResponseEntity<?> findProduct(Long barcode) {
+        Product product = productRepository.findById(barcode).orElseThrow(ProductNotFoundException::new);
 
         return ResponseEntity.ok(ProductResponseDTO.toDTO(product));
-    }
-
-    private void validateBarcodeLength(String barcode) {
-        if(barcode.length() != 13) {
-            throw new BarcodeLengthNotValidException();
-        }
     }
 }

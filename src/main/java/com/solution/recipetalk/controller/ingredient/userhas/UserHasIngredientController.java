@@ -1,7 +1,7 @@
 package com.solution.recipetalk.controller.ingredient.userhas;
 
 import com.solution.recipetalk.dto.ingredient.userhas.UserHasIngredientModifyDTO;
-import com.solution.recipetalk.dto.ingredient.userhas.UserHasIngredientRegisterDtoWrapper;
+import com.solution.recipetalk.dto.ingredient.userhas.UserHasIngredientRegisterDTO;
 import com.solution.recipetalk.service.ingredient.userhas.EditUserHasIngredientService;
 import com.solution.recipetalk.service.ingredient.userhas.FindUserHasIngredientService;
 import com.solution.recipetalk.service.ingredient.userhas.RegisterUserHasIngredientService;
@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class UserHasIngredientController {
     private final RemoveUserHasIngredientService removeUserHasIngredientService;
 
     @PostMapping("/user/ingredient")
-    public ResponseEntity<?> userHasIngredientAdd(@RequestBody @Valid UserHasIngredientRegisterDtoWrapper dtos) {
+    public ResponseEntity<?> userHasIngredientAdd(@RequestBody List<UserHasIngredientRegisterDTO> dtos) {
         return registerUserHasIngredientService.addUserHasIngredient(dtos);
     }
 
@@ -37,13 +39,13 @@ public class UserHasIngredientController {
     public ResponseEntity<?> userHasIngredientList(
             Pageable pageable,
             @PathVariable(name = "startId") Long startId,
-            @RequestParam(name = "sort", defaultValue = "expiration_date_asc") String sortElement
+            @RequestParam(name = "sort", defaultValue = "expiry_date_immi") String sortElement
     ) {
         return findUserHasIngredientService.findUserHasIngredients(pageable, startId, sortElement);
     }
 
     @PatchMapping("/user/ingredient/{id}")
-    public ResponseEntity<?> userHasIngredientModify(@PathVariable(name = "id") Long userHasIngredientId, UserHasIngredientModifyDTO dto) {
+    public ResponseEntity<?> userHasIngredientModify(@PathVariable(name = "id") Long userHasIngredientId, @RequestBody @Valid UserHasIngredientModifyDTO dto) {
         return editUserHasIngredientService.modifyUserHasIngredient(userHasIngredientId, dto);
     }
 
