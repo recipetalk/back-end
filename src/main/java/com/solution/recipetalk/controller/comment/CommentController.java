@@ -52,6 +52,11 @@ public class CommentController {
         return findCommentService.findCommentsByUser(pageable);
     }
 
+    @GetMapping("/user/comment/{commentId}")
+    public ResponseEntity<?> commentGetById(@PathVariable(name = "commentId") Long commentId) {
+        return findCommentService.findCommentById(commentId);
+    }
+
     @PatchMapping("/board/{boardId}/comment/{commentId}")
     public ResponseEntity<?> commentModify(
             @PathVariable Long boardId,
