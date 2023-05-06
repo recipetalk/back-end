@@ -6,6 +6,7 @@ import com.solution.recipetalk.service.ingredient.userhas.EditUserHasIngredientS
 import com.solution.recipetalk.service.ingredient.userhas.FindUserHasIngredientService;
 import com.solution.recipetalk.service.ingredient.userhas.RegisterUserHasIngredientService;
 import com.solution.recipetalk.service.ingredient.userhas.RemoveUserHasIngredientService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class UserHasIngredientController {
     }
 
     @PatchMapping("/user/ingredient/{id}")
-    public ResponseEntity<?> userHasIngredientModify(@PathVariable(name = "id") Long userHasIngredientId, @RequestBody UserHasIngredientModifyDTO dto) {
+    public ResponseEntity<?> userHasIngredientModify(@PathVariable(name = "id") Long userHasIngredientId, @RequestBody @Valid UserHasIngredientModifyDTO dto) {
         return editUserHasIngredientService.modifyUserHasIngredient(userHasIngredientId, dto);
     }
 

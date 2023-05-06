@@ -4,6 +4,7 @@ import com.solution.recipetalk.domain.comment.repository.CommentRepository;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.dto.comment.CommentResponseDTO;
+import com.solution.recipetalk.exception.comment.CommentNotFoundException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.comment.FindCommentService;
 import com.solution.recipetalk.util.ContextHolder;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 
 @Service
@@ -51,5 +54,13 @@ public class FindCommentServiceImpl implements FindCommentService {
         Page<CommentResponseDTO> allByWriter = commentRepository.findAllByWriter(writer.getId(), pageable);
 
         return ResponseEntity.ok(allByWriter);
+    }
+
+    @Override
+    public ResponseEntity<?> findCommentById(Long commentId) {
+        Long sessionId = ContextHolder.getUserLoginId();
+        Optional<CommentResponseDTO> commentById = commentRepository.findCommentById(sessionId, commentId);
+
+        return ResponseEntity.ok(commentById.orElseThrow(CommentNotFoundException::new));
     }
 }

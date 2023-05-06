@@ -1,5 +1,6 @@
 package com.solution.recipetalk.dto.product.request;
 
+import com.solution.recipetalk.annotation.CustomLength;
 import com.solution.recipetalk.domain.product.request.ProductRequest;
 import com.solution.recipetalk.domain.product.request.ProductRequestState;
 import lombok.*;
@@ -9,8 +10,11 @@ import lombok.*;
 @AllArgsConstructor
 public class ProductRequestRegisterDTO {
     @NonNull
+    @CustomLength(equals = 13, message = "barcode")
     private String barcode;
+
     @NonNull
+    @CustomLength(max = 100, message = "productName")
     private String productName;
 
     public ProductRequest toEntity() {

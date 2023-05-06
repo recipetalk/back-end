@@ -3,7 +3,6 @@ package com.solution.recipetalk.service.product.impl;
 import com.solution.recipetalk.domain.product.entity.Product;
 import com.solution.recipetalk.domain.product.repository.ProductRepository;
 import com.solution.recipetalk.dto.product.ProductResponseDTO;
-import com.solution.recipetalk.exception.product.BarcodeLengthNotValidException;
 import com.solution.recipetalk.exception.product.ProductNotFoundException;
 import com.solution.recipetalk.service.product.FindProductService;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +18,8 @@ public class FindProductServiceImpl implements FindProductService {
 
     @Override
     public ResponseEntity<?> findProduct(String barcode) {
-        validateBarcodeLength(barcode);
-
         Product product = productRepository.findById(barcode).orElseThrow(ProductNotFoundException::new);
 
         return ResponseEntity.ok(ProductResponseDTO.toDTO(product));
-    }
-
-    private void validateBarcodeLength(String barcode) {
-        if(barcode.length() != 13) {
-            throw new BarcodeLengthNotValidException();
-        }
     }
 }

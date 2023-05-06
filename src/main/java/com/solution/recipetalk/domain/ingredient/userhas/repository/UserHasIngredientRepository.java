@@ -5,5 +5,4 @@ import com.solution.recipetalk.domain.ingredient.userhas.repository.custom.UserH
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserHasIngredientRepository extends JpaRepository<UserHasIngredient, Long>, UserHasIngredientCustomRepository {
-    
 }
