@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @Entity
-@Table(name="ingredient")
+@Table(name="ingredient", indexes = {@Index(name = "ingredient_index", columnList = "ingredient_id")})
 public class Ingredient extends AuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

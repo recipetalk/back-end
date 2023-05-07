@@ -3,7 +3,6 @@ package com.solution.recipetalk.service.product.impl;
 import com.solution.recipetalk.domain.product.entity.Product;
 import com.solution.recipetalk.domain.product.repository.ProductRepository;
 import com.solution.recipetalk.dto.product.ProductResponseDTO;
-import com.solution.recipetalk.exception.product.BarcodeLengthNotValidException;
 import com.solution.recipetalk.exception.product.ProductNotFoundException;
 import com.solution.recipetalk.service.product.FindProductService;
 import lombok.RequiredArgsConstructor;

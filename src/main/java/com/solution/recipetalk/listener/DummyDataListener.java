@@ -85,7 +85,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         loadUserData();
         loadTestUserData();
         loadBoardData();
-        loadIngredientData();
+//        loadIngredientData();
         loadRecipeData();
         loadRecipeRowData();
         loadIngredientTrimmingData();
