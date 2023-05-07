@@ -1,7 +1,6 @@
 package com.solution.recipetalk.service.ingredient.trimming.impl;
 
-import com.solution.recipetalk.domain.board.entity.Board;
-import com.solution.recipetalk.domain.board.repository.BoardRepository;
+import com.solution.recipetalk.domain.ingredient.trimming.entity.IngredientTrimming;
 import com.solution.recipetalk.domain.ingredient.trimming.repository.IngredientTrimmingRepository;
 import com.solution.recipetalk.domain.ingredient.trimming.repository.IngredientTrimmingRepository.IngredientTrimmingResult;
 import com.solution.recipetalk.domain.ingredient.trimming.repository.IngredientTrimmingRepository.IngredientTrimmingDetailResult;
@@ -10,6 +9,8 @@ import com.solution.recipetalk.domain.ingredient.trimming.row.repository.Ingredi
 import com.solution.recipetalk.domain.user.block.repository.UserBlockRepository;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
+import com.solution.recipetalk.dto.ingredient.trimming.IngredientTrimmingByUserReqDTO;
+import com.solution.recipetalk.dto.ingredient.trimming.IngredientTrimmingByUserResDTO;
 import com.solution.recipetalk.dto.ingredient.trimming.IngredientTrimmingFindResDTO;
 import com.solution.recipetalk.exception.CustomException;
 import com.solution.recipetalk.exception.ErrorCode;
@@ -61,6 +62,19 @@ public class FindIngredientTrimmingServiceImpl implements FindIngredientTrimming
                         .findById(trimmingId).orElseThrow(IngredientTrimmingNotFoundException::new));
 
         return ResponseEntity.ok(IngredientTrimmingFindResDTO.fromIngredientTrimmingDetailResultAndTrimmingRows(ingredientTrimmingDetail, trimmingRows));
+    }
+
+    @Override
+    public ResponseEntity<?> findIngredientTrimmingListByUsername(IngredientTrimmingByUserReqDTO dto, String username){
+        UserDetail userDetail = userDetailRepository.findUserDetailByUsername(username).orElseThrow(UserNotFoundException::new);
+        UserDetail loginUser = ContextHolder.getUserLogin().getUserDetail();
+
+        if (userBlockRepository.existsByUserAndBlockedUser(loginUser, userDetail)){
+            throw new CustomException(ErrorCode.BOARD_NOT_FOUND);
+        }
+        List<IngredientTrimming> trimmings = ingredientTrimmingRepository.findIngredientTrimmingList(dto, userDetail.getId());
+
+        return ResponseEntity.ok(trimmings.stream().map(IngredientTrimmingByUserResDTO::toIngredientTrimmingByUserResDTO).toList());
     }
 
 

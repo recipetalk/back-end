@@ -1,5 +1,6 @@
 package com.solution.recipetalk.controller.ingredient.trimming;
 
+import com.solution.recipetalk.dto.ingredient.trimming.IngredientTrimmingByUserReqDTO;
 import com.solution.recipetalk.dto.ingredient.trimming.IngredientTrimmingModifyDTO;
 import com.solution.recipetalk.dto.ingredient.trimming.IngredientTrimmingRegisterDTO;
 import com.solution.recipetalk.service.ingredient.trimming.EditIngredientTrimmingService;
@@ -33,6 +34,12 @@ public class IngredientTrimmingController {
     @GetMapping("")
     public ResponseEntity<?> ingredientTrimmingList(@PathVariable(name = "ingredientId") Long ingredientId, @PageableDefault(size = 20) Pageable pageable) {
         return findIngredientTrimmingService.findIngredientTrimming(ingredientId, pageable);
+    }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<?> ingredientTrimmingListByUsername(@PathVariable(name = "ingredientId") Long ingredientId, @PathVariable(name = "username") String username,
+                                                              @Valid IngredientTrimmingByUserReqDTO dto){
+        return findIngredientTrimmingService.findIngredientTrimmingListByUsername(dto, username);
     }
 
     @GetMapping("/{trimmingId}")

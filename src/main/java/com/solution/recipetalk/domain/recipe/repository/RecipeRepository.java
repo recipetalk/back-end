@@ -33,11 +33,11 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long>, RecipeQue
             "GROUP BY recipe, writer, board, userFollow.id, isBoardLiked.id, isBookmark.id")
     Optional<RecipeDTO> findRecipeByViewerId(@Param("viewerId")Long viewerId, @Param("recipeId")Long recipeId);
 
-    @Query("SELECT B.id AS boardId, B.title AS title, B.createdDate AS createdDate, (UBL.user.id IS NOT NULL or true) AS isLiked, " +
-            "B.likeCount AS likeCount, B.commentCount AS commentCount, R.thumbnailImgURI AS thumbnailImgURI, R.quantity as quantity, " +
-            "R.id as recipeId, B.boardSort AS boardSort FROM Recipe AS R " +
-            "JOIN Board AS B ON R.board.id = B.id " +
-            "LEFT JOIN BoardLike AS UBL ON UBL.user.id = :userId AND UBL.board.id = B.id " +
-            "WHERE B.writer.id = :userId")
-    Optional<List<RecipeByUsername>> findRecipeByUserId(@Param("userId") Long userId);
+//    @Query("SELECT B.id AS boardId, B.title AS title, B.createdDate AS createdDate, (UBL.user.id IS NOT NULL or true) AS isLiked, " +
+//            "B.likeCount AS likeCount, B.commentCount AS commentCount, R.thumbnailImgURI AS thumbnailImgURI, R.quantity as quantity, " +
+//            "R.id as recipeId, B.boardSort AS boardSort FROM Recipe AS R " +
+//            "JOIN Board AS B ON R.board.id = B.id " +
+//            "LEFT JOIN BoardLike AS UBL ON UBL.user.id = :userId AND UBL.board.id = B.id " +
+//            "WHERE B.writer.id = :userId")
+//    Optional<List<RecipeByUsername>> findRecipeByUserId(@Param("userId") Long userId);
 }

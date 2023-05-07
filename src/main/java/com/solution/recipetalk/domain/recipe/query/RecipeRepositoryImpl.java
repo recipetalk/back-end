@@ -8,12 +8,15 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.solution.recipetalk.domain.board.bookmark.entity.QBookmark;
 import com.solution.recipetalk.domain.board.entity.QBoard;
 import com.solution.recipetalk.domain.board.like.entity.QBoardLike;
+import com.solution.recipetalk.domain.common.SortType;
 import com.solution.recipetalk.domain.recipe.entity.QRecipe;
 import com.solution.recipetalk.domain.recipe.repository.RecipeQueryDslRepository;
 import com.solution.recipetalk.domain.user.block.entity.QUserBlock;
 import com.solution.recipetalk.domain.user.follow.entity.QUserFollow;
+import com.solution.recipetalk.dto.recipe.RecipeByUserReqDTO;
 import com.solution.recipetalk.dto.recipe.RecipeListReqDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -60,7 +63,6 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
     public List<RecipeForList> findRecipeList(RecipeListReqDTO dto, Long userId){
         QRecipe qRecipe = QRecipe.recipe;
         QBoard qBoard = QBoard.board;
-        QUserFollow qUserFollow = QUserFollow.userFollow;
 
         JPAQuery<Tuple> queryBuilder = createCommonSql(userId);
 
@@ -87,7 +89,32 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
         }
 
 
-        switch (dto.getSortType()) {
+        queryBuilder = getSqlBySortType(queryBuilder, dto.getSortType(), userId);
+
+        queryBuilder = getBookmarkedAndBoardLike(queryBuilder, userId);
+
+        queryBuilder = getSQlByOrderBy(queryBuilder, dto.getLimit(), dto.getOffset());
+
+        return RecipeForList.toRecipeForList(queryBuilder.fetch());
+    }
+
+
+    @Override
+    public List<RecipeForList> findRecipeListByUser(RecipeByUserReqDTO dto, long userId){
+        JPAQuery<Tuple> queryBuilder = createCommonSql(userId);
+
+        queryBuilder = getSqlBySortType(queryBuilder, dto.getSortType(), userId);
+        queryBuilder = getBookmarkedAndBoardLike(queryBuilder, userId);
+        queryBuilder = getSQlByOrderBy(queryBuilder, dto.getLimit(), dto.getOffset());
+
+        return RecipeForList.toRecipeForList(queryBuilder.fetch());
+    }
+
+    private JPAQuery<Tuple> getSqlBySortType(JPAQuery<Tuple> queryBuilder, SortType sortType, long userId){
+        QBoard qBoard = QBoard.board;
+        QUserFollow qUserFollow = QUserFollow.userFollow;
+
+        switch (sortType) {
             case NEW -> {
                 queryBuilder = queryBuilder.orderBy(QBoard.board.createdDate.desc());
             }
@@ -101,11 +128,12 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
             }
         }
 
-        queryBuilder = getBookmarkedAndBoardLike(queryBuilder, userId);
+        return queryBuilder;
+    }
 
-        queryBuilder = queryBuilder.offset(dto.getOffset())
-                                .limit(dto.getLimit());
-        return RecipeForList.toRecipeForList(queryBuilder.fetch());
+    private JPAQuery<Tuple> getSQlByOrderBy(JPAQuery<Tuple> queryBuilder, long limit, long offset){
+        return queryBuilder.offset(offset)
+                .limit(limit);
     }
 
 }
