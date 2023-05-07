@@ -7,7 +7,6 @@ import com.solution.recipetalk.domain.board.bookmark.repository.BookmarkReposito
 import com.solution.recipetalk.domain.board.entity.Board;
 import com.solution.recipetalk.domain.board.entity.BoardSort;
 import com.solution.recipetalk.domain.board.like.entity.BoardLike;
-import com.solution.recipetalk.domain.board.like.id.BoardLikeId;
 import com.solution.recipetalk.domain.board.like.repository.BoardLikeRepository;
 import com.solution.recipetalk.domain.board.repository.BoardRepository;
 import com.solution.recipetalk.domain.comment.entity.Comment;
@@ -27,10 +26,8 @@ import com.solution.recipetalk.domain.recipe.row.entity.RecipeRow;
 import com.solution.recipetalk.domain.recipe.row.repository.RecipeRowRepository;
 import com.solution.recipetalk.domain.report.repository.ReportRepository;
 import com.solution.recipetalk.domain.user.block.entity.UserBlock;
-import com.solution.recipetalk.domain.user.block.id.UserBlockId;
 import com.solution.recipetalk.domain.user.block.repository.UserBlockRepository;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
-import com.solution.recipetalk.domain.user.follow.UserFollowId;
 import com.solution.recipetalk.domain.user.follow.entity.UserFollow;
 import com.solution.recipetalk.domain.user.follow.repository.UserFollowRepository;
 import com.solution.recipetalk.domain.user.login.entity.RoleType;
@@ -52,7 +49,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 @Slf4j
 @Component

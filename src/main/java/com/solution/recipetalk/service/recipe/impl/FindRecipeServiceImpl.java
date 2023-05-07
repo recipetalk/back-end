@@ -7,6 +7,7 @@ import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.dto.board.BoardDTO;
 import com.solution.recipetalk.dto.board.BoardRecipeDTO;
+import com.solution.recipetalk.dto.recipe.RecipeByUserReqDTO;
 import com.solution.recipetalk.dto.recipe.RecipeByUserResDTO;
 import com.solution.recipetalk.dto.recipe.RecipeDTO;
 import com.solution.recipetalk.dto.recipe.RecipeListReqDTO;
@@ -56,10 +57,10 @@ public class FindRecipeServiceImpl implements FindRecipeService {
     }
 
     @Override
-    public ResponseEntity<?> findRecipeWithUsername(String username){
+    public ResponseEntity<?> findRecipeWithUsername(RecipeByUserReqDTO dto, String username){
         UserDetail user = userDetailRepository.findUserDetailByUsername(username).orElseThrow(UserNotFoundException::new);
         // TODO: exception (RecipeNotFoundException)
-        List<RecipeByUsername> recipes = recipeRepository.findRecipeByUserId(user.getId()).orElseThrow(UserNotFoundException::new);
+        List<RecipeForList> recipes = recipeRepository.findRecipeListByUser(dto, user.getId());
 
         List<RecipeByUserResDTO> recipeByUserResDTOList = recipes.stream().map(recipe -> {
             BoardRecipeDTO boardRecipeDTO = BoardRecipeDTO.toDTO(recipe);

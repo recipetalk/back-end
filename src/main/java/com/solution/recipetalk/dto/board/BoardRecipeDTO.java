@@ -1,5 +1,8 @@
 package com.solution.recipetalk.dto.board;
 
+import com.solution.recipetalk.domain.board.entity.Board;
+import com.solution.recipetalk.domain.recipe.entity.Recipe;
+import com.solution.recipetalk.domain.recipe.query.RecipeForList;
 import com.solution.recipetalk.domain.recipe.repository.RecipeByUsername;
 import lombok.*;
 
@@ -20,15 +23,16 @@ public class BoardRecipeDTO {
     private String boardSort;
 
 
-    public static BoardRecipeDTO toDTO(RecipeByUsername recipeByUsername){
+    public static BoardRecipeDTO toDTO(RecipeForList recipeForList){
+        Board board= recipeForList.getRecipe().getBoard();
         return BoardRecipeDTO.builder()
-                .title(recipeByUsername.getTitle())
-                .createdDate(recipeByUsername.getCreatedDate())
-                .isLiked(recipeByUsername.getIsLiked())
-                .likeCount(recipeByUsername.getLikeCount())
-                .commentCount(recipeByUsername.getCommentCount())
-                .boardId(recipeByUsername.getBoardId())
-                .boardSort(recipeByUsername.getBoardSort().toString())
+                .title(board.getTitle())
+                .createdDate(board.getCreatedDate())
+                .isLiked(recipeForList.isLiked())
+                .likeCount(board.getLikeCount())
+                .commentCount(board.getCommentCount())
+                .boardId(board.getId())
+                .boardSort(board.getBoardSort().toString())
                 .build();
     }
 }

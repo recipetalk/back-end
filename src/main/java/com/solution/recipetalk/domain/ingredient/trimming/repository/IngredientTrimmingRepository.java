@@ -1,10 +1,7 @@
 package com.solution.recipetalk.domain.ingredient.trimming.repository;
 
 import com.solution.recipetalk.domain.board.entity.Board;
-import com.solution.recipetalk.domain.ingredient.description.entity.IngredientDescription;
-import com.solution.recipetalk.domain.ingredient.entity.Ingredient;
 import com.solution.recipetalk.domain.ingredient.trimming.entity.IngredientTrimming;
-import com.solution.recipetalk.domain.recipe.entity.Recipe;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,10 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface IngredientTrimmingRepository extends JpaRepository<IngredientTrimming, Long> {
+public interface IngredientTrimmingRepository extends JpaRepository<IngredientTrimming, Long>, IngredientTrimmingQueryDslRepository {
     interface IngredientTrimmingResult {
         Long getId();
         String getTitle();

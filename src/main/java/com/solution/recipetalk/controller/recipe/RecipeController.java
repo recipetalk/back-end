@@ -1,5 +1,6 @@
 package com.solution.recipetalk.controller.recipe;
 
+import com.solution.recipetalk.dto.recipe.RecipeByUserReqDTO;
 import com.solution.recipetalk.dto.recipe.RecipeListReqDTO;
 import com.solution.recipetalk.dto.recipe.RecipeModifyDTO;
 import com.solution.recipetalk.dto.recipe.RecipeRegisterDTO;
@@ -40,8 +41,8 @@ public class RecipeController {
     }
 
     @GetMapping("/username/{username}")
-    public ResponseEntity<?> recipeByUserDetails(@PathVariable(name = "username") String username){
-        return findRecipeService.findRecipeWithUsername(username);
+    public ResponseEntity<?> recipeByUserDetails(@PathVariable(name = "username") String username, @Valid RecipeByUserReqDTO dto){
+        return findRecipeService.findRecipeWithUsername(dto, username);
     }
 
     @PutMapping("/{id}")
