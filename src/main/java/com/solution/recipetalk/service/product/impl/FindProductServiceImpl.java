@@ -17,7 +17,7 @@ public class FindProductServiceImpl implements FindProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public ResponseEntity<?> findProduct(String barcode) {
+    public ResponseEntity<?> findProduct(Long barcode) {
         Product product = productRepository.findById(barcode).orElseThrow(ProductNotFoundException::new);
 
         return ResponseEntity.ok(ProductResponseDTO.toDTO(product));
