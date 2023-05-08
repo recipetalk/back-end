@@ -125,7 +125,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     }
 
     private void loadIngredientTrimmingData() {
-        createIngredientTrimmingDataIfNotNull(1L, 1L, 2L);
+        createIngredientTrimmingDataIfNotNull(2L, 1L, 2L);
     }
 
     private void loadUserFollowData() {
@@ -158,7 +158,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     }
 
     private void loadIngredientDescriptionData() {
-        createIngredientDescriptionIfNotNull(1L, 3L, 1L, "test1");
+        createIngredientDescriptionIfNotNull(3L, 3L, 1L, "test1");
     }
 
 

@@ -25,15 +25,14 @@ public class Recipe extends SoftDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "recipe_id", nullable = false)
     private Long id;
 
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id", nullable = false, referencedColumnName = "board_id")
+    private Board board;
     @Column(name = "thumbnail_img_uri")
     private String thumbnailImgURI;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id", nullable = false)
-    private Board board;
 
     @Column(name = "description", nullable = false)
     private String description;
