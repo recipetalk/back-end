@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProductRequest {
     @Id
-    private String barcode;
+    private Long barcode;
 
     @Column(name = "product_name")
     private String productName;
