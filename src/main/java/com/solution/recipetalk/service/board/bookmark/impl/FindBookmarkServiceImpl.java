@@ -6,6 +6,7 @@ import com.solution.recipetalk.domain.board.entity.Board;
 import com.solution.recipetalk.domain.board.like.id.BoardLikeId;
 import com.solution.recipetalk.domain.board.like.repository.BoardLikeRepository;
 import com.solution.recipetalk.domain.board.repository.BoardRepository;
+import com.solution.recipetalk.domain.common.SortType;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.dto.board.BoardLikedDTO;
@@ -14,9 +15,11 @@ import com.solution.recipetalk.exception.board.BoardNotFoundException;
 import com.solution.recipetalk.service.board.bookmark.FindBookmarkService;
 import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 @Transactional
@@ -36,5 +39,12 @@ public class FindBookmarkServiceImpl implements FindBookmarkService {
         BookmarkDTO dto = new BookmarkDTO(bookmarkRepository.findBookmarkByUserAndBoard(session,findBoard).isPresent());
 
         return ResponseEntity.ok(dto);
+    }
+
+    @Override
+    public ResponseEntity<?> findBoardListByUserId(Pageable pageable, SortType sortType) {
+        Long sessionId = ContextHolder.getUserLoginId();
+
+        return ResponseEntity.ok(bookmarkRepository.findBoardListByUserId(sessionId, sortType.name(), pageable));
     }
 }
