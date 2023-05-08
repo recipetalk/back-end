@@ -19,7 +19,7 @@ public class ProductController {
     private final RegisterProductService registerProductService;
 
     @GetMapping("/product/{barcode}")
-    public ResponseEntity<?> productDetails(@PathVariable(name = "barcode") @CustomLength(equals = 13, message = "barcode") Long barcode) {
+    public ResponseEntity<?> productDetails(@PathVariable(name = "barcode") @CustomLength(max = 13, message = "barcode") Long barcode) {
         return findProductService.findProduct(barcode);
     }
 
