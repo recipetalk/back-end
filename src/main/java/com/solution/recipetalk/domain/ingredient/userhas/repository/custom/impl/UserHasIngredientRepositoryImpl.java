@@ -22,7 +22,7 @@ public class UserHasIngredientRepositoryImpl implements UserHasIngredientCustomR
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<UserHasIngredientResponseDTO> findAllUserIngredient(Pageable pageable, Long startId, String sortElement) {
+    public Page<UserHasIngredientResponseDTO> findAllUserIngredient(Pageable pageable, String sortElement) {
         QUserHasIngredient userHasIngredient = QUserHasIngredient.userHasIngredient;
         QIngredient ingredient = QIngredient.ingredient;
 
@@ -35,9 +35,10 @@ public class UserHasIngredientRepositoryImpl implements UserHasIngredientCustomR
             default -> null;
         };
 
-        JPAQuery<UserHasIngredientResponseDTO> query = queryFactory.select(Projections.bean(UserHasIngredientResponseDTO.class, userHasIngredient.ingredient.name, userHasIngredient.state, userHasIngredient.quantity, userHasIngredient.expirationDate, userHasIngredient.ingredient.id))
+        JPAQuery<UserHasIngredientResponseDTO> query = queryFactory
+                .select(Projections.bean(UserHasIngredientResponseDTO.class, userHasIngredient.name.as("ingredientName"), userHasIngredient.state, userHasIngredient.quantity, userHasIngredient.expirationDate, userHasIngredient.ingredient.id.as("ingredientId")))
                 .from(userHasIngredient)
-                .join(userHasIngredient.ingredient, ingredient)
+                .join(userHasIngredient.ingredient, ingredient).on(userHasIngredient.ingredient.eq(ingredient))
                 .orderBy(orderSpecifier);
 
         JPAQuery<UserHasIngredient> countQuery = queryFactory.selectFrom(userHasIngredient);

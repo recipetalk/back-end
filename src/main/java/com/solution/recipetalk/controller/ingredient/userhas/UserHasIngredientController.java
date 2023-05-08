@@ -35,13 +35,12 @@ public class UserHasIngredientController {
         return findUserHasIngredientService.findUserHasIngredient(userHasIngredientId);
     }
 
-    @GetMapping("/user/ingredient/page/{startId}")
+    @GetMapping("/user/ingredient/page")
     public ResponseEntity<?> userHasIngredientList(
             Pageable pageable,
-            @PathVariable(name = "startId") Long startId,
             @RequestParam(name = "sort", defaultValue = "expiry_date_immi") String sortElement
     ) {
-        return findUserHasIngredientService.findUserHasIngredients(pageable, startId, sortElement);
+        return findUserHasIngredientService.findUserHasIngredients(pageable, sortElement);
     }
 
     @PatchMapping("/user/ingredient/{id}")
