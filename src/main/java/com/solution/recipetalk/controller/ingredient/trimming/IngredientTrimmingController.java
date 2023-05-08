@@ -19,40 +19,40 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/board/ingredient/{ingredientId}/trimming")
+@RequestMapping("/api/board/ingredient")
 public class IngredientTrimmingController {
     private final RegisterIngredientTrimmingService ingredientTrimmingService;
     private final FindIngredientTrimmingService findIngredientTrimmingService;
     private final RemoveIngredientTrimmingService removeIngredientTrimmingService;
     private final EditIngredientTrimmingService editIngredientTrimmingService;
 
-    @PostMapping("")
+    @PostMapping("/{ingredientId}/trimming")
     public ResponseEntity<?> ingredientTrimmingAdd(@PathVariable(name = "ingredientId") Long ingredientId, @Valid IngredientTrimmingRegisterDTO dto) {
         return ingredientTrimmingService.registerIngredientTrimming(dto, ingredientId);
     }
 
-    @GetMapping("")
+    @GetMapping("/{ingredientId}/trimming")
     public ResponseEntity<?> ingredientTrimmingList(@PathVariable(name = "ingredientId") Long ingredientId, @PageableDefault(size = 20) Pageable pageable) {
         return findIngredientTrimmingService.findIngredientTrimming(ingredientId, pageable);
     }
 
-    @GetMapping("/username/{username}")
-    public ResponseEntity<?> ingredientTrimmingListByUsername(@PathVariable(name = "ingredientId") Long ingredientId, @PathVariable(name = "username") String username,
+    @GetMapping("/trimming/username/{username}")
+    public ResponseEntity<?> ingredientTrimmingListByUsername(@PathVariable(name = "username") String username,
                                                               @Valid IngredientTrimmingByUserReqDTO dto){
         return findIngredientTrimmingService.findIngredientTrimmingListByUsername(dto, username);
     }
 
-    @GetMapping("/{trimmingId}")
+    @GetMapping("/{ingredientId}/trimming/{trimmingId}")
     public ResponseEntity<?> ingredientTrimmingDetail(@PathVariable(name = "ingredientId") Long ingredientId, @PathVariable(name = "trimmingId") Long trimmingId) {
         return findIngredientTrimmingService.findIngredientTrimmingDetail(ingredientId, trimmingId);
     }
 
-    @DeleteMapping("/{trimmingId}")
+    @DeleteMapping("/trimming/{trimmingId}")
     public ResponseEntity<?> ingredientTrimmingRemoveByTrimmingId(@PathVariable(name = "trimmingId") Long trimmingId){
         return removeIngredientTrimmingService.removeIngredientTrimmingById(trimmingId);
     }
 
-    @PatchMapping("/{trimmingId}")
+    @PatchMapping("/trimming/{trimmingId}")
     public ResponseEntity<?> ingredientTrimmingModifyByTrimmingId(@PathVariable(name = "trimmingId") Long trimmingId, @Valid IngredientTrimmingModifyDTO dto){
         return editIngredientTrimmingService.editIngredientTrimming(dto, trimmingId);
     }
