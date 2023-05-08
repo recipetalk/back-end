@@ -32,6 +32,7 @@ public class RegisterUserHasIngredientServiceImpl implements RegisterUserHasIngr
         for(UserHasIngredientRegisterDTO i : dtos) {
             userHasIngredientRepository.save(UserHasIngredient.builder()
                             .user(currentUser)
+                            .name(i.getIngredientName())
                             .ingredient(ingredientRepository.findById(i.getIngredientId()).orElseThrow(IngredientNotFoundException::new))
                             .state(i.getIngredientState())
                             .quantity(i.getQuantity())

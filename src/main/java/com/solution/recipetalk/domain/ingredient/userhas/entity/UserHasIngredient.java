@@ -27,6 +27,9 @@ public class UserHasIngredient extends AuditingEntity {
     @JoinColumn(name = "user_detail_id", nullable = false)
     private UserDetail user;
 
+    @Column(nullable = false)
+    private String name;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredient_id", nullable = false)
     private Ingredient ingredient;
