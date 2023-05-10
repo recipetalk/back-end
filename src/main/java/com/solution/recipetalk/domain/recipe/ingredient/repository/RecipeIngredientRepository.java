@@ -15,10 +15,11 @@ public interface RecipeIngredientRepository extends JpaRepository<RecipeIngredie
 
     List<RecipeIngredient> findRecipeIngredientsByRecipeId(Long recipeId);
 
-    @Query(value = "SELECT R.quantity AS quantity, I.name AS name, " +
-            "(CASE WHEN UHI.id IS NOT NULL THEN true ELSE false END) AS isHas FROM RecipeIngredient AS R " +
-            "JOIN Ingredient AS I ON I.id = R.ingredient.id " +
-            "LEFT JOIN UserHasIngredient AS UHI ON UHI.ingredient.id = I.id AND UHI.user.id = :userId " +
-            "WHERE R.recipe.id = :recipeId")
+    @Query(value = "SELECT ri.name, case WHEN uhi is not null THEN true WHEN uhi2 is not null THEN true ELSE false END, ri.quantity " +
+            "FROM RecipeIngredient ri " +
+            "LEFT JOIN Ingredient i ON ri.ingredient = i " +
+            "LEFT JOIN UserHasIngredient uhi ON uhi.user.id = :userId AND ri.name like '%' + uhi.name + '%' " +
+            "LEFT JOIN UserHasIngredient uhi2 ON uhi2.user.id = :viewerId AND ri.ingredient = uhi.ingredient " +
+            "WHERE ri.recipe.id = :recipeId")
     List<RecipeIngredientResult> findRecipeIngredientByUserIdAndRecipeId(Long userId, Long recipeId);
 }
