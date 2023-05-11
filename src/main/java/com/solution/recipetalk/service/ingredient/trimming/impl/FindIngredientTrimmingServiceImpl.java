@@ -56,7 +56,6 @@ public class FindIngredientTrimmingServiceImpl implements FindIngredientTrimming
             throw new CustomException(ErrorCode.BOARD_NOT_FOUND);
         }
 
-
         List<IngredientTrimmingRow> trimmingRows = ingredientTrimmingRowRepository
                 .findAllByIngredientTrimming(ingredientTrimmingRepository
                         .findById(trimmingId).orElseThrow(IngredientTrimmingNotFoundException::new));

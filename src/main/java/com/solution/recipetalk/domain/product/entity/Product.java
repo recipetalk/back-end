@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class Product extends AuditingEntity{
     @Id
     @Column(name = "barcode")
-    private String barcode;
+    private Long barcode;
 
     @Column(name = "product_registration_number", nullable = false)
     private Long productRegistrationNumber;
@@ -32,9 +32,10 @@ public class Product extends AuditingEntity{
     @Column
     private String company;
 
-    @Column(name = "is_closed")
-    private Boolean isClosed;
+    @Column(name = "closed_date")
+    private String closedDate;
 
     @Column(name = "is_product_shutdown")
-    private Boolean isProductShutdown;
+    private String productShutdownDate;
+
 }
