@@ -35,7 +35,7 @@ public class UserHasIngredientController {
         return findUserHasIngredientService.findUserHasIngredient(userHasIngredientId);
     }
 
-    @GetMapping("/user/ingredient/page")
+    @GetMapping("/user/ingredient")
     public ResponseEntity<?> userHasIngredientList(
             Pageable pageable,
             @RequestParam(name = "sort", defaultValue = "expiry_date_immi") String sortElement
