@@ -1,6 +1,7 @@
 package com.solution.recipetalk.dto.notification;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.solution.recipetalk.domain.notification.state.NotificationState;
 import lombok.*;
 

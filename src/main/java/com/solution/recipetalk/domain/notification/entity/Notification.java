@@ -14,6 +14,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 @Entity
 @Table(name = "notification")
@@ -57,6 +59,21 @@ public class Notification extends SoftDeleteEntity {
             data.put(map[0], map[1]);
         }
         return data;
+    }
+
+    public static String toNavigationId(Map<String, String> navigations) {
+        Iterator<Map.Entry<String, String>> iterator = navigations.entrySet().iterator();
+        StringBuilder stringBuilder = new StringBuilder();
+        while(iterator.hasNext()){
+            Map.Entry<String, String> next = iterator.next();
+            stringBuilder.append(next.getKey());
+            stringBuilder.append("=");
+            stringBuilder.append(next.getValue());
+            if(iterator.hasNext()){
+                stringBuilder.append("&");
+            }
+        }
+        return stringBuilder.toString();
     }
 
     public NotificationDTO toDTO() {
