@@ -24,8 +24,12 @@ public class RecipeIngredient extends AuditingEntity {
     @Column(name = "recipe_ingredient_id", nullable = false)
     private Long id;
 
+    // ingredient 필드가 있으면 name = null, 없으면 name 존재
+    @Column(name = "recipe_ingredient_name")
+    private String name;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ingredient_id", nullable = false)
+    @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
     @Column(name = "quantity")
