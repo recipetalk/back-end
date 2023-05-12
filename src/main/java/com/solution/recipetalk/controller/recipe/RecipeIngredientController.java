@@ -2,6 +2,7 @@ package com.solution.recipetalk.controller.recipe;
 
 
 import com.solution.recipetalk.dto.recipe.ingredient.RecipeIngredientDTOWrapper;
+import com.solution.recipetalk.service.ingredient.FindIngredientService;
 import com.solution.recipetalk.service.recipe.ingredient.FindRecipeIngredientService;
 import com.solution.recipetalk.service.recipe.ingredient.ModifyRecipeIngredientService;
 import com.solution.recipetalk.service.recipe.ingredient.RegisterRecipeIngredientService;
@@ -19,6 +20,7 @@ public class RecipeIngredientController {
     private final RegisterRecipeIngredientService registerRecipeIngredientService;
     private final ModifyRecipeIngredientService modifyRecipeIngredientService;
     private final FindRecipeIngredientService findRecipeIngredientService;
+    private final FindIngredientService findIngredientService;
 
     @PostMapping("/{recipeId}/recipeIngredient")
     public ResponseEntity<?> recipeIngredientAdd(@PathVariable(name = "recipeId") Long recipeId, @Valid @RequestBody RecipeIngredientDTOWrapper wrapper){
@@ -33,5 +35,12 @@ public class RecipeIngredientController {
     @GetMapping("/{recipeId}/recipeIngredient")
     public ResponseEntity<?> recipeIngredientList(@PathVariable(name = "recipeId") Long recipeId){
         return findRecipeIngredientService.findRecipeIngredient(recipeId);
+    }
+
+    @GetMapping("/ingredient/{nameComponent}")
+    public ResponseEntity<?> recipeIngredientListForRegister(
+            @PathVariable(name = "nameComponent") String nameComponent
+    ) {
+        return findIngredientService.findIngredientListByNameComponentPage(nameComponent);
     }
 }
