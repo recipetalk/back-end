@@ -4,7 +4,6 @@ import com.solution.recipetalk.domain.user.login.entity.UserLogin;
 import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.mail.SendMailForTemporaryPasswordService;
-import com.solution.recipetalk.service.user.login.password.TemporaryPasswordService;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -25,7 +24,6 @@ public class SendMailForTemporaryPasswordServiceImpl implements SendMailForTempo
 
     private final SpringTemplateEngine templateEngine;
 
-    private final TemporaryPasswordService temporaryPasswordService;
 
     private final UserLoginRepository userLoginRepository;
 
@@ -51,7 +49,7 @@ public class SendMailForTemporaryPasswordServiceImpl implements SendMailForTempo
         message.addRecipients(Message.RecipientType.TO, byUsername.getEmail());
         message.setSubject(title);
         message.setFrom(this.username + "@naver.com");
-        message.setText(setContext(temporaryPasswordService.createTemporaryPassword(byUsername)), "utf-8", "html");
+        message.setText(setContext("아래 링크를 통해 비밀번호를 변경해주세요!"), "utf-8", "html");
 
         return message;
     }
