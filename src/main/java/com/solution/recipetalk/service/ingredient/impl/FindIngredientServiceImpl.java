@@ -21,4 +21,10 @@ public class FindIngredientServiceImpl implements FindIngredientService {
         List<IngredientFindResultDTO> ingredientResultDTOs = ingredientRepository.findAllStartWith(nameComponent);
         return ResponseEntity.ok(ingredientResultDTOs);
     }
+
+    @Override
+    public ResponseEntity<?> findIngredientListByNameComponentPage(String nameComponent) {
+        List<IngredientFindResultDTO> dtos = ingredientRepository.findSomeStartWith(nameComponent);
+        return ResponseEntity.ok(dtos);
+    }
 }
