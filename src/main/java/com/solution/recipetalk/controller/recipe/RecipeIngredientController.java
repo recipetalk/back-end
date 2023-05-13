@@ -37,10 +37,4 @@ public class RecipeIngredientController {
         return findRecipeIngredientService.findRecipeIngredient(recipeId);
     }
 
-    @GetMapping("/ingredient/{nameComponent}")
-    public ResponseEntity<?> recipeIngredientListForRegister(
-            @PathVariable(name = "nameComponent") String nameComponent
-    ) {
-        return findIngredientService.findIngredientListByNameComponentPage(nameComponent);
-    }
 }

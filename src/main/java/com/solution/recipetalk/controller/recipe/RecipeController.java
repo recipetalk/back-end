@@ -54,4 +54,9 @@ public class RecipeController {
     public ResponseEntity<?> recipeRemove(@PathVariable(name = "id") Long recipeId){
         return removeRecipeService.removeRecipeById(recipeId);
     }
+
+    @DeleteMapping("/hard/{id}")
+    public ResponseEntity<?> recipeHardRemove(@PathVariable(name = "id") Long recipeId){
+        return removeRecipeService.hardRemoveRecipeById(recipeId);
+    }
 }

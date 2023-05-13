@@ -6,6 +6,7 @@ import com.solution.recipetalk.domain.user.entity.UserDetail;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -41,5 +42,9 @@ public interface IngredientTrimmingRepository extends JpaRepository<IngredientTr
             "JOIN Board AS B ON B = IT.board " +
             "WHERE IT.id = :trimmingId AND IT.ingredient.id = :ingredientId")
     Optional<IngredientTrimmingDetailResult> findIngredientTrimmingDetailResultById(@Param("ingredientId") Long ingredientId, @Param("trimmingId") Long trimmingId);
+
+    @Modifying
+    @Query(value = "DELETE FROM ingredient_trimming WHERE board_id = :boardId", nativeQuery = true)
+    void hardDeleteByBoardId(@Param("boardId")Long boardId);
 }
 

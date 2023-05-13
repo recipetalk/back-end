@@ -40,4 +40,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long>, RecipeQue
 //            "LEFT JOIN BoardLike AS UBL ON UBL.user.id = :userId AND UBL.board.id = B.id " +
 //            "WHERE B.writer.id = :userId")
 //    Optional<List<RecipeByUsername>> findRecipeByUserId(@Param("userId") Long userId);
+
+    @Modifying
+    @Query(value = "DELETE FROM recipe WHERE board_id = :recipeId", nativeQuery = true)
+    void hardDeleteRecipeById(@Param("recipeId")Long recipeId);
 }

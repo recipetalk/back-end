@@ -52,6 +52,11 @@ public class IngredientTrimmingController {
         return removeIngredientTrimmingService.removeIngredientTrimmingById(trimmingId);
     }
 
+    @DeleteMapping("/trimming/hard/{trimmingId}")
+    public ResponseEntity<?> ingredientTrimmingHardRemoveByTrimmingId(@PathVariable(name = "trimmingId") Long trimmingId){
+        return removeIngredientTrimmingService.hardRemoveIngredientTrimmingById(trimmingId);
+    }
+
     @PatchMapping("/trimming/{trimmingId}")
     public ResponseEntity<?> ingredientTrimmingModifyByTrimmingId(@PathVariable(name = "trimmingId") Long trimmingId, @Valid IngredientTrimmingModifyDTO dto){
         return editIngredientTrimmingService.editIngredientTrimming(dto, trimmingId);
