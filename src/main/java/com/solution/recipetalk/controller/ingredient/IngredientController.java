@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class IngredientController {
     private final FindIngredientService findIngredientService;
 
-    @GetMapping("/ingredient/search/{nameComponent}")
-    public ResponseEntity<?> ingredientListByNameComponent(@PathVariable(name = "nameComponent") String nameComponent) {
-        return findIngredientService.findIngredientListByNameComponent(nameComponent);
+    @GetMapping("/ingredient/{nameComponent}")
+    public ResponseEntity<?> recipeIngredientListForRegister(
+            @PathVariable(name = "nameComponent") String nameComponent
+    ) {
+        return findIngredientService.findIngredientListByNameComponentPage(nameComponent);
     }
 }
