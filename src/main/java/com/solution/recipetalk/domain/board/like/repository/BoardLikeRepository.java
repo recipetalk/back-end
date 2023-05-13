@@ -37,4 +37,6 @@ public interface BoardLikeRepository extends JpaRepository<BoardLike, Long> {
                 "AND writer.isBlocked = false " +
                 "AND writer.isDeleted = false ")
     Page<BoardFacadeDTO> findBoardLikeByUserId(@Param("viewerId")Long viewerId, Pageable pageable);
+
+    void deleteAllByUser_Id(Long userId);
 }

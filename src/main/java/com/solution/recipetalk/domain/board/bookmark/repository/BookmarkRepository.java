@@ -1,9 +1,7 @@
 package com.solution.recipetalk.domain.board.bookmark.repository;
 
 import com.solution.recipetalk.domain.board.bookmark.entity.Bookmark;
-import com.solution.recipetalk.domain.board.bookmark.id.BookmarkId;
 import com.solution.recipetalk.domain.board.entity.Board;
-import com.solution.recipetalk.domain.common.SortType;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.dto.board.BoardFacadeDTO;
 import org.springframework.data.domain.Page;
@@ -39,4 +37,6 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
                     "AND writer.isBlocked = false " +
                     "AND writer.isDeleted = false ")
     Page<BoardFacadeDTO> findBoardListByUserId(@Param("viewerId")Long viewerId, @Param("sortType")String sortType, Pageable pageable);
+
+    void deleteAllByUser_Id(Long userId);
 }

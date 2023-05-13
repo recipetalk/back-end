@@ -18,4 +18,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     @Modifying
     @Query(value = "UPDATE Notification n SET n.state = com.solution.recipetalk.domain.notification.state.NotificationState.OPEN WHERE n.id in :ids ")
     void modifyNotificationOpenByIds(List<Long> ids);
+
+    void deleteAllByUser_Id(Long userId);
 }
