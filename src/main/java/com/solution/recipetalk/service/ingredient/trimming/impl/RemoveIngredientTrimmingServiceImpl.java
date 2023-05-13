@@ -10,6 +10,7 @@ import com.solution.recipetalk.exception.ErrorCode;
 import com.solution.recipetalk.exception.ingredient.trimming.IngredientTrimmingNotFoundException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.s3.upload.S3Uploader;
+import com.solution.recipetalk.service.board.RemoveBoardService;
 import com.solution.recipetalk.service.ingredient.trimming.RemoveIngredientTrimmingService;
 import com.solution.recipetalk.service.ingredient.trimming.row.RemoveIngredientTrimmingRowService;
 import com.solution.recipetalk.util.ContextHolder;
@@ -27,23 +28,49 @@ public class RemoveIngredientTrimmingServiceImpl implements RemoveIngredientTrim
     private final S3Uploader s3Uploader;
     private final UserDetailRepository userDetailRepository;
     private final RemoveIngredientTrimmingRowService removeIngredientTrimmingRowService;
+    private final RemoveBoardService removeBoardService;
 
     @Override
     public ResponseEntity<?> removeIngredientTrimmingById(Long trimmingId){
         Long userLoginId = ContextHolder.getUserLoginId();
         UserDetail currentUser = userDetailRepository.findById(userLoginId).orElseThrow(UserNotFoundException::new);
-        
+
         IngredientTrimming ingredientTrimming = ingredientTrimmingRepository.findById(trimmingId).orElseThrow(IngredientTrimmingNotFoundException::new);
         if (!ingredientTrimming.getBoard().getWriter().equals(currentUser)){
             throw new CustomException(ErrorCode.NOT_AUTHORIZED);
         }
-        
+
         String ingredientTrimmingUri = ingredientTrimming.getThumbnailUri();
 
-        s3Uploader.deleteFile(ingredientTrimmingUri, S3dir.INGREDIENT_TRIMMING_IMG_DIR);
+        if(ingredientTrimmingUri != null)
+            s3Uploader.deleteFile(ingredientTrimmingUri, S3dir.INGREDIENT_TRIMMING_IMG_DIR);
+
         removeIngredientTrimmingRowService.removeIngredientTrimmingRowByIngredientTrimming(ingredientTrimming);
 
         ingredientTrimmingRepository.delete(ingredientTrimming);
+
+        return ResponseEntity.ok(null);
+    }
+
+    @Override
+    public ResponseEntity<?> hardRemoveIngredientTrimmingById(Long trimmingId) {
+        Long userLoginId = ContextHolder.getUserLoginId();
+        UserDetail currentUser = userDetailRepository.findById(userLoginId).orElseThrow(UserNotFoundException::new);
+
+        IngredientTrimming ingredientTrimming = ingredientTrimmingRepository.findById(trimmingId).orElseThrow(IngredientTrimmingNotFoundException::new);
+        if (!ingredientTrimming.getBoard().getWriter().equals(currentUser)){
+            throw new CustomException(ErrorCode.NOT_AUTHORIZED);
+        }
+
+        String ingredientTrimmingUri = ingredientTrimming.getThumbnailUri();
+        if(ingredientTrimmingUri != null)
+            s3Uploader.deleteFile(ingredientTrimmingUri, S3dir.INGREDIENT_TRIMMING_IMG_DIR);
+
+        removeIngredientTrimmingRowService.removeIngredientTrimmingRowByIngredientTrimming(ingredientTrimming);
+
+        ingredientTrimmingRepository.hardDeleteByBoardId(trimmingId);
+
+        removeBoardService.hardRemoveByBoardId(trimmingId);
 
         return ResponseEntity.ok(null);
     }
