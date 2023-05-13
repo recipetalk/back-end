@@ -39,4 +39,6 @@ public interface BoardLikeRepository extends JpaRepository<BoardLike, Long> {
     Page<BoardFacadeDTO> findBoardLikeByUserId(@Param("viewerId")Long viewerId, Pageable pageable);
 
     void deleteAllByUser_Id(Long userId);
+
+    void deleteAllByBoard_Id(Long boardId);
 }

@@ -10,8 +10,4 @@ import java.util.List;
 
 public interface RecipeRowRepository extends JpaRepository<RecipeRow, Long> {
     List<RecipeRow> findRecipeRowsByRecipeIdOrderById(Long recipeId);
-
-    @Modifying
-    @Query("DELETE  FROM RecipeRow rr JOIN Board b ON rr.recipe_id = b.id WHERE ")
-    void deleteAllByWriterId(@Param("writerId")Long writerId);
 }

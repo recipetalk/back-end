@@ -51,8 +51,20 @@ public class RemoveCommentServiceImpl implements RemoveCommentService {
         return ResponseEntity.ok(null);
     }
 
+    @Override
+    public ResponseEntity<?> hardRemoveChildCommentsByBoardId(Long boardId) {
+        commentRepository.hardDeleteChildCommentsAllByBoard_Id(boardId);
+        return ResponseEntity.ok(null);
+    }
+
+    @Override
+    public ResponseEntity<?> hardRemoveParentCommentsByBoardId(Long boardId) {
+        commentRepository.hardDeleteParentCommentsAllByBoard_id(boardId);
+        return ResponseEntity.ok(null);
+    }
+
     private void validateWhoIsRemovingComment(UserDetail writer, UserDetail currentLoginUser) {
-        if(!currentLoginUser.equals(writer)) {
+        if (!currentLoginUser.equals(writer)) {
             throw new NotAuthorizedToModifyCommentException();
         }
     }

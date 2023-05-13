@@ -39,4 +39,6 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     Page<BoardFacadeDTO> findBoardListByUserId(@Param("viewerId")Long viewerId, @Param("sortType")String sortType, Pageable pageable);
 
     void deleteAllByUser_Id(Long userId);
+
+    void deleteAllByBoard_Id(Long boardId);
 }
