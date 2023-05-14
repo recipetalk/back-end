@@ -4,6 +4,7 @@ import com.solution.recipetalk.domain.board.entity.Board;
 import com.solution.recipetalk.domain.recipe.entity.Recipe;
 import com.solution.recipetalk.domain.recipe.repository.RecipeRepository;
 import com.solution.recipetalk.dto.recipe.RecipeModifyDTO;
+import com.solution.recipetalk.exception.common.NotAuthorizedToModifyException;
 import com.solution.recipetalk.exception.recipe.RecipeNotFoundException;
 import com.solution.recipetalk.service.recipe.ModifyRecipeService;
 import com.solution.recipetalk.util.ContextHolder;
@@ -27,8 +28,7 @@ public class ModifyRecipeServiceImpl implements ModifyRecipeService {
         Long loginUserId = ContextHolder.getUserLoginId();
 
         if (!Objects.equals(recipeWriterId, loginUserId)){
-            // TODO: exception
-            throw new RuntimeException("수정 권한이 없습니다.");
+            throw new NotAuthorizedToModifyException();
         }
 
         board.changeTitle(dto.getTitle());

@@ -4,11 +4,12 @@ import com.solution.recipetalk.config.properties.S3dir;
 import com.solution.recipetalk.domain.image.entity.Image;
 import com.solution.recipetalk.domain.image.repository.ImageRepository;
 import com.solution.recipetalk.domain.recipe.row.entity.RecipeRow;
-import com.solution.recipetalk.domain.recipe.row.img.entity.RecipeRowImg;
 import com.solution.recipetalk.domain.recipe.row.img.repository.RecipeRowImgRepository;
 import com.solution.recipetalk.domain.recipe.row.repository.RecipeRowRepository;
 import com.solution.recipetalk.dto.recipe.row.RecipeRowModifyDTO;
 import com.solution.recipetalk.dto.recipe.row.RecipeRowModifyDTOWrapper;
+import com.solution.recipetalk.exception.common.NotAuthorizedToModifyException;
+import com.solution.recipetalk.exception.recipe.row.RecipeRowNotFoundException;
 import com.solution.recipetalk.exception.s3.ImageUploadFailedException;
 import com.solution.recipetalk.s3.upload.S3Uploader;
 import com.solution.recipetalk.service.recipe.row.ModifyRecipeRowService;
@@ -17,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import software.amazon.ion.IonException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,19 +39,16 @@ public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
         List<RecipeRowModifyDTO> dtoList = wrapper.getDtoList();
 
         if (dtoList.size() > 0){
-            // TODO: Exception (NotFoundRecipeRowException)
-            Long recipeRowUserId = recipeRowRepository.findById(wrapper.getDtoList().get(0).getRowSeq()).orElseThrow()
+            Long recipeRowUserId = recipeRowRepository.findById(wrapper.getDtoList().get(0).getRowSeq()).orElseThrow(RecipeRowNotFoundException::new)
                     .getRecipe().getBoard().getWriter().getId();
 
-            // TODO: Exception (수정 권한 검증)
             if (!Objects.equals(loginUserId, recipeRowUserId)){
-                throw new RuntimeException("수정 권한이 없습니다.");
+                throw new NotAuthorizedToModifyException();
             }
         }
 
         dtoList.forEach(recipeRowModifyDTO -> {
-            // TODO: Exception (NotFoundRecipeRowException)
-            RecipeRow recipeRow = recipeRowRepository.findById(recipeRowModifyDTO.getRowSeq()).orElseThrow();
+            RecipeRow recipeRow = recipeRowRepository.findById(recipeRowModifyDTO.getRowSeq()).orElseThrow(RecipeRowNotFoundException::new);
 
             List<String> imgUriList = recipeRowImgRepository.findImageURIByRecipeRowId(recipeRow.getId());
             List<Long> imgIdList = recipeRowImgRepository.findImageIdByRecipeRowId(recipeRow.getId());
@@ -70,8 +67,7 @@ public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
 
             // 업로드 정상 확인
             if (newImgUri.size() != imgs.size()){
-                // TODO: Exception
-                throw new RuntimeException("파일 업로드 중 문제가 발생하였습니다. 재시도해주세요.");
+                throw new ImageUploadFailedException();
             }
 
             // 기존 이미지 s3 삭제

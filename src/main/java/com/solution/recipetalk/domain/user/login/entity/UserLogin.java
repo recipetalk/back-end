@@ -46,4 +46,7 @@ public class UserLogin extends SoftDeleteEntity {
     @Column(name = "role")
     private RoleType role;
 
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 }

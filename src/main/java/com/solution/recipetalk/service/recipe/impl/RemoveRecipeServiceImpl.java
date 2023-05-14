@@ -2,19 +2,16 @@ package com.solution.recipetalk.service.recipe.impl;
 
 import com.solution.recipetalk.config.properties.S3dir;
 import com.solution.recipetalk.domain.board.entity.Board;
-import com.solution.recipetalk.domain.board.like.repository.BoardLikeRepository;
 import com.solution.recipetalk.domain.board.repository.BoardRepository;
-import com.solution.recipetalk.domain.image.repository.ImageRepository;
 import com.solution.recipetalk.domain.recipe.entity.Recipe;
 import com.solution.recipetalk.domain.recipe.ingredient.entity.RecipeIngredient;
 import com.solution.recipetalk.domain.recipe.ingredient.repository.RecipeIngredientRepository;
 import com.solution.recipetalk.domain.recipe.repository.RecipeRepository;
 import com.solution.recipetalk.domain.recipe.row.entity.RecipeRow;
-import com.solution.recipetalk.domain.recipe.row.img.entity.RecipeRowImg;
-import com.solution.recipetalk.domain.recipe.row.img.repository.RecipeRowImgRepository;
 import com.solution.recipetalk.domain.recipe.row.repository.RecipeRowRepository;
 import com.solution.recipetalk.exception.board.BoardNotFoundException;
 import com.solution.recipetalk.exception.common.NotAuthorizedException;
+import com.solution.recipetalk.exception.common.NotAuthorizedToRemoveException;
 import com.solution.recipetalk.exception.recipe.RecipeNotFoundException;
 import com.solution.recipetalk.s3.upload.S3Uploader;
 import com.solution.recipetalk.service.board.RemoveBoardService;
@@ -52,9 +49,8 @@ public class RemoveRecipeServiceImpl implements RemoveRecipeService {
         Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(RecipeNotFoundException::new);
         Long recipeWriterId = recipe.getBoard().getWriter().getId();
 
-        // TODO: exception
         if (!Objects.equals(loginUser, recipeWriterId)){
-            throw new RuntimeException("삭제 권한이 없습니다.");
+            throw new NotAuthorizedToRemoveException();
         }
 
         List<RecipeIngredient> recipeIngredients = recipeIngredientRepository.findRecipeIngredientsByRecipeId(recipeId);
