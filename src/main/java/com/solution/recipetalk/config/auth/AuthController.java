@@ -1,6 +1,7 @@
 package com.solution.recipetalk.config.auth;
 
 
+import com.solution.recipetalk.domain.verification.token.type.VerificationType;
 import com.solution.recipetalk.dto.fcm.temp.TempFcmTokenRegisterDTO;
 import com.solution.recipetalk.dto.user.PhoneAuthRequestDTO;
 import com.solution.recipetalk.dto.user.PhoneAuthVerificationRequestDTO;
@@ -75,8 +76,14 @@ public class AuthController {
     }
 
     @GetMapping("/verify/{email}")
-    public ResponseEntity<?> tokenRequest(@PathVariable(name = "email")String email){
-        return sendMailService.sendEmail(email);
+    public ResponseEntity<?> emailTokenRequest(@PathVariable(name = "email")String email){
+        return sendMailService.sendEmail(email, VerificationType.SIGNUP);
+    }
+
+    @GetMapping("/verify/{email}/{username}")
+    public ResponseEntity<?> passwordTokenRequest(@PathVariable(name = "email")String email, @PathVariable(name = "username")String username){
+        findUserLoginService.findUserByUsernameAndEmail(username, email);
+        return sendMailService.sendEmail(email, VerificationType.PASSWORD);
     }
 
     @GetMapping("/find/id/{email}")

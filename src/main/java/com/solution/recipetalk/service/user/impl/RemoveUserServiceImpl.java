@@ -21,6 +21,9 @@ import com.solution.recipetalk.dto.user.UserDetailProfileModifyDTO;
 import com.solution.recipetalk.exception.s3.ImageUploadFailedException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.s3.upload.S3Uploader;
+import com.solution.recipetalk.service.board.RemoveBoardService;
+import com.solution.recipetalk.service.ingredient.trimming.row.RemoveIngredientTrimmingRowService;
+import com.solution.recipetalk.service.recipe.RemoveRecipeService;
 import com.solution.recipetalk.service.user.ModifyUserDetailService;
 import com.solution.recipetalk.service.user.RemoveUserService;
 import com.solution.recipetalk.util.ContextHolder;
@@ -49,7 +52,6 @@ public class RemoveUserServiceImpl implements RemoveUserService {
     private final BookmarkRepository bookmarkRepository; // 삭제 필요.
     private final UserFollowRepository userFollowRepository; // 삭제 필요
     private final FcmTokenRepository fcmTokenRepository; // 삭제 필요
-
     @Override
     public ResponseEntity<?> removeUserDetail() {
         Long userLoginId = ContextHolder.getUserLoginId();

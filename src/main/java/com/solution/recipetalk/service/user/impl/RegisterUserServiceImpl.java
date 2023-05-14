@@ -7,6 +7,7 @@ import com.solution.recipetalk.domain.user.phone.repository.PhoneAuthenticationR
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.domain.verification.token.entity.VerificationToken;
 import com.solution.recipetalk.domain.verification.token.repository.VerificationTokenRepository;
+import com.solution.recipetalk.domain.verification.token.type.VerificationType;
 import com.solution.recipetalk.dto.user.SignUpUserReqDto;
 import com.solution.recipetalk.exception.signup.DuplicatedUserException;
 import com.solution.recipetalk.exception.signup.UnverifiedException;
@@ -39,7 +40,7 @@ public class RegisterUserServiceImpl implements RegisterUserService {
         VerificationToken verificationToken = verificationTokenRepository.findByEmail(signUpUserReqDto.getEmail()).orElseThrow(UnverifiedException::new);
 
         //인증 되지 않은 유저라면
-        if(!verificationToken.getIsVerified()){
+        if(!verificationToken.getIsVerified() && verificationToken.getType() != VerificationType.SIGNUP){
             throw new UnverifiedException();
         }
 

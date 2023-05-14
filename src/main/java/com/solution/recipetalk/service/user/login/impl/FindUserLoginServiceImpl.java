@@ -32,6 +32,16 @@ public class FindUserLoginServiceImpl implements FindUserLoginService {
         return ResponseEntity.ok(dto);
     }
 
+
+    @Override
+    public ResponseEntity<?> findUserByUsernameAndEmail(String username, String email) {
+        UserLogin userLogin = userLoginRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+        if(!userLogin.getEmail().equals(email))
+            throw new UserNotFoundException();
+
+        return ResponseEntity.ok(null);
+    }
+
     private Boolean isDuplicatedEmailExceptionHandler(String email) {
         if(!isDuplicatedEmail(email)) {
             throw new DuplicatedEmailException();
@@ -44,4 +54,5 @@ public class FindUserLoginServiceImpl implements FindUserLoginService {
         Optional<UserLogin> byEmail = userLoginRepository.findByEmail(email);
         return byEmail.isEmpty();
     }
+
 }

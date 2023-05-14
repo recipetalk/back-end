@@ -5,4 +5,6 @@ import org.springframework.http.ResponseEntity;
 public interface FindUserLoginService {
     ResponseEntity<?> findDuplicatedEmailInUserLogin(String email);
     ResponseEntity<?> findUsernameByEmailAddress(String email);
+
+    ResponseEntity<?> findUserByUsernameAndEmail(String username, String email);
 }

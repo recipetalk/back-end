@@ -2,8 +2,13 @@ package com.solution.recipetalk.service.verification.token.impl;
 
 import com.solution.recipetalk.domain.fcm.entity.temp.entity.TempFcmToken;
 import com.solution.recipetalk.domain.fcm.entity.temp.repository.TempFcmTokenRepository;
+import com.solution.recipetalk.domain.user.login.entity.UserLogin;
+import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
+import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.domain.verification.token.entity.VerificationToken;
 import com.solution.recipetalk.domain.verification.token.repository.VerificationTokenRepository;
+import com.solution.recipetalk.domain.verification.token.type.VerificationType;
+import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.verification.token.VerificationTokenService;
 import com.solution.recipetalk.util.UUIDGenerator;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +27,10 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     private final VerificationTokenRepository verificationTokenRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final TempFcmTokenRepository fcmTokenRepository;
+    private final UserLoginRepository userLoginRepository;
 
     @Override
-    public VerificationToken createVerificationToken(String email) {
+    public VerificationToken createVerificationToken(String email, VerificationType type) {
         String token = UUIDGenerator.getUUID();
         LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(30);
         Optional<VerificationToken> byEmail = verificationTokenRepository.findByEmail(email);
@@ -46,7 +52,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
-    public String verifyToken(String token) {
+    public String verifyToken(String token, VerificationType type) {
         Optional<VerificationToken> findByToken = verificationTokenRepository.findByToken(token);
 
         if(findByToken.isEmpty()){
@@ -57,18 +63,20 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
 
         Optional<TempFcmToken> tempFcmTokenByEmail = fcmTokenRepository.findTempFcmTokenByEmail(tokenData.getEmail());
 
-        if(tokenData.getExpiryDate().isBefore(LocalDateTime.now()) || tempFcmTokenByEmail.isEmpty()){
+        if(tokenData.getExpiryDate().isBefore(LocalDateTime.now()) || tempFcmTokenByEmail.isEmpty() || tokenData.getType() != type){
+            return "redirect:/auth/verifyFailed";
+        }
+
+        if(type == VerificationType.PASSWORD && !pwVerifyToken(tokenData)){
             return "redirect:/auth/verifyFailed";
         }
 
         tokenData.ok();
-
-
-
-
-
         eventPublisher.publishEvent(tempFcmTokenByEmail.get());
-
         return "redirect:/auth/verified";
+    }
+
+    private Boolean pwVerifyToken(VerificationToken token){
+        return userLoginRepository.findByEmail(token.getEmail()).isPresent();// 회원정보 없으면 false
     }
 }

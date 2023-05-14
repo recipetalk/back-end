@@ -1,5 +1,6 @@
 package com.solution.recipetalk.config.auth;
 
+import com.solution.recipetalk.domain.verification.token.type.VerificationType;
 import com.solution.recipetalk.service.verification.token.VerificationTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,9 @@ public class VerifyController {
     private final VerificationTokenService verificationTokenService;
 
     @GetMapping("/verify")
-    public String tokenVerify(@RequestParam String token){
+    public String tokenVerify(@RequestParam String token, @RequestParam VerificationType type){
 
-        return verificationTokenService.verifyToken(token);
+        return verificationTokenService.verifyToken(token, type);
     }
 
     @GetMapping("/verified")
