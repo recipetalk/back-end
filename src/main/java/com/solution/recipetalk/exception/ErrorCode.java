@@ -63,6 +63,8 @@ public enum ErrorCode {
     // user Block
     USER_BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "UB001", "차단 되어 있지 않습니다."),
     USER_BLOCK_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "UB002", "이미 차단되어 있습니다."),
+    USER_INFORMATION_NOT_MATCH(HttpStatus.BAD_REQUEST, "U002", "사용자 정보가 일치하지 않습니다."),
+
     REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "REP001", "신고내역을 찾을 수 없습니다."),
 
     BARCODE_LENGTH_NOT_VALID(HttpStatus.BAD_REQUEST, "P001", "바코드 길이가 유효하지 않습니다."),
