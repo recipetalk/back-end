@@ -8,4 +8,6 @@ public interface FindUserService {
     ResponseEntity<?> findDuplicatedNicknameInUserLogin(String nickname);
 
     ResponseEntity<?> findUserProfile(String username);
+
+    ResponseEntity<?> findMyProfile();
 }
