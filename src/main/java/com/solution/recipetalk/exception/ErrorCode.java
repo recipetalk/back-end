@@ -11,6 +11,9 @@ public enum ErrorCode {
     NOT_FOUND(HttpStatus.NOT_FOUND, "C001", "페이지를 찾을 수 없습니다"),
     NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "C003", "권한이 없습니다"),
 
+    NOT_AUTHORIZED_TO_REMOVE(HttpStatus.FORBIDDEN, "C004", "삭제 권한이 없습니다"),
+    NOT_AUTHORIZED_TO_MODIFY(HttpStatus.FORBIDDEN, "C005", "수정 권한이 없습니다"),
+
     // signup
     SMS_API_REQUEST_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "U002", "인증번호를 다시 한번 요청해 주세요."),
     PHONE_AUTH_ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND, "U003", "인증번호를 요청해 주세요."),
@@ -48,6 +51,8 @@ public enum ErrorCode {
     INGREDIENT_DESCRIPTION_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "IND002", "해당 식재료의 효능 정보가 이미 등록되어 있습니다."),
     // recipe
     RECIPE_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "R001", "레시피를 찾을 수 없습니다."),
+
+    RECIPE_ROW_NOT_FOUND(HttpStatus.NOT_FOUND, "R002", "레시피 행을 찾을 수 없습니다."),
 
     // user
     USER_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "U001", "유저를 찾을 수 없습니다."),
