@@ -8,6 +8,7 @@ import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.dto.user.DuplicateUserDTO;
 import com.solution.recipetalk.dto.user.UserDetailProfileDTO;
+import com.solution.recipetalk.dto.user.UserSimpleProfileDTO;
 import com.solution.recipetalk.exception.signup.DuplicatedNicknameException;
 import com.solution.recipetalk.exception.signup.DuplicatedUserException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
@@ -80,5 +81,17 @@ public class FindUserServiceImpl implements FindUserService {
         UserDetailProfileDTO findUserProfileDTO = UserDetailProfileDTO.toDTO(findUserDetail, followingCount, followerCount, recipeNum);
 
         return ResponseEntity.ok(findUserProfileDTO);
+    }
+
+    @Override
+    public ResponseEntity<?> findMyProfile() {
+        UserDetail session = userDetailRepository.findById(ContextHolder.getUserLoginId()).orElseThrow(UserNotFoundException::new);
+
+        UserSimpleProfileDTO profileDTO = UserSimpleProfileDTO.builder()
+                .nickname(session.getNickname())
+                .description(session.getDescription())
+                .profileImageURI(session.getProfileImageURI())
+                .build();
+        return ResponseEntity.ok(profileDTO);
     }
 }

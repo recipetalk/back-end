@@ -29,6 +29,11 @@ public class UserController {
         return findUserService.findUserProfile(username);
     }
 
+    @GetMapping("/profile")
+    public ResponseEntity<?> myProfileDetails(){
+        return findUserService.findMyProfile();
+    }
+
     @PatchMapping("/profile")
     public ResponseEntity<?> profileModify(@Valid UserDetailProfileModifyDTO dto){
         return modifyUserDetailService.modifyUserDetail(dto);
