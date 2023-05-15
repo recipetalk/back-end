@@ -36,6 +36,7 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
         QUserBlock qUserBlock = QUserBlock.userBlock;
         QBookmark qBookmark = QBookmark.bookmark;
         QBoardLike qBoardLike = QBoardLike.boardLike;
+        QUserFollow qUserFollow = QUserFollow.userFollow;
 
         BooleanExpression notInBlockedBoards = qBoard.writer.id.notIn(
                 JPAExpressions.select(qUserBlock.blockedUser.id)
@@ -43,8 +44,9 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
                         .where(qUserBlock.user.id.eq(userId)));
         BooleanExpression isBookMarked = qBookmark.user.id.isNotNull();
         BooleanExpression isLiked = qBoardLike.user.id.isNotNull();
+        BooleanExpression isFollowing = qUserFollow.isNotNull();
 
-        return jpaQueryFactory.select(qRecipe, qUserDetail, qBoard, isBookMarked.as("isBookmarked"), isLiked.as("isLiked"))
+        return jpaQueryFactory.select(qRecipe, qUserDetail, qBoard, isBookMarked.as("isBookmarked"), isLiked.as("isLiked"), isFollowing.as("isFollowing"))
                 .from(qRecipe)
                 .join(qRecipe.board, qBoard)
                 .on(notInBlockedBoards);
@@ -52,15 +54,18 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
 
     }
 
-    private JPAQuery<Tuple> getBookmarkedAndBoardLike(JPAQuery<Tuple> queryBuilder, Long userId){
+    private JPAQuery<Tuple> getBookmarkedAndBoardLikeAndisFollowing(JPAQuery<Tuple> queryBuilder, Long userId){
         QBoard qBoard = QBoard.board;
         QBookmark qBookmark = QBookmark.bookmark;
         QBoardLike qBoardLike = QBoardLike.boardLike;
-
+        QUserFollow qUserFollow = QUserFollow.userFollow;
+        QUserDetail qUserDetail = QUserDetail.userDetail;
         return queryBuilder.leftJoin(qBookmark)
                 .on(qBookmark.user.id.eq(userId).and(qBookmark.board.eq(qBoard)))
                 .leftJoin(qBoardLike)
-                .on(qBoardLike.user.id.eq(userId).and(qBoardLike.board.eq(qBoard)));
+                .on(qBoardLike.user.id.eq(userId).and(qBoardLike.board.eq(qBoard)))
+                .leftJoin(qUserFollow)
+                .on(qUserFollow.user.id.eq(userId).and(qUserFollow.following.eq(qUserDetail)));
     }
 
 
@@ -105,7 +110,7 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
 
         queryBuilder = getSqlBySortType(queryBuilder, dto.getSortType(), userId);
 
-        queryBuilder = getBookmarkedAndBoardLike(queryBuilder, userId);
+        queryBuilder = getBookmarkedAndBoardLikeAndisFollowing(queryBuilder, userId);
 
         queryBuilder = getSQlByOrderBy(queryBuilder, dto.getLimit(), dto.getOffset());
 
@@ -118,7 +123,7 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
         JPAQuery<Tuple> queryBuilder = createCommonSql(userId);
 
         queryBuilder = getSqlBySortType(queryBuilder, dto.getSortType(), userId);
-        queryBuilder = getBookmarkedAndBoardLike(queryBuilder, userId);
+        queryBuilder = getBookmarkedAndBoardLikeAndisFollowing(queryBuilder, userId);
         queryBuilder = getSQlByOrderBy(queryBuilder, dto.getLimit(), dto.getOffset());
 
         return RecipeForList.toRecipeForList(queryBuilder.fetch());

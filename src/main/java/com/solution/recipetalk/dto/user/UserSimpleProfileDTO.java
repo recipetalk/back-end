@@ -42,4 +42,13 @@ public class UserSimpleProfileDTO {
                 .profileImageURI(userDetail.getProfileImageURI())
                 .build();
     }
+    public static UserSimpleProfileDTO toDTO(UserDetail userDetail, Boolean isFollowing) {
+        return UserSimpleProfileDTO.builder()
+                .nickname(userDetail.getNickname())
+                .username(userDetail.getUsername())
+                .profileImageURI(userDetail.getProfileImageURI())
+                .description(userDetail.getDescription())
+                .isFollowing(isFollowing)
+                .build();
+    }
 }
