@@ -46,7 +46,7 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
 
         return jpaQueryFactory.select(qRecipe, qUserDetail, qBoard, isBookMarked.as("isBookmarked"), isLiked.as("isLiked"))
                 .from(qRecipe)
-                .join(qRecipe.board, qBoard)정
+                .join(qRecipe.board, qBoard)
                 .on(notInBlockedBoards);
 
 
