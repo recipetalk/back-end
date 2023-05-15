@@ -12,6 +12,7 @@ import com.solution.recipetalk.domain.common.SortType;
 import com.solution.recipetalk.domain.recipe.entity.QRecipe;
 import com.solution.recipetalk.domain.recipe.repository.RecipeQueryDslRepository;
 import com.solution.recipetalk.domain.user.block.entity.QUserBlock;
+import com.solution.recipetalk.domain.user.entity.QUserDetail;
 import com.solution.recipetalk.domain.user.follow.entity.QUserFollow;
 import com.solution.recipetalk.dto.recipe.RecipeByUserReqDTO;
 import com.solution.recipetalk.dto.recipe.RecipeListReqDTO;
@@ -33,6 +34,8 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
         QUserBlock qUserBlock = QUserBlock.userBlock;
         QBookmark qBookmark = QBookmark.bookmark;
         QBoardLike qBoardLike = QBoardLike.boardLike;
+
+
         BooleanExpression notInBlockedBoards = qBoard.writer.id.notIn(
                 JPAExpressions.select(qUserBlock.blockedUser.id)
                         .from(qUserBlock)
@@ -86,6 +89,10 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
         // situation 만 존재하는 경우
         else if (dto.getSituationCategory() != null){
             queryBuilder = queryBuilder.where(qRecipe.situation.eq(dto.getSituationCategory()));
+        }
+
+        if(dto.getTargetUsername() != null){
+            queryBuilder = queryBuilder.where(qBoard.writer.username.eq(dto.getTargetUsername()));
         }
 
 
