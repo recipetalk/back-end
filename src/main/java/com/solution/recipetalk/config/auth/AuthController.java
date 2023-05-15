@@ -95,15 +95,12 @@ public class AuthController {
         return registerTempFcmTokenService.registerTempFcmTokenService(dto);
     }
 
-    @GetMapping("/find/pw/{username}")
-    public ResponseEntity<?> forgottenPasswordModify(@PathVariable(name = "username") String username) {
-        // TODO : 이메일 인증 -> 비밀번호 변경
-        return sendMailForModifyingPasswordService.sendEmail(username);
-    }
-
-    @GetMapping("/reset/pw")
-    public ResponseEntity<?> showPasswordResetForm(@RequestParam(name = "user") String username) {
-        return null;
+    @GetMapping("/find/pw")
+    public ResponseEntity<?> forgottenPasswordModify(
+            @RequestParam(name = "user") String username,
+            @RequestParam(name = "email") String email
+    ) {
+        return sendMailForModifyingPasswordService.sendEmail(username, email);
     }
 
     @PostMapping("/reset/pw")

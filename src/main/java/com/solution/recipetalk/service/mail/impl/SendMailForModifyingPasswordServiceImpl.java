@@ -3,6 +3,7 @@ package com.solution.recipetalk.service.mail.impl;
 import com.solution.recipetalk.domain.user.login.entity.UserLogin;
 import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
 import com.solution.recipetalk.domain.verification.token.entity.VerificationToken;
+import com.solution.recipetalk.exception.user.UserInformationMatchException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.mail.SendMailForModifyingPasswordService;
 import com.solution.recipetalk.service.verification.token.VerificationTokenService;
@@ -36,9 +37,9 @@ public class SendMailForModifyingPasswordServiceImpl implements SendMailForModif
     @Value("${spring.host}") private final String host;
 
     @Override
-    public ResponseEntity<?> sendEmail(String username) {
+    public ResponseEntity<?> sendEmail(String username, String email) {
         try {
-            MimeMessage emailForm = createEmailForm(username);
+            MimeMessage emailForm = createEmailForm(username, email);
             emailSender.send(emailForm);
         } catch(MessagingException e) {
             throw new RuntimeException(e);
@@ -47,8 +48,13 @@ public class SendMailForModifyingPasswordServiceImpl implements SendMailForModif
         return null;
     }
 
-    private MimeMessage createEmailForm(String username) throws MessagingException {
+    private MimeMessage createEmailForm(String username, String email) throws MessagingException {
         UserLogin byUsername = userLoginRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+
+        if(!byUsername.getEmail().equals(email)) {
+            throw new UserInformationMatchException();
+        }
+
         VerificationToken token = verificationTokenService.createVerificationToken(byUsername.getEmail());
 
         MimeMessage message = emailSender.createMimeMessage();
