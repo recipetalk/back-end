@@ -13,6 +13,7 @@ import com.solution.recipetalk.domain.recipe.entity.QRecipe;
 import com.solution.recipetalk.domain.recipe.repository.RecipeQueryDslRepository;
 import com.solution.recipetalk.domain.user.block.entity.QUserBlock;
 import com.solution.recipetalk.domain.user.entity.QUserDetail;
+import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.domain.user.follow.entity.QUserFollow;
 import com.solution.recipetalk.dto.recipe.RecipeByUserReqDTO;
 import com.solution.recipetalk.dto.recipe.RecipeListReqDTO;
@@ -31,10 +32,10 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
     private JPAQuery<Tuple> createCommonSql(Long userId) {
         QRecipe qRecipe = QRecipe.recipe;
         QBoard qBoard = QBoard.board;
+        QUserDetail qUserDetail = QUserDetail.userDetail;
         QUserBlock qUserBlock = QUserBlock.userBlock;
         QBookmark qBookmark = QBookmark.bookmark;
         QBoardLike qBoardLike = QBoardLike.boardLike;
-
 
         BooleanExpression notInBlockedBoards = qBoard.writer.id.notIn(
                 JPAExpressions.select(qUserBlock.blockedUser.id)
@@ -43,10 +44,11 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
         BooleanExpression isBookMarked = qBookmark.user.id.isNotNull();
         BooleanExpression isLiked = qBoardLike.user.id.isNotNull();
 
-        return jpaQueryFactory.select(qRecipe, isBookMarked.as("isBookmarked"), isLiked.as("isLiked"))
+        return jpaQueryFactory.select(qRecipe, qUserDetail, qBoard, isBookMarked.as("isBookmarked"), isLiked.as("isLiked"))
                 .from(qRecipe)
-                .join(qRecipe.board, qBoard)
+                .join(qRecipe.board, qBoard)정
                 .on(notInBlockedBoards);
+
 
     }
 
@@ -66,15 +68,24 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
     public List<RecipeForList> findRecipeList(RecipeListReqDTO dto, Long userId){
         QRecipe qRecipe = QRecipe.recipe;
         QBoard qBoard = QBoard.board;
+        QUserDetail qUserDetail = QUserDetail.userDetail;
 
         JPAQuery<Tuple> queryBuilder = createCommonSql(userId);
+
+
 
         // 타이틀이 존재하는 경우
         if (dto.getTitle() != null) {
             BooleanExpression boardTitleContains = qBoard.title.like("%" + dto.getTitle() + "%");
             queryBuilder = queryBuilder.on(boardTitleContains);
         }
+        queryBuilder = queryBuilder.join(qBoard.writer, qUserDetail);
 
+        // 타겟이 존재하는 경우
+        if(dto.getTargetUsername() != null){
+          BooleanExpression boardWriterUsernameEquals = qBoard.writer.username.eq(dto.getTargetUsername());
+          queryBuilder = queryBuilder.on(boardWriterUsernameEquals);
+        }
 
         // 카테고리 2개 존재하는 경우
         if (dto.getSituationCategory() != null && dto.getSortCategory() != null){
@@ -89,10 +100,6 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
         // situation 만 존재하는 경우
         else if (dto.getSituationCategory() != null){
             queryBuilder = queryBuilder.where(qRecipe.situation.eq(dto.getSituationCategory()));
-        }
-
-        if(dto.getTargetUsername() != null){
-            queryBuilder = queryBuilder.where(qBoard.writer.username.eq(dto.getTargetUsername()));
         }
 
 

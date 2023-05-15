@@ -48,8 +48,8 @@ public class FindRecipeServiceImpl implements FindRecipeService {
         List<RecipeForList> recipes = recipeRepository.findRecipeList(dto, currentUser.getId());
 
         List<RecipeDTO> recipeDTOList = recipes.stream().map(recipe -> {
-            UserSimpleProfileDTO userSimpleProfileDTO = UserSimpleProfileDTO.toDTO(recipe.getRecipe().getBoard().getWriter());
-            BoardDTO boardDTO = BoardDTO.toDTO(recipe.getRecipe().getBoard(), userSimpleProfileDTO, recipe.isLiked(), recipe.isBookmarked());
+            UserSimpleProfileDTO userSimpleProfileDTO = UserSimpleProfileDTO.toDTO(recipe.getWriter());
+            BoardDTO boardDTO = BoardDTO.toDTO(recipe.getBoard(), userSimpleProfileDTO, recipe.isLiked(), recipe.isBookmarked());
             return RecipeDTO.toDTO(recipe.getRecipe(), boardDTO);
         }).toList();
 
