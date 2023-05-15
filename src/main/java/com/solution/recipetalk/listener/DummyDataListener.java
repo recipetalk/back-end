@@ -107,7 +107,8 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private void loadBoardData() {
         createBoardData(1L, "test", "test board", 0L, BoardSort.RECIPE);
         createBoardData(2L, "hyunkim", "test board2", 0L, BoardSort.TRIMMING);
-        createBoardData(3L, "test1", "test board2", 0L,BoardSort.DESCRIPTION);
+        createBoardData(3L, "test1", "test board3", 0L,BoardSort.DESCRIPTION);
+        createBoardData(4L, "hyunkim", "test board4", 0L,BoardSort.RECIPE);
     }
 
     private void loadIngredientData() {
@@ -117,6 +118,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
 
     private void loadRecipeData() {
         createRecipeDataIfNotNull(1L, "", 1L, "ONE", "sample");
+        createRecipeDataIfNotNull(4L, "", 4L, "ONE", "sample");
     }
 
     private void loadRecipeRowData() {
