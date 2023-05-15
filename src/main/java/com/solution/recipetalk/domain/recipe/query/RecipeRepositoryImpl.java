@@ -141,7 +141,7 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
                 queryBuilder = queryBuilder.orderBy(QBoard.board.likeCount.desc());
             }
             case FOLLOW -> {
-                queryBuilder = queryBuilder.leftJoin(qUserFollow)
+                queryBuilder = queryBuilder.join(qUserFollow)
                         .on(qUserFollow.user.id.eq(userId).and(qUserFollow.following.id.eq(qBoard.writer.id)))
                         .orderBy(qBoard.createdDate.desc());
             }
