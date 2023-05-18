@@ -2,10 +2,7 @@ package com.solution.recipetalk.config.auth;
 
 
 import com.solution.recipetalk.dto.fcm.temp.TempFcmTokenRegisterDTO;
-import com.solution.recipetalk.dto.user.PasswordResetDTO;
-import com.solution.recipetalk.dto.user.PhoneAuthRequestDTO;
-import com.solution.recipetalk.dto.user.PhoneAuthVerificationRequestDTO;
-import com.solution.recipetalk.dto.user.SignUpUserReqDto;
+import com.solution.recipetalk.dto.user.*;
 import com.solution.recipetalk.service.fcm.temp.RegisterTempFcmTokenService;
 import com.solution.recipetalk.service.mail.SendMailForModifyingPasswordService;
 import com.solution.recipetalk.service.mail.SendMailService;
@@ -95,12 +92,9 @@ public class AuthController {
         return registerTempFcmTokenService.registerTempFcmTokenService(dto);
     }
 
-    @GetMapping("/find/pw")
-    public ResponseEntity<?> forgottenPasswordModify(
-            @RequestParam(name = "user") String username,
-            @RequestParam(name = "email") String email
-    ) {
-        return sendMailForModifyingPasswordService.sendEmail(username, email);
+    @PostMapping("/find/pw")
+    public ResponseEntity<?> forgottenPasswordModify(@RequestBody ForgottenPasswordFindResponseDTO dto) {
+        return sendMailForModifyingPasswordService.sendEmail(dto);
     }
 
     @PostMapping("/reset/pw")

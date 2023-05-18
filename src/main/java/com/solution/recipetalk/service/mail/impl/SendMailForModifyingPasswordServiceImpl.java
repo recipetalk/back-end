@@ -1,8 +1,11 @@
 package com.solution.recipetalk.service.mail.impl;
 
+import com.solution.recipetalk.domain.fcm.entity.temp.entity.TempFcmToken;
+import com.solution.recipetalk.domain.fcm.entity.temp.repository.TempFcmTokenRepository;
 import com.solution.recipetalk.domain.user.login.entity.UserLogin;
 import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
 import com.solution.recipetalk.domain.verification.token.entity.VerificationToken;
+import com.solution.recipetalk.dto.user.ForgottenPasswordFindResponseDTO;
 import com.solution.recipetalk.exception.user.UserInformationMatchException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.mail.SendMailForModifyingPasswordService;
@@ -29,6 +32,9 @@ public class SendMailForModifyingPasswordServiceImpl implements SendMailForModif
 
     private final VerificationTokenService verificationTokenService;
 
+    private final TempFcmTokenRepository tempFcmTokenRepository;
+
+
 
     private final UserLoginRepository userLoginRepository;
 
@@ -37,9 +43,9 @@ public class SendMailForModifyingPasswordServiceImpl implements SendMailForModif
     @Value("${spring.host}") private final String host;
 
     @Override
-    public ResponseEntity<?> sendEmail(String username, String email) {
+    public ResponseEntity<?> sendEmail(ForgottenPasswordFindResponseDTO dto) {
         try {
-            MimeMessage emailForm = createEmailForm(username, email);
+            MimeMessage emailForm = createEmailForm(dto);
             emailSender.send(emailForm);
         } catch(MessagingException e) {
             throw new RuntimeException(e);
@@ -48,12 +54,16 @@ public class SendMailForModifyingPasswordServiceImpl implements SendMailForModif
         return null;
     }
 
-    private MimeMessage createEmailForm(String username, String email) throws MessagingException {
-        UserLogin byUsername = userLoginRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+    private MimeMessage createEmailForm(ForgottenPasswordFindResponseDTO dto) throws MessagingException {
+        UserLogin byUsername = userLoginRepository.findByUsername(dto.getUsername()).orElseThrow(UserNotFoundException::new);
 
-        if(!byUsername.getEmail().equals(email)) {
+        if(!byUsername.getEmail().equals(dto.getEmail())) {
             throw new UserInformationMatchException();
         }
+
+        TempFcmToken fcmToken = TempFcmToken.builder().email(dto.getEmail()).fcmToken(dto.getFcmToken()).build();
+
+        tempFcmTokenRepository.save(fcmToken);
 
         VerificationToken token = verificationTokenService.createVerificationToken(byUsername.getEmail());
 
@@ -61,7 +71,7 @@ public class SendMailForModifyingPasswordServiceImpl implements SendMailForModif
         message.addRecipients(Message.RecipientType.TO, byUsername.getEmail());
         message.setSubject(title);
         message.setFrom(this.username + "@naver.com");
-        message.setText(setContext(username, token.getToken()), "utf-8", "html");
+        message.setText(setContext(dto.getUsername(), token.getToken()), "utf-8", "html");
 
         return message;
     }
