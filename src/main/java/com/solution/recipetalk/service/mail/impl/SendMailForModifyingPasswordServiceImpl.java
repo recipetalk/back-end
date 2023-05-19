@@ -1,14 +1,13 @@
 package com.solution.recipetalk.service.mail.impl;
 
-import com.solution.recipetalk.domain.fcm.entity.temp.entity.TempFcmToken;
-import com.solution.recipetalk.domain.fcm.entity.temp.repository.TempFcmTokenRepository;
 import com.solution.recipetalk.domain.user.login.entity.UserLogin;
 import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
 import com.solution.recipetalk.domain.verification.token.entity.VerificationSort;
 import com.solution.recipetalk.domain.verification.token.entity.VerificationToken;
+import com.solution.recipetalk.dto.fcm.temp.TempFcmTokenRegisterDTO;
 import com.solution.recipetalk.dto.user.ForgottenPasswordFindResponseDTO;
-import com.solution.recipetalk.exception.user.UserInformationMatchException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
+import com.solution.recipetalk.service.fcm.temp.RegisterTempFcmTokenService;
 import com.solution.recipetalk.service.mail.SendMailForModifyingPasswordService;
 import com.solution.recipetalk.service.verification.token.VerificationTokenService;
 import jakarta.mail.Message;
@@ -33,7 +32,7 @@ public class SendMailForModifyingPasswordServiceImpl implements SendMailForModif
 
     private final VerificationTokenService verificationTokenService;
 
-    private final TempFcmTokenRepository tempFcmTokenRepository;
+    private final RegisterTempFcmTokenService registerTempFcmTokenService;
 
 
 
@@ -62,9 +61,7 @@ public class SendMailForModifyingPasswordServiceImpl implements SendMailForModif
             throw new UserNotFoundException();
         }
 
-        TempFcmToken fcmToken = TempFcmToken.builder().email(dto.getEmail()).fcmToken(dto.getFcmToken()).build();
-
-        tempFcmTokenRepository.save(fcmToken);
+        registerTempFcmTokenService.registerTempFcmTokenService(TempFcmTokenRegisterDTO.builder().email(dto.getEmail()).fcmToken(dto.getFcmToken()).build());
 
         VerificationToken token = verificationTokenService.createVerificationToken(byUsername.getEmail(), VerificationSort.PASSWORD);
 
