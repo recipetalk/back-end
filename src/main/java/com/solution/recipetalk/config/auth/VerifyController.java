@@ -19,7 +19,7 @@ public class VerifyController {
     private final UserVerificationService userVerificationService;
 
     @GetMapping("/verify")
-    public String tokenVerify(@RequestParam String token, @RequestParam VerificationSort sort){
+    public String tokenVerify(@RequestParam String token, @RequestParam("type") VerificationSort sort){
 
         return verificationTokenService.verifyToken(token, sort);
     }
