@@ -40,6 +40,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
             verificationToken = byEmail.get();
             verificationToken.updateToken(token);
             verificationToken.updateExpiryDate(expiryDate);
+            verificationToken.denied();
         }
 
         return verificationTokenRepository.save(verificationToken);

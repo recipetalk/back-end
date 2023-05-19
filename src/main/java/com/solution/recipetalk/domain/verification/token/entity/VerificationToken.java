@@ -45,4 +45,7 @@ public class VerificationToken extends AuditingEntity {
     public void ok(){
         isVerified = true;
     }
+    public void denied(){
+        isVerified = false;
+    }
 }
