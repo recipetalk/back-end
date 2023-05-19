@@ -9,4 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 public class PasswordResetDTO {
     private String password;
+    private String username;
+    private String email;
 }

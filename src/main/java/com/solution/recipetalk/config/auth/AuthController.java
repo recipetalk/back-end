@@ -97,8 +97,8 @@ public class AuthController {
         return sendMailForModifyingPasswordService.sendEmail(dto);
     }
 
-    @PostMapping("/reset/pw")
-    public ResponseEntity<?> passwordReset(@RequestParam(name = "user") String username, @RequestBody PasswordResetDTO dto) {
-        return modifyUserLoginService.modifyPassword(username, dto.getPassword());
+    @PatchMapping("/reset/pw")
+    public ResponseEntity<?> passwordReset(@RequestBody PasswordResetDTO dto) {
+        return modifyUserLoginService.modifyPassword(dto);
     }
 }

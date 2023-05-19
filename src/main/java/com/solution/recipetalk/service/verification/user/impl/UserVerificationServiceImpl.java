@@ -36,7 +36,8 @@ public class UserVerificationServiceImpl implements UserVerificationService {
 
         Optional<TempFcmToken> tempFcmTokenByEmail = fcmTokenRepository.findTempFcmTokenByEmail(tokenData.getEmail());
 
-        if(tokenData.getExpiryDate().isBefore(LocalDateTime.now()) || tempFcmTokenByEmail.isEmpty()) {
+
+        if(tokenData.getExpiryDate().isBefore(LocalDateTime.now()) || tempFcmTokenByEmail.isEmpty() || tokenData.getIsVerified()) {
             return "redirect:/auth/verifyFailed";
         }
 

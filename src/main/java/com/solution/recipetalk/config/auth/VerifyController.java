@@ -1,5 +1,7 @@
 package com.solution.recipetalk.config.auth;
 
+import com.solution.recipetalk.domain.verification.token.entity.VerificationSort;
+import com.solution.recipetalk.domain.verification.token.entity.VerificationToken;
 import com.solution.recipetalk.service.verification.token.VerificationTokenService;
 import com.solution.recipetalk.service.verification.user.UserVerificationService;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +19,9 @@ public class VerifyController {
     private final UserVerificationService userVerificationService;
 
     @GetMapping("/verify")
-    public String tokenVerify(@RequestParam String token){
+    public String tokenVerify(@RequestParam String token, @RequestParam VerificationSort sort){
 
-        return verificationTokenService.verifyToken(token);
+        return verificationTokenService.verifyToken(token, sort);
     }
 
     @GetMapping("/verified")
@@ -34,8 +36,4 @@ public class VerifyController {
         return "이메일 인증 실패, 이메일을 다시 한번 요청해주세요";
     }
 
-    @GetMapping("/verify/user")
-    public String userVerify(@RequestParam(name = "user") String username, @RequestParam(name = "token") String token) {
-        return userVerificationService.verifyUser(username, token);
-    }
 }

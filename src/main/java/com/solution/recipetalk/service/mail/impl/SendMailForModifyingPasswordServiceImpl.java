@@ -4,6 +4,7 @@ import com.solution.recipetalk.domain.fcm.entity.temp.entity.TempFcmToken;
 import com.solution.recipetalk.domain.fcm.entity.temp.repository.TempFcmTokenRepository;
 import com.solution.recipetalk.domain.user.login.entity.UserLogin;
 import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
+import com.solution.recipetalk.domain.verification.token.entity.VerificationSort;
 import com.solution.recipetalk.domain.verification.token.entity.VerificationToken;
 import com.solution.recipetalk.dto.user.ForgottenPasswordFindResponseDTO;
 import com.solution.recipetalk.exception.user.UserInformationMatchException;
@@ -65,20 +66,20 @@ public class SendMailForModifyingPasswordServiceImpl implements SendMailForModif
 
         tempFcmTokenRepository.save(fcmToken);
 
-        VerificationToken token = verificationTokenService.createVerificationToken(byUsername.getEmail());
+        VerificationToken token = verificationTokenService.createVerificationToken(byUsername.getEmail(), VerificationSort.PASSWORD);
 
         MimeMessage message = emailSender.createMimeMessage();
         message.addRecipients(Message.RecipientType.TO, byUsername.getEmail());
         message.setSubject(title);
         message.setFrom(this.username + "@naver.com");
-        message.setText(setContext(dto.getUsername(), token.getToken()), "utf-8", "html");
+        message.setText(setContext(token.getToken()), "utf-8", "html");
 
         return message;
     }
 
-    private String setContext(String username, String token) {
+    private String setContext(String token) {
         Context context = new Context();
-        context.setVariable("password", host + "auth/verify/user?user=" + username + "&token=" + token);
+        context.setVariable("password", host + "auth/verify?token=" + token + "&type="+VerificationSort.PASSWORD.name());
 
         return templateEngine.process("tmpPwMail", context);
     }
