@@ -56,7 +56,7 @@ public class SendMailServiceImpl implements SendMailService {
 
     private String setContext(String verificationToken, VerificationSort sort){
         Context context = new Context();
-        context.setVariable("token", host+"auth/verify?token="+verificationToken+"&sort=" + sort.name());
+        context.setVariable("token", host+"auth/verify?token="+verificationToken+"&type=" + sort.name());
         return templateEngine.process("mail", context);
     }
 
