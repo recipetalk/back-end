@@ -58,7 +58,7 @@ public class SendMailForModifyingPasswordServiceImpl implements SendMailForModif
         UserLogin byUsername = userLoginRepository.findByUsername(dto.getUsername()).orElseThrow(UserNotFoundException::new);
 
         if(!byUsername.getEmail().equals(dto.getEmail())) {
-            throw new UserInformationMatchException();
+            throw new UserNotFoundException();
         }
 
         TempFcmToken fcmToken = TempFcmToken.builder().email(dto.getEmail()).fcmToken(dto.getFcmToken()).build();
