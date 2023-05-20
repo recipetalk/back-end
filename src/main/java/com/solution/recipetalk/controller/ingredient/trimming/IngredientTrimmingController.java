@@ -42,9 +42,9 @@ public class IngredientTrimmingController {
         return findIngredientTrimmingService.findIngredientTrimmingListByUsername(dto, username);
     }
 
-    @GetMapping("/{ingredientId}/trimming/{trimmingId}")
-    public ResponseEntity<?> ingredientTrimmingDetail(@PathVariable(name = "ingredientId") Long ingredientId, @PathVariable(name = "trimmingId") Long trimmingId) {
-        return findIngredientTrimmingService.findIngredientTrimmingDetail(ingredientId, trimmingId);
+    @GetMapping("/trimming/{trimmingId}")
+    public ResponseEntity<?> ingredientTrimmingDetail(@PathVariable(name = "trimmingId") Long trimmingId) {
+        return findIngredientTrimmingService.findIngredientTrimmingDetail(trimmingId);
     }
 
     @DeleteMapping("/trimming/{trimmingId}")

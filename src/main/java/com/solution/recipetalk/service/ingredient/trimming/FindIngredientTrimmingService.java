@@ -7,6 +7,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface FindIngredientTrimmingService {
     ResponseEntity<?> findIngredientTrimming(Long ingredientId, Pageable pageable);
-    ResponseEntity<?> findIngredientTrimmingDetail(Long ingredientId, Long trimmingId);
+    ResponseEntity<?> findIngredientTrimmingDetail(Long trimmingId);
     ResponseEntity<?> findIngredientTrimmingListByUsername(IngredientTrimmingByUserReqDTO dto, String username);
 }

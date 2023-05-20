@@ -48,13 +48,9 @@ public class FindIngredientTrimmingServiceImpl implements FindIngredientTrimming
     }
 
     @Override
-    public ResponseEntity<?> findIngredientTrimmingDetail(Long ingredientId, Long trimmingId){
+    public ResponseEntity<?> findIngredientTrimmingDetail(Long trimmingId){
         UserDetail currentUser = userDetailRepository.findById(ContextHolder.getUserLoginId()).orElseThrow(UserNotFoundException::new);
-        IngredientTrimmingDetailResult ingredientTrimmingDetail = ingredientTrimmingRepository.findIngredientTrimmingDetailResultById(ingredientId, trimmingId).orElseThrow(IngredientTrimmingNotFoundException::new);
-        if (userBlockRepository.existsByUserAndBlockedUser(ingredientTrimmingDetail.getBoard().getWriter(), currentUser)){
-            // 권한이 없다는 것 보다는 차단한 유저에게 마치 원래 게시글이 없는 것처럼 보내줄 예정
-            throw new CustomException(ErrorCode.BOARD_NOT_FOUND);
-        }
+        IngredientTrimmingDetailResult ingredientTrimmingDetail = ingredientTrimmingRepository.findIngredientTrimmingDetailResultById(trimmingId, currentUser.getId()).orElseThrow(IngredientTrimmingNotFoundException::new);
 
         List<IngredientTrimmingRow> trimmingRows = ingredientTrimmingRowRepository
                 .findAllByIngredientTrimming(ingredientTrimmingRepository
