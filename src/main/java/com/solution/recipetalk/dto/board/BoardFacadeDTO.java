@@ -25,8 +25,9 @@ public class BoardFacadeDTO {
     private Long boardId;
     private BoardSort boardSort;
     private String thumbnailURI;
+    private Long ingredientId;
 
-    public BoardFacadeDTO(String title, String description, LocalDateTime createdDate, Boolean isLiked, Long commentCount, Long likeCount, Long boardId, BoardSort boardSort, String thumbnailURI){
+    public BoardFacadeDTO(String title, String description, LocalDateTime createdDate, Boolean isLiked, Long commentCount, Long likeCount, Long boardId, BoardSort boardSort, String thumbnailURI, Long ingredientId){
         this.title = title;
         this.description = description;
         this.createdDate = createdDate;
@@ -36,9 +37,10 @@ public class BoardFacadeDTO {
         this.boardId = boardId;
         this.boardSort = boardSort;
         this.thumbnailURI = thumbnailURI;
+        this.ingredientId = ingredientId;
     }
 
-    public BoardFacadeDTO(String title, String description, LocalDateTime createdDate, Boolean isBookmarked, Long commentCount, Long likeCount, Long boardId, BoardSort boardSort, String thumbnailURI, Boolean dummyBoolean){
+    public BoardFacadeDTO(String title, String description, LocalDateTime createdDate, Boolean isBookmarked, Long commentCount, Long likeCount, Long boardId, BoardSort boardSort, String thumbnailURI, Long ingredientId, Boolean dummyBoolean){
         this.title = title;
         this.description = description;
         this.createdDate = createdDate;
@@ -48,6 +50,7 @@ public class BoardFacadeDTO {
         this.boardId = boardId;
         this.boardSort = boardSort;
         this.thumbnailURI = thumbnailURI;
+        this.ingredientId = ingredientId;
     }
 }
 
