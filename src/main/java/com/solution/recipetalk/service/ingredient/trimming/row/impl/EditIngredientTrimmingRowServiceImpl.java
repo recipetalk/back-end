@@ -45,7 +45,7 @@ public class EditIngredientTrimmingRowServiceImpl implements EditIngredientTrimm
         }
         List<IngredientTrimmingRow> ingredientTrimmingRows = dtoList.stream().map(dto -> {
             IngredientTrimmingRow ingredientTrimmingRow = ingredientTrimmingRowRepository
-                    .findByIngredientTrimmingAndTrimmingSeqAndTrimmingSubSeq(ingredientTrimming, dto.getTrimmingSeq(), dto.getTrimmingSubSeq())
+                    .findByIngredientTrimmingAndTrimmingSeq(ingredientTrimming, dto.getTrimmingSeq())
                     .orElseThrow(IngredientTrimmingRowNotFoundException::new);
 
             s3Uploader.deleteFile(ingredientTrimmingRow.getImgURI(), S3dir.INGREDIENT_TRIMMING_ROW_IMG_DIR);

@@ -31,9 +31,6 @@ public class IngredientTrimmingRow extends AuditingEntity {
     @Column(name = "trimming_seq")
     private Long trimmingSeq;
 
-    @Column(name = "trimming_sub_seq")
-    private Long trimmingSubSeq;
-
     public void changeImageURI(String imgURI){
         if (imgURI != null){
             this.imgURI = imgURI;
