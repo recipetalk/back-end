@@ -33,11 +33,9 @@ public interface IngredientTrimmingRepository extends JpaRepository<IngredientTr
         Boolean getIsBookmarked();
     }
 
-    @Query("SELECT B.id AS id, B.title AS title, count(DISTINCT BL.user.id) AS likeCount, count(DISTINCT C.id) AS commentCount, IT.thumbnailUri AS thumbnailUri, B.writer.nickname AS nickname " +
+    @Query("SELECT B.id AS id, B.title AS title, B.likeCount AS likeCount, B.commentCount AS commentCount, IT.thumbnailUri AS thumbnailUri, B.writer.nickname AS nickname " +
             "FROM IngredientTrimming AS IT " +
             "JOIN Board AS B ON B = IT.board " +
-            "LEFT JOIN BoardLike AS BL ON BL.board = B " +
-            "LEFT JOIN Comment AS C ON C.board = B " +
             "LEFT JOIN UserBlock AS UB ON UB.user = B.writer AND UB.blockedUser = :currentUser " +
             "WHERE IT.ingredient.id = :ingredientId AND UB.blockedUser IS NULL " +
             "GROUP BY IT.id")
