@@ -17,6 +17,7 @@ public class UserHasIngredientResponseDTO {
     private String quantity;
     private LocalDate expirationDate;
     private Long ingredientId;
+    private Long userHasIngredientId;
 
     public static UserHasIngredientResponseDTO toDTO(UserHasIngredient entity) {
         return UserHasIngredientResponseDTO.builder()
@@ -25,6 +26,7 @@ public class UserHasIngredientResponseDTO {
                 .state(entity.getState())
                 .quantity(entity.getQuantity())
                 .expirationDate(entity.getExpirationDate())
+                .userHasIngredientId(entity.getId())
                 .build();
     }
 }
