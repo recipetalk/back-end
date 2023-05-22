@@ -5,6 +5,7 @@ import com.solution.recipetalk.domain.recipe.entity.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 import org.yaml.snakeyaml.util.EnumUtils;
 
 
@@ -23,9 +24,7 @@ public class RecipeModifyDTO {
     @Length(max = 1000)
     private String description;
 
-    @NotNull
-    @Length(max = 1000)
-    private String thumbnailImgUri;
+    private MultipartFile thumbnailImg;
 
     @NotNull
     @Enum(enumClass = RecipeLevel.class, ignoreCase = true)
@@ -39,7 +38,7 @@ public class RecipeModifyDTO {
     @Enum(enumClass = RecipeQuantityCategory.class, ignoreCase = true)
     private String quantity;
 
-    @NotNull
+
     @Enum(enumClass = RecipeSituationCategory.class, ignoreCase = true)
     private String situation;
 
