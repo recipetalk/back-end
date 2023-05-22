@@ -19,6 +19,8 @@ import com.solution.recipetalk.domain.ingredient.repository.IngredientRepository
 import com.solution.recipetalk.domain.ingredient.trimming.entity.IngredientTrimming;
 import com.solution.recipetalk.domain.ingredient.trimming.repository.IngredientTrimmingRepository;
 import com.solution.recipetalk.domain.ingredient.trimming.row.repository.IngredientTrimmingRowRepository;
+import com.solution.recipetalk.domain.product.entity.Product;
+import com.solution.recipetalk.domain.product.repository.ProductRepository;
 import com.solution.recipetalk.domain.recipe.entity.*;
 import com.solution.recipetalk.domain.recipe.ingredient.repository.RecipeIngredientRepository;
 import com.solution.recipetalk.domain.recipe.repository.RecipeRepository;
@@ -74,6 +76,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private final UserBlockRepository userBlockRepository;
     private final UserFollowRepository userFollowRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final ProductRepository productRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -170,6 +173,11 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         createIngredientDescriptionIfNotNull(3L, 3L, 1L, "test1");
     }
 
+    private void loadProductData() {
+        createProductIfNotNull(1L, "바코드1", 1L, null, null, 1L);
+        createProductIfNotNull(2L, "바코드2", 2L, "2023-05-15", null, 2L);
+        createProductIfNotNull(3L, "바코드3", 1L, null, "2023-05-15", 3L);
+    }
 
     private void createUserDataIfNotNull(Long id, String nickname, String username, String password, Boolean isBlocked, String email){
         Optional<UserDetail> byId = userDetailRepository.findById(id);
@@ -383,5 +391,27 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
                     .build();
             ingredientDescriptionRepository.save(build);
         }
+    }
+
+    private void createProductIfNotNull(Long barcode, String name, Long ingredientId,String closedDate, String shutdownDate, Long registrationNumber) {
+
+
+        Optional<Product> byId = productRepository.findById(barcode);
+
+        if(byId.isPresent()){
+            return;
+        }
+
+        Ingredient ingredient = ingredientRepository.findById(ingredientId).orElseThrow(IngredientNotFoundException::new);
+
+        Product product = Product.builder()
+                .barcode(barcode)
+                .productName(name)
+                .productShutdownDate(shutdownDate)
+                .closedDate(closedDate)
+                .productRegistrationNumber(registrationNumber)
+                .ingredient(ingredient).build();
+
+        productRepository.save(product);
     }
 }
