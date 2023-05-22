@@ -54,6 +54,7 @@ public class RecipeRegisterDTO {
                 .description(description)
                 .sort(sort)
                 .situation(situationCategory)
+                .durationTime(durationTime)
                 .level(level)
                 .build();
 
