@@ -1,7 +1,6 @@
 package com.solution.recipetalk.service.recipe.row.impl;
 
 import com.solution.recipetalk.domain.recipe.row.entity.RecipeRow;
-import com.solution.recipetalk.domain.recipe.row.img.repository.RecipeRowImgRepository;
 import com.solution.recipetalk.domain.recipe.row.repository.RecipeRowRepository;
 import com.solution.recipetalk.dto.recipe.row.RecipeRowDTO;
 import com.solution.recipetalk.service.recipe.row.FindRecipeRowService;
@@ -12,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -19,21 +19,12 @@ import java.util.List;
 public class FindRecipeRowServiceImpl implements FindRecipeRowService {
 
     private final RecipeRowRepository recipeRowRepository;
-    private final RecipeRowImgRepository recipeRowImgRepository;
     @Override
     public ResponseEntity<?> findRecipeRow(Long recipeId) {
+        //TODO: n+1 터지는지 확인 필요
         List<RecipeRow> recipeRowsByRecipeIdOrderById = recipeRowRepository.findRecipeRowsByRecipeIdOrderById(recipeId);
 
-        List<RecipeRowDTO> sendDto = new ArrayList<>();
-
-        for (int i = 0; i < recipeRowsByRecipeIdOrderById.size(); i++) {
-            RecipeRow target = recipeRowsByRecipeIdOrderById.get(i);
-            Long recipeRowId = target.getId();
-
-            List<String> imgUris = recipeRowImgRepository.findImageURIByRecipeRowId(recipeRowId);
-
-            sendDto.add(RecipeRowDTO.toDTO(target, imgUris, (long)i, recipeRowId));
-        }
+        List<RecipeRowDTO> sendDto = recipeRowsByRecipeIdOrderById.stream().map(RecipeRowDTO::toDTO).collect(Collectors.toList());
 
         return ResponseEntity.ok(sendDto);
     }

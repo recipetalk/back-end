@@ -13,16 +13,14 @@ import java.util.List;
 public class RecipeRowDTO {
     private Long sequenceNum;
     private String description;
-    private List<String> imgUris;
-    private Long rowSeq;
+    private String imgUri;
 
 
-    public static RecipeRowDTO toDTO(RecipeRow recipeRow, List<String> imgUris, Long sequenceNum, Long recipeRowId){
+    public static RecipeRowDTO toDTO(RecipeRow recipeRow){
         return RecipeRowDTO.builder()
                 .description(recipeRow.getDescription())
-                .sequenceNum(sequenceNum)
-                .imgUris(imgUris)
-                .rowSeq(recipeRowId)
+                .sequenceNum(recipeRow.getSeqNum())
+                .imgUri(recipeRow.getImageURI())
                 .build();
     }
 }

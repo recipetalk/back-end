@@ -130,7 +130,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
 
     private void loadRecipeRowData() {
         createRecipeRowDataIfNotNull(1L, "kind of food", 2L, 1L);
-        createRecipeRowDataIfNotNull(2L, "kind of recipe", 0L, 1L);
+        createRecipeRowDataIfNotNull(2L, "kind of recipe", 1L, 1L);
     }
 
     private void loadIngredientTrimmingData() {
@@ -255,7 +255,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
 
 
 
-    private void createRecipeRowDataIfNotNull(Long id, String description, Long timer, Long recipeId) {
+    private void createRecipeRowDataIfNotNull(Long id, String description, Long seqNum, Long recipeId) {
         Optional<RecipeRow> byId = recipeRowRepository.findById(id);
         if(byId.isPresent()) {
             return;
@@ -265,7 +265,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
 
         RecipeRow row = RecipeRow.builder()
                 .description(description)
-                .timer(timer)
+                .seqNum(seqNum)
                 .recipe(recipe)
                 .build();
 

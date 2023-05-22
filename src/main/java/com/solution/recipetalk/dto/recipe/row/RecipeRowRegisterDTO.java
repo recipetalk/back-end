@@ -17,15 +17,16 @@ public class RecipeRowRegisterDTO {
     private String description;
 
     //TODO : File valid 기능 필요
-    private List<MultipartFile> imgs;
+    private MultipartFile img;
     @NonNull
-    private Long timer;
+    private Long seqNum;
 
-    public RecipeRow toRecipeRowEntity(Recipe recipe) {
+    public RecipeRow toRecipeRowEntity(Recipe recipe, String imgURI) {
         return RecipeRow.builder()
                 .recipe(recipe)
                 .description(description)
-                .timer(timer)
+                .imageURI(imgURI)
+                .seqNum(seqNum)
                 .build();
     }
 }

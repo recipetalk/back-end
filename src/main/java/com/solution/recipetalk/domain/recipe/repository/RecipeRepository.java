@@ -18,6 +18,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long>, RecipeQue
     Long countByBoard_Writer(UserDetail writer);
 
 
+    Boolean existsRecipeByBoardWriter_IdAndId(Long writerId, Long recipeId);
+
     @Query("SELECT DISTINCT new com.solution.recipetalk.dto.recipe.RecipeDTO(recipe, writer, board, userFollow.id IS NOT NULL, isBoardLiked.id IS NOT NULL, isBookmark.id IS NOT NULL) " +
             "FROM Recipe recipe " +
             "JOIN Board board ON recipe.board = board " +

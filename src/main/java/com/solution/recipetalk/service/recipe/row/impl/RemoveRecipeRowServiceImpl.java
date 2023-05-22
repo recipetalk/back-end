@@ -3,9 +3,9 @@ package com.solution.recipetalk.service.recipe.row.impl;
 import com.solution.recipetalk.config.properties.S3dir;
 import com.solution.recipetalk.domain.image.entity.Image;
 import com.solution.recipetalk.domain.image.repository.ImageRepository;
+import com.solution.recipetalk.domain.recipe.repository.RecipeRepository;
 import com.solution.recipetalk.domain.recipe.row.entity.RecipeRow;
-import com.solution.recipetalk.domain.recipe.row.img.entity.RecipeRowImg;
-import com.solution.recipetalk.domain.recipe.row.img.repository.RecipeRowImgRepository;
+
 import com.solution.recipetalk.domain.recipe.row.repository.RecipeRowRepository;
 import com.solution.recipetalk.exception.common.NotAuthorizedToRemoveException;
 import com.solution.recipetalk.exception.recipe.row.RecipeRowNotFoundException;
@@ -25,31 +25,53 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class RemoveRecipeRowServiceImpl implements RemoveRecipeRowService {
     private final RecipeRowRepository recipeRowRepository;
-    private final RecipeRowImgRepository recipeRowImgRepository;
-    private final ImageRepository imageRepository;
+    private final RecipeRepository recipeRepository;
+
     private final S3Uploader s3Uploader;
 
     @Override
-    public ResponseEntity<?> removeRecipeRow(Long recipeId, Long recipeRowId){
+    public ResponseEntity<?> removeRecipeRow(Long recipeId, Long seqNum){
         Long loginUserId = ContextHolder.getUserLoginId();
-        RecipeRow recipeRow = recipeRowRepository.findById(recipeRowId).orElseThrow(RecipeRowNotFoundException::new);
 
-        if (!Objects.equals(loginUserId, recipeRow.getRecipe().getBoard().getWriter().getId())){
+        if(!recipeRepository.existsRecipeByBoardWriter_IdAndId(ContextHolder.getUserLoginId(), recipeId)){
             throw new NotAuthorizedToRemoveException();
         }
 
-        List<RecipeRowImg> recipeRowImgs = recipeRowImgRepository.findAllByRecipeRowId(recipeRow.getId());
-        List<Long> imgIds = recipeRowImgRepository.findImageIdByRecipeRowId(recipeRow.getId());
-        List<Image> imgs = imageRepository.findAllById(imgIds);
+        RecipeRow findRecipeRow = recipeRowRepository.findRecipeRowByRecipe_IdAndSeqNum(recipeId, seqNum).orElseThrow(RecipeRowNotFoundException::new);
 
         // S3 이미지 삭제
-        imgs.forEach(img -> s3Uploader.deleteFile(img.getURI(), S3dir.RECIPE_ROW_IMG_DIR));
+        if(findRecipeRow.getImageURI() != null)
+            s3Uploader.deleteFile(findRecipeRow.getImageURI(), S3dir.RECIPE_ROW_IMG_DIR);
 
         // recipe row, recipe row img, image 삭제
-        recipeRowImgRepository.deleteAll(recipeRowImgs);
-        imageRepository.deleteAll(imgs);
-        recipeRowRepository.delete(recipeRow);
+        recipeRowRepository.delete(findRecipeRow);
 
-        return null;
+        return ResponseEntity.ok(null);
+    }
+
+    @Override
+    public ResponseEntity<?> removeRecipeRowNoWriterChecking(Long recipeId, Long seqNum) {
+        Long loginUserId = ContextHolder.getUserLoginId();
+
+        RecipeRow findRecipeRow = recipeRowRepository.findRecipeRowByRecipe_IdAndSeqNum(recipeId, seqNum).orElseThrow(RecipeRowNotFoundException::new);
+
+        // S3 이미지 삭제
+        if(findRecipeRow.getImageURI() != null)
+            s3Uploader.deleteFile(findRecipeRow.getImageURI(), S3dir.RECIPE_ROW_IMG_DIR);
+
+        // recipe row, recipe row img, image 삭제
+        recipeRowRepository.delete(findRecipeRow);
+
+        return ResponseEntity.ok(null);
+    }
+
+    @Override
+    public void removeRecipeRowNoWriterCheckingById(Long id) {
+        RecipeRow findRecipeRow = recipeRowRepository.findById(id).orElseThrow(RecipeRowNotFoundException::new);
+        if(findRecipeRow.getImageURI() != null)
+            s3Uploader.deleteFile(findRecipeRow.getImageURI(), S3dir.RECIPE_ROW_IMG_DIR);
+
+        // recipe row, recipe row img, image 삭제
+        recipeRowRepository.delete(findRecipeRow);
     }
 }

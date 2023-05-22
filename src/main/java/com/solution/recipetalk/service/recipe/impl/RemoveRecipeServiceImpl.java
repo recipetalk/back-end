@@ -57,7 +57,7 @@ public class RemoveRecipeServiceImpl implements RemoveRecipeService {
         List<RecipeRow> recipeRows = recipeRowRepository.findRecipeRowsByRecipeIdOrderById(recipeId);
 
         // TODO: removeRecipeRow 개선 (권한 검증 생략 + recipeRow 객체로 받아서 삭제 처리)
-        recipeRows.forEach(recipeRow -> removeRecipeRowService.removeRecipeRow(recipeId, recipeRow.getId()));
+        recipeRows.forEach(recipeRow -> removeRecipeRowService.removeRecipeRowNoWriterCheckingById(recipeRow.getId()));
         recipeIngredientRepository.deleteAll(recipeIngredients);
         recipeRepository.delete(recipe);
         boardRepository.delete(recipe.getBoard());
@@ -81,7 +81,7 @@ public class RemoveRecipeServiceImpl implements RemoveRecipeService {
         List<RecipeRow> recipeRows = recipeRowRepository.findRecipeRowsByRecipeIdOrderById(recipeId);
         List<RecipeIngredient> recipeIngredients = recipeIngredientRepository.findRecipeIngredientsByRecipeId(recipeId);
 
-        recipeRows.forEach(recipeRow -> removeRecipeRowService.removeRecipeRow(recipeId, recipeRow.getId()));
+        recipeRows.forEach(recipeRow -> removeRecipeRowService.removeRecipeRowNoWriterCheckingById(recipeRow.getId()));
         recipeIngredientRepository.deleteAll(recipeIngredients);
 
         recipeRepository.hardDeleteRecipeById(recipeId);

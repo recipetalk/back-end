@@ -16,18 +16,25 @@ public class RecipeRowModifyDTO {
     @NonNull
     private String description;
 
-    private List<MultipartFile> imgs;
+    private MultipartFile img;
     @NonNull
-    private Long timer;
+    private Long seqNum;
 
-    @NonNull
-    private Long rowSeq;
 
-    public RecipeRow toRecipeRowEntity(Recipe recipe) {
+    public RecipeRow toRecipeRowEntity(Recipe recipe, String imgURI) {
         return RecipeRow.builder()
                 .recipe(recipe)
                 .description(description)
-                .timer(timer)
+                .seqNum(seqNum)
+                .imageURI(imgURI)
+                .build();
+    }
+
+    public RecipeRowRegisterDTO toRegisterDTO(){
+        return RecipeRowRegisterDTO.builder()
+                .description(description)
+                .img(img)
+                .seqNum(seqNum)
                 .build();
     }
 }

@@ -19,21 +19,19 @@ public class RecipeRow extends AuditingEntity {
     @Column(name = "recipe_row_id", nullable = false)
     private Long id;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "timer")
-    private Long timer; //currentTimeMillis
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipe_id")
+    @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
-    public void changeTimer(Long timer){
-        if (timer != null){
-            this.timer = timer;
-        }
-    }
+    @Column(name = "image_uri")
+    private String imageURI;
+
+    @Column(name = "seq_num", nullable = false)
+    private Long seqNum;
 
     public void changeDescription(String description){
         if (description != null){
