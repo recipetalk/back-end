@@ -27,8 +27,11 @@ public class RecipeRow extends AuditingEntity {
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
-    @Column(name = "image_uri")
-    private String imageURI;
+    @Column(name = "recipe_row_image_uri")
+    private String rowImageURI;
+
+    @Column(nullable = true)
+    private String tips;
 
     @Column(name = "seq_num", nullable = false)
     private Long seqNum;
