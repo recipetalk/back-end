@@ -22,9 +22,9 @@ public class IngredientTrimmingByUserResDTO {
     public static IngredientTrimmingByUserResDTO toIngredientTrimmingByUserResDTO(Tuple tuple){
         return IngredientTrimmingByUserResDTO.builder()
                 .board(BoardIngredientDTO.toBoardIngredientDTO(tuple.get(QBoard.board)))
-                .description(tuple.get(QIngredientTrimming.ingredientTrimming.description))
-                .thumbnailUri(tuple.get(QIngredientTrimming.ingredientTrimming.thumbnailUri))
-                .ingredientId(tuple.get(QIngredient.ingredient.id))
+                .description(tuple.get(QIngredientTrimming.ingredientTrimming).getDescription())
+                .thumbnailUri(tuple.get(QIngredientTrimming.ingredientTrimming).getThumbnailUri())
+                .ingredientId(tuple.get(QIngredient.ingredient).getId())
                 .build();
     }
 }
