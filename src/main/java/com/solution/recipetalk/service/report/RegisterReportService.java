@@ -4,5 +4,5 @@ import com.solution.recipetalk.dto.report.ReportRegisterDTO;
 import org.springframework.http.ResponseEntity;
 
 public interface RegisterReportService {
-    ResponseEntity<?> addReport(Long reporteeId, ReportRegisterDTO dto);
+    ResponseEntity<?> addReport(ReportRegisterDTO dto);
 }

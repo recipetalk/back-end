@@ -15,7 +15,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
      * 댓글과 마찬가지로 사용자 삭제 여부는 DTO에서, 이미 처리가 완료된 신고 내역은 조회하지 않도록
      */
     @Query(
-            value = "select new com.solution.recipetalk.dto.report.ReportResponseDTO(reporter.username, reporter.nickname, reporter.profileImageURI, r.reportee.username, r.reportee.nickname, r.reportee.profileImageURI, r.description, r.screenshotURI, r.reportState, reporter.isDeleted, r.reportee.isDeleted) from Report r join UserDetail reporter on r.reporter = reporter where r.reportState <> 3 order by r.id",
+            value = "select new com.solution.recipetalk.dto.report.ReportResponseDTO(reporter.username, reporter.nickname, reporter.profileImageURI, r.description, r.reportState, reporter.isDeleted) from Report r join UserDetail reporter on r.reporter = reporter where r.reportState <> 3 order by r.id",
             countQuery = "select count(*) from Report r"
     )
     Page<ReportResponseDTO> findAllReports(Pageable pageable);
