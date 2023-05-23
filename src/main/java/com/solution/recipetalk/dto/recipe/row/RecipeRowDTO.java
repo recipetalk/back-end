@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class RecipeRowDTO {
-    private Long sequenceNum;
+    private Long seqNum;
     private String description;
     private String imgUri;
 
@@ -19,7 +19,7 @@ public class RecipeRowDTO {
     public static RecipeRowDTO toDTO(RecipeRow recipeRow){
         return RecipeRowDTO.builder()
                 .description(recipeRow.getDescription())
-                .sequenceNum(recipeRow.getSeqNum())
+                .seqNum(recipeRow.getSeqNum())
                 .imgUri(recipeRow.getImageURI())
                 .build();
     }
