@@ -19,7 +19,7 @@ public class RecipeIngredientRegisterDTO {
     private String quantity;
 
     @NonNull
-    @Size(max = 10)
+    @Size(max = 20)
     private String ingredientName;
 
     public RecipeIngredient toRecipeIngredientEntity(Ingredient ingredient, Recipe recipe){
