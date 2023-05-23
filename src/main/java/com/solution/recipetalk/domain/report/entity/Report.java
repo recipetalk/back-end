@@ -23,15 +23,8 @@ public class Report extends AuditingEntity {
     @JoinColumn(name = "reporter_id")
     private UserDetail reporter;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reportee_id")
-    private UserDetail reportee;
-
     @Column(name = "description", nullable = false)
     private String description;
-
-    @Column(name = "screenshot_uri")
-    private String screenshotURI;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "report_state")
