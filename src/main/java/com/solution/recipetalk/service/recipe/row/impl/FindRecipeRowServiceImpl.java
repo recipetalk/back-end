@@ -24,7 +24,16 @@ public class FindRecipeRowServiceImpl implements FindRecipeRowService {
         //TODO: n+1 터지는지 확인 필요
         List<RecipeRow> recipeRowsByRecipeIdOrderById = recipeRowRepository.findRecipeRowsByRecipeIdOrderById(recipeId);
 
-        List<RecipeRowDTO> sendDto = recipeRowsByRecipeIdOrderById.stream().map(RecipeRowDTO::toDTO).collect(Collectors.toList());
+        List<RecipeRowDTO> sendDto = recipeRowsByRecipeIdOrderById.stream().map(RecipeRowDTO::toDTO).sorted((recipeRowDTO, t1) -> {
+            if(recipeRowDTO.getSeqNum() > t1.getSeqNum()){
+                return 1;
+            }else if(recipeRowDTO.getSeqNum() == t1.getSeqNum()){
+                return 0;
+            }else {
+                return -1;
+            }
+
+        }).collect(Collectors.toList());
 
         return ResponseEntity.ok(sendDto);
     }
