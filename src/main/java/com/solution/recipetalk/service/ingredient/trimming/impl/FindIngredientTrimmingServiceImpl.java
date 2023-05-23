@@ -1,5 +1,6 @@
 package com.solution.recipetalk.service.ingredient.trimming.impl;
 
+import com.querydsl.core.Tuple;
 import com.solution.recipetalk.domain.ingredient.trimming.entity.IngredientTrimming;
 import com.solution.recipetalk.domain.ingredient.trimming.repository.IngredientTrimmingRepository;
 import com.solution.recipetalk.domain.ingredient.trimming.repository.IngredientTrimmingRepository.IngredientTrimmingResult;
@@ -67,7 +68,7 @@ public class FindIngredientTrimmingServiceImpl implements FindIngredientTrimming
         if (userBlockRepository.existsByUserAndBlockedUser(loginUser, userDetail)){
             throw new CustomException(ErrorCode.BOARD_NOT_FOUND);
         }
-        List<IngredientTrimming> trimmings = ingredientTrimmingRepository.findIngredientTrimmingList(dto, userDetail.getId());
+        List<Tuple> trimmings = ingredientTrimmingRepository.findIngredientTrimmingList(dto, userDetail.getId());
 
         return ResponseEntity.ok(trimmings.stream().map(IngredientTrimmingByUserResDTO::toIngredientTrimmingByUserResDTO).toList());
     }

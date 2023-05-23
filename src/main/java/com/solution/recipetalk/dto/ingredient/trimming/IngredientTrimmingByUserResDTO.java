@@ -1,6 +1,10 @@
 package com.solution.recipetalk.dto.ingredient.trimming;
 
+import com.querydsl.core.Tuple;
+import com.solution.recipetalk.domain.board.entity.QBoard;
+import com.solution.recipetalk.domain.ingredient.entity.QIngredient;
 import com.solution.recipetalk.domain.ingredient.trimming.entity.IngredientTrimming;
+import com.solution.recipetalk.domain.ingredient.trimming.entity.QIngredientTrimming;
 import com.solution.recipetalk.dto.board.BoardIngredientDTO;
 import lombok.*;
 
@@ -13,12 +17,14 @@ public class IngredientTrimmingByUserResDTO {
     private BoardIngredientDTO board;
     private String description;
     private String thumbnailUri;
+    private Long ingredientId;
 
-    public static IngredientTrimmingByUserResDTO toIngredientTrimmingByUserResDTO(IngredientTrimming ingredientTrimming){
+    public static IngredientTrimmingByUserResDTO toIngredientTrimmingByUserResDTO(Tuple tuple){
         return IngredientTrimmingByUserResDTO.builder()
-                .board(BoardIngredientDTO.toBoardIngredientDTO(ingredientTrimming.getBoard()))
-                .description(ingredientTrimming.getDescription())
-                .thumbnailUri(ingredientTrimming.getThumbnailUri())
+                .board(BoardIngredientDTO.toBoardIngredientDTO(tuple.get(QBoard.board)))
+                .description(tuple.get(QIngredientTrimming.ingredientTrimming.description))
+                .thumbnailUri(tuple.get(QIngredientTrimming.ingredientTrimming.thumbnailUri))
+                .ingredientId(tuple.get(QIngredient.ingredient.id))
                 .build();
     }
 }

@@ -1,9 +1,11 @@
 package com.solution.recipetalk.domain.ingredient.trimming.query;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.solution.recipetalk.domain.board.entity.QBoard;
 import com.solution.recipetalk.domain.common.SortType;
+import com.solution.recipetalk.domain.ingredient.entity.QIngredient;
 import com.solution.recipetalk.domain.ingredient.trimming.repository.IngredientTrimmingQueryDslRepository;
 import com.solution.recipetalk.domain.ingredient.trimming.entity.IngredientTrimming;
 import com.solution.recipetalk.domain.ingredient.trimming.entity.QIngredientTrimming;
@@ -21,12 +23,13 @@ public class IngredientTrimmingRepositoryImpl implements IngredientTrimmingQuery
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<IngredientTrimming> findIngredientTrimmingList(IngredientTrimmingByUserReqDTO dto, Long userId){
+    public List<Tuple> findIngredientTrimmingList(IngredientTrimmingByUserReqDTO dto, Long userId){
         QIngredientTrimming qIngredientTrimming = QIngredientTrimming.ingredientTrimming;
         QBoard qBoard = QBoard.board;
         QUserDetail qUserDetail = QUserDetail.userDetail;
+        QIngredient qIngredient = QIngredient.ingredient;
 
-        JPAQuery<IngredientTrimming> queryBuilder = jpaQueryFactory.selectFrom(qIngredientTrimming)
+        JPAQuery<Tuple> queryBuilder = jpaQueryFactory.select(qIngredientTrimming, qBoard, qIngredient).from(qIngredientTrimming)
                 .join(qBoard)
                 .on(qBoard.id.eq(qIngredientTrimming.board.id)
                         .and(qBoard.writer.id.eq(userId))
@@ -34,7 +37,9 @@ public class IngredientTrimmingRepositoryImpl implements IngredientTrimmingQuery
                 .join(qUserDetail)
                 .on(qUserDetail.id.eq(qBoard.writer.id)
                         .and(qUserDetail.isBlocked.eq(false))
-                        .and(qUserDetail.isDeleted.eq(false)));
+                        .and(qUserDetail.isDeleted.eq(false)))
+                .join(qIngredient)
+                .on(qIngredient.id.eq(qIngredientTrimming.ingredient.id));
 
         queryBuilder = getSqlBySortType(queryBuilder, dto.getSortType());
         queryBuilder = getSQlByOrderBy(queryBuilder, dto.getLimit(), dto.getOffset());
@@ -42,7 +47,7 @@ public class IngredientTrimmingRepositoryImpl implements IngredientTrimmingQuery
         return queryBuilder.fetch();
     }
 
-    private JPAQuery<IngredientTrimming> getSqlBySortType(JPAQuery<IngredientTrimming> queryBuilder, SortType sortType){
+    private JPAQuery<Tuple> getSqlBySortType(JPAQuery<Tuple> queryBuilder, SortType sortType){
         switch (sortType) {
             case NEW -> {
                 queryBuilder = queryBuilder.orderBy(QBoard.board.createdDate.desc());
@@ -54,7 +59,7 @@ public class IngredientTrimmingRepositoryImpl implements IngredientTrimmingQuery
         return queryBuilder;
     }
 
-    private JPAQuery<IngredientTrimming> getSQlByOrderBy(JPAQuery<IngredientTrimming> queryBuilder, long limit, long offset){
+    private JPAQuery<Tuple> getSQlByOrderBy(JPAQuery<Tuple> queryBuilder, long limit, long offset){
         return queryBuilder.offset(offset)
                 .limit(limit);
     }
