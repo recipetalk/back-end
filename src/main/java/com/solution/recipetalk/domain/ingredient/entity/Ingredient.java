@@ -20,6 +20,13 @@ public class Ingredient extends AuditingEntity {
     @Column(nullable = false)
     private String name;
 
+    @Column(name = "usedCount")
+    private Long usedCount;
+
+    public void updateCount() {
+        this.usedCount++;
+    }
+
 // 주석처리 한 녀석은 추후 넣을 예정
 //    @Column(nullable = false)
 //    private Integer calorie;
