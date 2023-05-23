@@ -8,7 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @Setter
 @Builder
-public class RecipeIngredientListResDTO implements RecipeIngredientResult {
+@Getter
+public class RecipeIngredientListResDTO {
 
     private String name;
     private Boolean isHas;
@@ -21,20 +22,5 @@ public class RecipeIngredientListResDTO implements RecipeIngredientResult {
                 .isHas(result.getIsHas())
                 .name(result.getName())
                 .build();
-    }
-
-    @Override
-    public String getQuantity() {
-        return quantity;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public Boolean getIsHas() {
-        return isHas;
     }
 }
