@@ -18,12 +18,11 @@ public class ReportController {
     private final RegisterReportService registerReportService;
     private final FindReportService findReportService;
 
-    @PostMapping("/report/{reportedId}")
+    @PostMapping("/report")
     public ResponseEntity<?> reportAdd(
-            @PathVariable(name = "reportedId") Long reportedId,
-            @Valid ReportRegisterDTO dto
+            @RequestBody @Valid ReportRegisterDTO dto
     ) {
-        return registerReportService.addReport(reportedId, dto);
+        return registerReportService.addReport(dto);
     }
 
     @GetMapping("/report/list")
@@ -31,7 +30,7 @@ public class ReportController {
         return findReportService.findAllReportsByReporter(pageable);
     }
 
-    @GetMapping("/report/details/{reportId}")
+    @GetMapping("/report/{reportId}")
     public ResponseEntity<?> reportDetails(@PathVariable(name = "reportId") Long reportId) {
         return findReportService.findReport(reportId);
     }
