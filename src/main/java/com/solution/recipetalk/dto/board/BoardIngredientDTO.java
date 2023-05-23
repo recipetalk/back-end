@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class BoardIngredientDTO {
-    private Long id;
+    private Long boardId;
     private String title;
     private String nickname;
     private Long likeCount;
@@ -17,7 +17,7 @@ public class BoardIngredientDTO {
 
     public static BoardIngredientDTO toBoardIngredientDTO(Board board){
         return BoardIngredientDTO.builder()
-                .id(board.getId())
+                .boardId(board.getId())
                 .title(board.getTitle())
                 .nickname(board.getWriter().getNickname())
                 .likeCount(board.getLikeCount())
