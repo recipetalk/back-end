@@ -28,7 +28,7 @@ public class RecipeRow extends AuditingEntity {
     private Recipe recipe;
 
     @Column(name = "recipe_row_image_uri")
-    private String rowImageURI;
+    private String imageURI;
 
     @Column(nullable = true)
     private String tips;
