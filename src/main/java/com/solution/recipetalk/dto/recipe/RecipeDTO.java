@@ -33,7 +33,7 @@ public class RecipeDTO {
                 .level(recipe.getLevel().toString())
                 .durationTime(recipe.getDurationTime().toString())
                 .sort(recipe.getSort().toString())
-                .situationCategory(recipe.getSituation().toString() != null ? recipe.getSituation().toString() : null)
+                .situationCategory(recipe.getSituation() != null ? recipe.getSituation().toString() : null)
                 .build();
     }
 
@@ -55,7 +55,7 @@ public class RecipeDTO {
         this.level = recipe.getLevel().toString();
         this.durationTime = recipe.getDurationTime().toString();
         this.sort = recipe.getSort().toString();
-        this.situationCategory = recipe.getSituation().toString() != null ? recipe.getSituation().toString() : null;
+        this.situationCategory = recipe.getSituation() != null ? recipe.getSituation().toString() : null;
 
     }
 }
