@@ -17,6 +17,7 @@ public class RecipeRowModifyDTO {
     private String description;
 
     private MultipartFile img;
+    private Boolean isImgDeleted;
     @NonNull
     private Long seqNum;
 

@@ -41,4 +41,13 @@ public class RecipeRow extends AuditingEntity {
             this.description = description;
         }
     }
+
+    public void updateImageURI(String imageURI) {
+        this.imageURI = imageURI;
+    }
+
+    public void updateSeqNum(Long num) {
+        this.seqNum = num;
+    }
+
 }

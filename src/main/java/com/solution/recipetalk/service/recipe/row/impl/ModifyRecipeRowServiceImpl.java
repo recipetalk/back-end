@@ -20,6 +20,7 @@ import com.solution.recipetalk.service.recipe.row.RegisterRecipeRowService;
 import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,10 +46,23 @@ public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
             throw new NotAuthorizedException();
         }
 
-        //삭제 후 등록
-        recipeRowRepository.deleteByRecipe_IdAndSeqNum(recipeId, dto.getSeqNum());
+        RecipeRow findRecipeRow = recipeRowRepository.findRecipeRowByRecipe_IdAndSeqNum(recipeId, dto.getSeqNum()).orElseThrow(RecipeRowNotFoundException::new);
 
-        registerRecipeRowService.registerRecipeRow(findRecipe, dto.toRegisterDTO());
+        if ((dto.getIsImgDeleted() || dto.getImg() != null) && findRecipeRow.getImageURI() != null){
+           s3Uploader.deleteFile(findRecipeRow.getImageURI(), S3dir.RECIPE_ROW_IMG_DIR);
+           findRecipeRow.updateImageURI(null);
+        }
+
+        if(dto.getImg() != null) {
+            try {
+                String uri = s3Uploader.upload(dto.getImg(), S3dir.RECIPE_ROW_IMG_DIR);
+                findRecipeRow.updateImageURI(uri);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        findRecipeRow.changeDescription(dto.getDescription());
 
         return ResponseEntity.ok(null);
     }

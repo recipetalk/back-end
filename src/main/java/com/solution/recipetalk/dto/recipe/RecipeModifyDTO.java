@@ -26,6 +26,8 @@ public class RecipeModifyDTO {
 
     private MultipartFile thumbnailImg;
 
+    private Boolean isThumbnailDeleted;
+
     @NotNull
     @Enum(enumClass = RecipeLevel.class, ignoreCase = true)
     private String level;
