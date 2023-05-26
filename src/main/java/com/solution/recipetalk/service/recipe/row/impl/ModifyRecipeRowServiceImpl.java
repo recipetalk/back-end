@@ -45,7 +45,7 @@ public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
         Recipe findRecipe = recipeRepository.findById(recipeId).orElseThrow(RecipeNotFoundException::new);
 
         //권한 체킹
-        if(recipeRepository.existsRecipeByBoardWriter_IdAndId(ContextHolder.getUserLoginId(), recipeId)){
+        if(!recipeRepository.existsRecipeByBoardWriter_IdAndId(ContextHolder.getUserLoginId(), recipeId)){
             throw new NotAuthorizedException();
         }
         //레시피 Seq로 찾아오는 로직 필요
