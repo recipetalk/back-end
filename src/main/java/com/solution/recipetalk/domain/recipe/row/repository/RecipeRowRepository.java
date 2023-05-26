@@ -18,6 +18,6 @@ public interface RecipeRowRepository extends JpaRepository<RecipeRow, Long> {
 
     Optional<RecipeRow> findRecipeRowByRecipe_IdAndSeqNum(Long recipeId, Long seqNum);
 
-    @Query("SELECT RecipeRow FROM RecipeRow WHERE recipe.id = :recipeId AND seqNum > :seqNum ")
+    @Query("SELECT r FROM RecipeRow r WHERE r.recipe.id = :recipeId AND r.seqNum > :seqNum ")
     List<RecipeRow> findRecipeRowsByRecipeIdAndSeqNum(@Param("recipeId")Long recipeId, @Param("seqNum")Long seqNum);
 }
