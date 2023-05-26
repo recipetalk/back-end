@@ -49,7 +49,7 @@ public class RecipeRowController {
     }
 
     @PostMapping("/{recipeId}/recipeRow/list")
-    public ResponseEntity<?> recipeRowAllAdd(@PathVariable(name="recipeId") Long recipeId, @Valid @NonNull List<RecipeRowRegisterDTO> dtoList) {
+    public ResponseEntity<?> recipeRowAllAdd(@PathVariable(name="recipeId") Long recipeId, @Valid @NonNull @RequestBody List<RecipeRowRegisterDTO> dtoList) {
         for(int i = 0; i < dtoList.size(); i++){
             registerRecipeRowService.registerRecipeRow(recipeId, dtoList.get(i));
         }
