@@ -67,10 +67,7 @@ public class Recipe extends SoftDeleteEntity {
 
     // dto 내 null check 를 진행하므로 null check 생략
     public void changeByRecipeModifyDTO(RecipeModifyDTO dto, String thumbnailImgURI){
-        if(thumbnailImgURI != null) {
-            this.thumbnailImgURI = thumbnailImgURI;
-        }
-
+        this.thumbnailImgURI = thumbnailImgURI;
         this.description = dto.getDescription();
         this.durationTime = dto.getDurationTime();
         this.level = dto.getLevel();
@@ -83,4 +80,5 @@ public class Recipe extends SoftDeleteEntity {
 
         this.sort = dto.getSort();
     }
+
 }
