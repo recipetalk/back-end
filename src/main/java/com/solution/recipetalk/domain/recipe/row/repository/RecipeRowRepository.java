@@ -17,4 +17,7 @@ public interface RecipeRowRepository extends JpaRepository<RecipeRow, Long> {
     void deleteByRecipe_IdAndSeqNum(@Param("recipeId") Long recipeId, @Param("seqNum") Long seqNum);
 
     Optional<RecipeRow> findRecipeRowByRecipe_IdAndSeqNum(Long recipeId, Long seqNum);
+
+    @Query("SELECT RecipeRow FROM RecipeRow WHERE recipe.id = :recipeId AND seqNum > :seqNum ")
+    List<RecipeRow> findRecipeRowsByRecipeIdAndSeqNum(@Param("recipeId")Long recipeId, @Param("seqNum")Long seqNum);
 }

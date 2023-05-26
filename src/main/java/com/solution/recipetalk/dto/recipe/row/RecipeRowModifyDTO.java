@@ -15,12 +15,15 @@ import java.util.List;
 public class RecipeRowModifyDTO {
     @NonNull
     private String description;
-
+    private String imgUri;
     private MultipartFile img;
     private Boolean isImgDeleted;
     @NonNull
     private Long seqNum;
 
+
+    private Long id;
+    private Boolean isLast;
 
     public RecipeRow toRecipeRowEntity(Recipe recipe, String imgURI) {
         return RecipeRow.builder()
