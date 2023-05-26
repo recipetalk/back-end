@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @Validated
@@ -44,5 +46,13 @@ public class RecipeRowController {
     @DeleteMapping("/{recipeId}/recipeRow/{seqNum}")
     public ResponseEntity<?> recipeRowRemove(@PathVariable(name = "recipeId") Long recipeId, @PathVariable(name = "seqNum") Long seqNum){
         return removeRecipeRowService.removeRecipeRow(recipeId, seqNum);
+    }
+
+    @PostMapping("/{recipeId}/recipeRow/list")
+    public ResponseEntity<?> recipeRowAllAdd(@PathVariable(name="recipeId") Long recipeId, @Valid @NonNull List<RecipeRowRegisterDTO> dtoList) {
+        for(int i = 0; i < dtoList.size(); i++){
+            registerRecipeRowService.registerRecipeRow(recipeId, dtoList.get(i));
+        }
+        return ResponseEntity.ok(null);
     }
 }
