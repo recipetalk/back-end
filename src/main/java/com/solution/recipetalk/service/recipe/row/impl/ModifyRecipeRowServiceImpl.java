@@ -76,9 +76,7 @@ public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
                 if(dto.getImg() != null) {
                     imageDelete(dtoRecipeRow);
                     uploadImage(dto.getImg(), dtoRecipeRow);
-                }
-
-                if(dto.getImgUri() != null){
+                }else {
                     dtoRecipeRow.updateImageURI(dto.getImgUri());
                 }
 
@@ -89,9 +87,9 @@ public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
 
                 imageDelete(repoRecipeRow);
 
-                if(dto.getImg() != null) {
-                    uploadImage(dto.getImg(), repoRecipeRow);
-                }
+
+                uploadImage(dto.getImg(), repoRecipeRow);
+
 
                 repoRecipeRow.updateSeqNum(dto.getSeqNum());
                 repoRecipeRow.updateDescription(dto.getDescription());
@@ -103,9 +101,7 @@ public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
                 if(dto.getImg() != null) {
                     imageDelete(dtoRecipeRow);
                     uploadImage(dto.getImg(), dtoRecipeRow);
-                }
-
-                if(dto.getImgUri() != null){
+                }else {
                     dtoRecipeRow.updateImageURI(dto.getImgUri());
                 }
 

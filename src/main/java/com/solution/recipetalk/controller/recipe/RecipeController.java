@@ -46,7 +46,7 @@ public class RecipeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> recipeModify(@PathVariable(name = "id") Long recipeId, @Valid @NonNull @RequestBody() RecipeModifyDTO recipeModifyDTO){
+    public ResponseEntity<?> recipeModify(@PathVariable(name = "id") Long recipeId, @Valid @NonNull RecipeModifyDTO recipeModifyDTO){
         return modifyRecipeService.modifyRecipe(recipeId, recipeModifyDTO);
     }
 
