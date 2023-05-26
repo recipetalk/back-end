@@ -47,12 +47,4 @@ public class RecipeRowController {
     public ResponseEntity<?> recipeRowRemove(@PathVariable(name = "recipeId") Long recipeId, @PathVariable(name = "seqNum") Long seqNum){
         return removeRecipeRowService.removeRecipeRow(recipeId, seqNum);
     }
-
-    @PostMapping("/{recipeId}/recipeRow/list")
-    public ResponseEntity<?> recipeRowAllAdd(@PathVariable(name="recipeId") Long recipeId, @Valid @NonNull @RequestBody List<RecipeRowRegisterDTO> dtoList) {
-        for(int i = 0; i < dtoList.size(); i++){
-            registerRecipeRowService.registerRecipeRow(recipeId, dtoList.get(i));
-        }
-        return ResponseEntity.ok(null);
-    }
 }
