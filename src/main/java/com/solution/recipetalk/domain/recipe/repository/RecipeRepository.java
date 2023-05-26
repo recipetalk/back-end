@@ -17,7 +17,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long>, RecipeQue
 
     Long countByBoard_Writer(UserDetail writer);
 
-
+    @Query("SELECT CASE WHEN count(r) > 0 THEN TRUE ELSE FALSE END FROM Recipe r JOIN Board b ON r.board = b WHERE b.writer.id = :writerId AND r.id = :recipeId")
     Boolean existsRecipeByBoardWriter_IdAndId(Long writerId, Long recipeId);
 
     @Query("SELECT DISTINCT new com.solution.recipetalk.dto.recipe.RecipeDTO(recipe, writer, board, userFollow.id IS NOT NULL, isBoardLiked.id IS NOT NULL, isBookmark.id IS NOT NULL) " +
