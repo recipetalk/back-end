@@ -69,8 +69,9 @@ public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
                 RecipeRow dtoRecipeRow = recipeRowRepository.findById(dto.getId()).orElseThrow(RecipeRowNotFoundException::new);
                 RecipeRow repoRecipeRow = recipeRowByRecipe_idAndSeqNum.get();
 
-                imageDelete(repoRecipeRow);
+
                 if(!dtoRecipeRow.getSeqNum().equals(repoRecipeRow.getSeqNum())) {
+                    imageDelete(repoRecipeRow);
                     recipeRowRepository.delete(repoRecipeRow);
                 }
 
