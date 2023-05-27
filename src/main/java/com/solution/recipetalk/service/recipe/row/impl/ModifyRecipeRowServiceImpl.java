@@ -20,6 +20,7 @@ import com.solution.recipetalk.service.recipe.row.ModifyRecipeRowService;
 import com.solution.recipetalk.service.recipe.row.RegisterRecipeRowService;
 import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
     private final RecipeRowRepository recipeRowRepository;
     private final RecipeRepository recipeRepository;
@@ -53,19 +55,11 @@ public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
 
         Optional<RecipeRow> recipeRowByRecipe_idAndSeqNum = recipeRowRepository.findRecipeRowByRecipe_IdAndSeqNum(recipeId, dto.getSeqNum());
 
-        //나보다 큰 녀석은 모두 삭제.
-        if(dto.getIsLast()){
-            List<RecipeRow> recipeRowsByRecipeIdAndSeqNum = recipeRowRepository.findRecipeRowsByRecipeIdAndSeqNum(recipeId, dto.getSeqNum());
 
-            recipeRowsByRecipeIdAndSeqNum.forEach(this::imageDelete);
-
-            if(recipeRowsByRecipeIdAndSeqNum.size() > 0){
-                recipeRowRepository.deleteAll(recipeRowsByRecipeIdAndSeqNum);
-            }
-        }
 
         if (recipeRowByRecipe_idAndSeqNum.isPresent()){
             if (dto.getId() != null) {
+                log.error(String.valueOf(dto.getId()));
                 RecipeRow dtoRecipeRow = recipeRowRepository.findById(dto.getId()).orElseThrow(RecipeRowNotFoundException::new);
                 RecipeRow repoRecipeRow = recipeRowByRecipe_idAndSeqNum.get();
 
@@ -111,6 +105,17 @@ public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
                 dtoRecipeRow.updateDescription(dto.getDescription());
             }else{
                 registerRecipeRowService.registerRecipeRow(findRecipe, dto.toRegisterDTO());
+            }
+        }
+
+        //나보다 큰 녀석은 모두 삭제.
+        if(dto.getIsLast()){
+            List<RecipeRow> recipeRowsByRecipeIdAndSeqNum = recipeRowRepository.findRecipeRowsByRecipeIdAndSeqNum(recipeId, dto.getSeqNum());
+
+            recipeRowsByRecipeIdAndSeqNum.forEach(this::imageDelete);
+
+            if(recipeRowsByRecipeIdAndSeqNum.size() > 0){
+                recipeRowRepository.deleteAll(recipeRowsByRecipeIdAndSeqNum);
             }
         }
 
