@@ -54,4 +54,19 @@ public class RegisterIngredientTrimmingRowServiceImpl implements RegisterIngredi
 
         return ResponseEntity.ok(null);
     }
+
+    @Override
+    public ResponseEntity<?> registerIngredientTrimmingRow(IngredientTrimmingRowRegisterDTO dto, IngredientTrimming ingredientTrimming) {
+
+        try {
+            IngredientTrimmingRow createdIngredientTrimmingRows = dto.toIngredientTrimmingRow(ingredientTrimming,
+                    dto.getImg() != null ? s3Uploader.upload(dto.getImg(), S3dir.INGREDIENT_TRIMMING_ROW_IMG_DIR) : null);
+            ingredientTrimmingRowRepository.save(createdIngredientTrimmingRows);
+        } catch (IOException e) {
+            throw new ImageUploadFailedException();
+        }
+
+
+        return ResponseEntity.ok(null);
+    }
 }

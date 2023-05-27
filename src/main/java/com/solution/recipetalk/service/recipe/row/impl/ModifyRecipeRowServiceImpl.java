@@ -59,7 +59,6 @@ public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
 
         if (recipeRowByRecipe_idAndSeqNum.isPresent()){
             if (dto.getId() != null) {
-                log.error(String.valueOf(dto.getId()));
                 RecipeRow dtoRecipeRow = recipeRowRepository.findById(dto.getId()).orElseThrow(RecipeRowNotFoundException::new);
                 RecipeRow repoRecipeRow = recipeRowByRecipe_idAndSeqNum.get();
 

@@ -42,4 +42,8 @@ public class IngredientTrimmingRow extends AuditingEntity {
             this.description = description;
         }
     }
+
+    public void changeTrimmingSeq(Long seqNum){
+        this.trimmingSeq = seqNum;
+    }
 }

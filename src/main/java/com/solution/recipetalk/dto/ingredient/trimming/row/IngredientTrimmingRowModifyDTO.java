@@ -13,11 +13,16 @@ import org.springframework.web.multipart.MultipartFile;
 public class IngredientTrimmingRowModifyDTO {
     @NonNull
     private String description;
+    private String imgUri;
 
     private MultipartFile img;
+    private Boolean isImgDeleted;
 
     @NonNull
     private Long trimmingSeq;
+
+    private Long id;
+    private Boolean isLast;
 
 
     public IngredientTrimmingRow toIngredientTrimmingRow(IngredientTrimming ingredientTrimming, String imgUri){
@@ -26,6 +31,14 @@ public class IngredientTrimmingRowModifyDTO {
                 .imgURI(imgUri)
                 .description(this.description)
                 .trimmingSeq(this.trimmingSeq)
+                .build();
+    }
+
+    public IngredientTrimmingRowRegisterDTO toRegisterDTO() {
+        return IngredientTrimmingRowRegisterDTO.builder()
+                .description(description)
+                .img(img)
+                .trimmingSeq(trimmingSeq)
                 .build();
     }
 }
