@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -55,7 +56,15 @@ public class FindIngredientTrimmingServiceImpl implements FindIngredientTrimming
 
         List<IngredientTrimmingRow> trimmingRows = ingredientTrimmingRowRepository
                 .findAllByIngredientTrimming(ingredientTrimmingRepository
-                        .findById(trimmingId).orElseThrow(IngredientTrimmingNotFoundException::new));
+                        .findById(trimmingId).orElseThrow(IngredientTrimmingNotFoundException::new)).stream().sorted((ingredientTrimmingRow, t1) -> {
+                    if(ingredientTrimmingRow.getTrimmingSeq() > t1.getTrimmingSeq()){
+                        return 1;
+                    }else if(ingredientTrimmingRow.getTrimmingSeq() == t1.getTrimmingSeq()){
+                        return 0;
+                    }else {
+                        return -1;
+                    }
+                }).collect(Collectors.toList());
 
         return ResponseEntity.ok(IngredientTrimmingFindResDTO.fromIngredientTrimmingDetailResultAndTrimmingRows(ingredientTrimmingDetail, trimmingRows));
     }
