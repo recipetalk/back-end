@@ -41,13 +41,13 @@ public class ModifyRecipeServiceImpl implements ModifyRecipeService {
         String thumbnailURI = null;
         if(recipe.getThumbnailImgURI() != null && dto.getIsThumbnailDeleted() ){
             s3Uploader.deleteFile(recipe.getThumbnailImgURI(), S3dir.RECIPE_IMG_DIR);
-            if(dto.getThumbnailImg() != null) {
-                try {
-                    thumbnailURI = s3Uploader.upload(dto.getThumbnailImg(), S3dir.RECIPE_IMG_DIR);
+        }
+        if(dto.getThumbnailImg() != null) {
+            try {
+                thumbnailURI = s3Uploader.upload(dto.getThumbnailImg(), S3dir.RECIPE_IMG_DIR);
 
-                } catch (IOException e) {
-                    throw new ImageUploadFailedException();
-                }
+            } catch (IOException e) {
+                throw new ImageUploadFailedException();
             }
         }
 

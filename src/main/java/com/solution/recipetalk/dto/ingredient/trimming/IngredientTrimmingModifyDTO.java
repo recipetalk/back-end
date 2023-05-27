@@ -21,6 +21,7 @@ public class IngredientTrimmingModifyDTO {
     private String title;
 
     private MultipartFile thumbnail;
+    private Boolean isThumbnailDeleted;
 
     public IngredientTrimming toIngredientTrimming(Board board, Ingredient ingredient, String thumbnailUri){
         return IngredientTrimming.builder()
