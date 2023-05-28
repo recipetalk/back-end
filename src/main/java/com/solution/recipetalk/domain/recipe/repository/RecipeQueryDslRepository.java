@@ -8,5 +8,4 @@ import java.util.List;
 
 public interface RecipeQueryDslRepository {
     List<RecipeForList> findRecipeList(RecipeListReqDTO dto, Long userId);
-    List<RecipeForList> findRecipeListByUser(RecipeByUserReqDTO dto, long userId);
 }

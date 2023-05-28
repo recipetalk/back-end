@@ -8,5 +8,4 @@ import org.springframework.http.ResponseEntity;
 public interface FindRecipeService {
     ResponseEntity<?> findRecipeWithId(Long recipeId);
     ResponseEntity<?> findRecipeList(RecipeListReqDTO dto);
-    ResponseEntity<?> findRecipeWithUsername(RecipeByUserReqDTO dto, String username);
 }

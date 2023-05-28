@@ -28,7 +28,7 @@ public class BoardRecipeDTO {
         return BoardRecipeDTO.builder()
                 .title(board.getTitle())
                 .createdDate(board.getCreatedDate())
-                .isLiked(recipeForList.isLiked())
+                .isLiked(recipeForList.getIsLiked())
                 .likeCount(board.getLikeCount())
                 .commentCount(board.getCommentCount())
                 .boardId(board.getId())
