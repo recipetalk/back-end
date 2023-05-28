@@ -27,7 +27,7 @@ public class RecipeDTO {
         return RecipeDTO.builder()
                 .board(boardDTO)
                 .description(recipe.getDescription())
-                .quantity(recipe.getQuantity().getValue()+"인분")
+                .quantity(recipe.getQuantity().toString())
                 .thumbnailUri(recipe.getThumbnailImgURI())
                 .recipeId(recipe.getId())
                 .level(recipe.getLevel().toString())
@@ -49,7 +49,7 @@ public class RecipeDTO {
 
         this.board = BoardDTO.toDTO(board, userSimpleProfileDTO, isLiked, isBookmarked);
         this.description = recipe.getDescription();
-        this.quantity = recipe.getQuantity().getValue()+"인분";
+        this.quantity = recipe.getQuantity().toString();
         this.thumbnailUri = recipe.getThumbnailImgURI();
         this.recipeId = recipe.getId();
         this.level = recipe.getLevel().toString();
