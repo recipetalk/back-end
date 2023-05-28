@@ -109,7 +109,7 @@ public class CommentNotificationVO implements NotificationVO {
                 .build();
     }
 
-    private String toNavigationId(Long parentCommentId, Long boardId, String boardSort) {
+    public static String toNavigationId(Long parentCommentId, Long boardId, String boardSort) {
         return String.format(NAVIGATION_ID_PATTERN,parentCommentId == null ? "null" : parentCommentId, boardId, boardSort);
     }
 }
