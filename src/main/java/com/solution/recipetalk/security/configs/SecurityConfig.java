@@ -4,18 +4,16 @@ package com.solution.recipetalk.security.configs;
 
 import com.solution.recipetalk.security.filter.JWTAuthenticationFilter;
 import com.solution.recipetalk.security.filter.JsonLoginProcessingFilter;
-import com.solution.recipetalk.security.handler.CustomAccessDeniedHandler;
-import com.solution.recipetalk.security.handler.CustomLoginAuthEntryPoint;
-import com.solution.recipetalk.security.handler.JsonAuthFailureHandler;
-import com.solution.recipetalk.security.handler.JsonAuthSuccessHandler;
+import com.solution.recipetalk.security.filter.RefreshAuthenticationFilter;
+import com.solution.recipetalk.security.handler.*;
 import com.solution.recipetalk.security.provider.JWTAuthenticationProvider;
 import com.solution.recipetalk.security.provider.JsonAuthenticationProvider;
+import com.solution.recipetalk.security.provider.RefreshAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -33,8 +31,6 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 @Configuration
@@ -60,6 +56,16 @@ public class SecurityConfig{
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler(){
         return new JsonAuthSuccessHandler();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler refreshAuthSuccessHandler() {
+        return new RefreshAuthSuccessHandler();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler refreshAuthFailureHandler() {
+        return new RefreshAuthFailureHandler();
     }
 
     @Bean
@@ -93,6 +99,13 @@ public class SecurityConfig{
         return jwtAuthenticationProvider;
     }
 
+    @Bean
+    public AuthenticationProvider refreshAuthenticationProvider() {
+        RefreshAuthenticationProvider refreshAuthenticationProvider = new RefreshAuthenticationProvider();
+        refreshAuthenticationProvider.setUserDetailsService(userDetailsService);
+        return refreshAuthenticationProvider;
+    }
+
     public JsonLoginProcessingFilter jsonLoginProcessingFilter(AuthenticationManager authenticationManager) throws Exception {
         JsonLoginProcessingFilter jsonLoginProcessingFilter = new JsonLoginProcessingFilter();
 
@@ -103,6 +116,17 @@ public class SecurityConfig{
         jsonLoginProcessingFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
 
         return jsonLoginProcessingFilter;
+    }
+
+    public RefreshAuthenticationFilter refreshAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
+        RefreshAuthenticationFilter refreshAuthenticationFilter = new RefreshAuthenticationFilter();
+
+        refreshAuthenticationFilter.setAuthenticationManager(authenticationManager);
+
+        refreshAuthenticationFilter.setAuthenticationFailureHandler(refreshAuthFailureHandler());
+        refreshAuthenticationFilter.setAuthenticationSuccessHandler(refreshAuthSuccessHandler());
+
+        return refreshAuthenticationFilter;
     }
 
 
@@ -124,6 +148,7 @@ public class SecurityConfig{
         ProviderManager p = (ProviderManager) authenticationManager;
         p.getProviders().add(jsonAuthenticationProvider()); // 계속 Provider에 DaoProvider만 저장되는 현상. 그래서 직접 할당하게 됨.
         p.getProviders().add(JWTAuthenticationProvider());
+        p.getProviders().add(refreshAuthenticationProvider());
 
         return http
                 .formLogin().disable()
@@ -139,6 +164,7 @@ public class SecurityConfig{
                 .and()
                 .addFilterAt(jsonLoginProcessingFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter(authenticationManager), JsonLoginProcessingFilter.class)
+                .addFilterBefore(refreshAuthenticationFilter(authenticationManager), JWTAuthenticationFilter.class)
 
                 /* 미인증, 인가예외 핸들러 등록 */
                 .exceptionHandling()
