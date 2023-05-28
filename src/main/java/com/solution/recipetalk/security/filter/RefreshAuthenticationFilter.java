@@ -1,7 +1,5 @@
 package com.solution.recipetalk.security.filter;
 
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.JWTVerifier;
 import com.solution.recipetalk.security.dto.properties.JWT;
 import com.solution.recipetalk.security.token.JWTAuthenticationToken;
 import jakarta.servlet.ServletException;
@@ -29,23 +27,11 @@ public class RefreshAuthenticationFilter extends AbstractAuthenticationProcessin
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         String refreshToken = request.getHeader(JWT.REFRESH_TOKEN_HEADER);
 
-        if(!checkIfRefreshToken(refreshToken))
+        if(refreshToken == null)
             throw new BadCredentialsException("Not a refresh token");
 
         JWTAuthenticationToken jwtAuthenticationToken = new JWTAuthenticationToken(refreshToken);
         return getAuthenticationManager().authenticate(jwtAuthenticationToken);
     }
 
-    private boolean checkIfRefreshToken(String refreshToken) {
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(refreshKey);
-            JWTVerifier verifier = com.auth0.jwt.JWT.require(algorithm).withIssuer(issuer).build();
-            verifier.verify(refreshToken);
-
-            return true;
-        } catch(Exception e) {
-            System.out.println(e.getClass());
-            return false;
-        }
-    }
 }
