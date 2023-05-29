@@ -19,7 +19,7 @@ import java.util.List;
 @SuperBuilder
 @Entity
 @Table(name="recipe")
-@SQLDelete(sql = "UPDATE recipe SET is_deleted = true WHERE recipe_id = ?")
+@SQLDelete(sql = "UPDATE recipe SET is_deleted = true WHERE board_id = ?")
 @Where(clause = "is_deleted = false")
 public class Recipe extends SoftDeleteEntity {
 

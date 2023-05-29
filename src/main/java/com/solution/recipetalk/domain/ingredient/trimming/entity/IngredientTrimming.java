@@ -16,7 +16,7 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor
 @Entity
 @Table(name="ingredient_trimming")
-@SQLDelete(sql = "UPDATE ingredient_trimming SET is_deleted = true WHERE ingredient_trimming_id = ?")
+@SQLDelete(sql = "UPDATE ingredient_trimming SET is_deleted = true WHERE board_id = ?")
 @Where(clause = "is_deleted = false")
 public class IngredientTrimming extends SoftDeleteEntity {
     @Id
