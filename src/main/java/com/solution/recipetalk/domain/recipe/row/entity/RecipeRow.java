@@ -36,9 +36,18 @@ public class RecipeRow extends AuditingEntity {
     @Column(name = "seq_num", nullable = false)
     private Long seqNum;
 
-    public void changeDescription(String description){
+    public void updateDescription(String description){
         if (description != null){
             this.description = description;
         }
     }
+
+    public void updateImageURI(String imageURI) {
+        this.imageURI = imageURI;
+    }
+
+    public void updateSeqNum(Long num) {
+        this.seqNum = num;
+    }
+
 }

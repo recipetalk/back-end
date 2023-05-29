@@ -42,8 +42,12 @@ public class EditIngredientTrimmingServiceImpl implements EditIngredientTrimming
 
         Board board = boardRepository.findById(ingredientTrimming.getBoard().getId()).orElseThrow(BoardNotFoundException::new);
 
-        String dir = "";
-        if( null != dto.getThumbnail() ){
+        String dir = null;
+        if( null != ingredientTrimming.getThumbnailUri() && dto.getIsThumbnailDeleted()){
+            s3Uploader.deleteFile(ingredientTrimming.getThumbnailUri(), S3dir.INGREDIENT_TRIMMING_IMG_DIR);
+        }
+
+        if(dto.getThumbnail() != null){
             try {
                 dir = s3Uploader.upload(dto.getThumbnail(), S3dir.INGREDIENT_TRIMMING_IMG_DIR);
             } catch (IOException e) {

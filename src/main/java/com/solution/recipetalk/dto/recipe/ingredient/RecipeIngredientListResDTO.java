@@ -14,6 +14,7 @@ public class RecipeIngredientListResDTO {
     private String name;
     private Boolean isHas;
     private String quantity;
+    private Long ingredientId;
 
 
     public static RecipeIngredientListResDTO ToResDTO(RecipeIngredientResult result){
@@ -21,6 +22,7 @@ public class RecipeIngredientListResDTO {
                 .quantity(result.getQuantity())
                 .isHas(result.getIsHas())
                 .name(result.getName())
+                .ingredientId(result.getIngredientId())
                 .build();
     }
 }

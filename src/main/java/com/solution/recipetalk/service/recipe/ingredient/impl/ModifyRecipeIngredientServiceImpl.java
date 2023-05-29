@@ -40,7 +40,7 @@ public class ModifyRecipeIngredientServiceImpl implements ModifyRecipeIngredient
         recipeIngredientRepository.deleteAll(recipeIngredientsByRecipeId);
 
         List<RecipeIngredient> newRecipeIngredientList = dtos.stream().map(dto -> dto.toRecipeIngredientEntity(
-                        ingredientRepository.findById(dto.getIngredientId()).orElse(null),
+                        dto.getIngredientId() == null ? null : ingredientRepository.findById(dto.getIngredientId()).orElse(null),
                         findRecipe
                 )
         ).toList();

@@ -27,9 +27,8 @@ public class IngredientTrimmingRepositoryImpl implements IngredientTrimmingQuery
         QIngredientTrimming qIngredientTrimming = QIngredientTrimming.ingredientTrimming;
         QBoard qBoard = QBoard.board;
         QUserDetail qUserDetail = QUserDetail.userDetail;
-        QIngredient qIngredient = QIngredient.ingredient;
 
-        JPAQuery<Tuple> queryBuilder = jpaQueryFactory.select(qIngredientTrimming, qBoard, qIngredient).from(qIngredientTrimming)
+        JPAQuery<Tuple> queryBuilder = jpaQueryFactory.select(qIngredientTrimming, qBoard).from(qIngredientTrimming)
                 .join(qBoard)
                 .on(qBoard.id.eq(qIngredientTrimming.board.id)
                         .and(qBoard.writer.id.eq(userId))
@@ -37,9 +36,8 @@ public class IngredientTrimmingRepositoryImpl implements IngredientTrimmingQuery
                 .join(qUserDetail)
                 .on(qUserDetail.id.eq(qBoard.writer.id)
                         .and(qUserDetail.isBlocked.eq(false))
-                        .and(qUserDetail.isDeleted.eq(false)))
-                .join(qIngredient)
-                .on(qIngredient.id.eq(qIngredientTrimming.ingredient.id));
+                        .and(qUserDetail.isDeleted.eq(false)));
+
 
         queryBuilder = getSqlBySortType(queryBuilder, dto.getSortType());
         queryBuilder = getSQlByOrderBy(queryBuilder, dto.getLimit(), dto.getOffset());

@@ -35,18 +35,18 @@ public class RecipeController {
         return findRecipeService.findRecipeWithId(recipeId);
     }
 
+    @GetMapping("/pick")
+    public ResponseEntity<?> recipePick(){
+        return findRecipeService.findPickRecipe();
+    }
+
     @GetMapping("/list")
     public ResponseEntity<?> recipeList(@Valid RecipeListReqDTO dto){
         return findRecipeService.findRecipeList(dto);
     }
 
-    @GetMapping("/username/{username}")
-    public ResponseEntity<?> recipeByUserDetails(@PathVariable(name = "username") String username, @Valid RecipeByUserReqDTO dto){
-        return findRecipeService.findRecipeWithUsername(dto, username);
-    }
-
     @PutMapping("/{id}")
-    public ResponseEntity<?> recipeModify(@PathVariable(name = "id") Long recipeId, @Valid @NonNull @RequestBody() RecipeModifyDTO recipeModifyDTO){
+    public ResponseEntity<?> recipeModify(@PathVariable(name = "id") Long recipeId, @Valid @NonNull RecipeModifyDTO recipeModifyDTO){
         return modifyRecipeService.modifyRecipe(recipeId, recipeModifyDTO);
     }
 

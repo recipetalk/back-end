@@ -42,9 +42,9 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
                 JPAExpressions.select(qUserBlock.blockedUser.id)
                         .from(qUserBlock)
                         .where(qUserBlock.user.id.eq(userId)));
-        BooleanExpression isBookMarked = qBookmark.user.id.isNotNull();
-        BooleanExpression isLiked = qBoardLike.user.id.isNotNull();
-        BooleanExpression isFollowing = qUserFollow.isNotNull();
+        BooleanExpression isBookMarked = qBookmark.id.isNotNull();
+        BooleanExpression isLiked = qBoardLike.id.isNotNull();
+        BooleanExpression isFollowing = qUserFollow.id.isNotNull();
 
         return jpaQueryFactory.select(qRecipe, qUserDetail, qBoard, isBookMarked.as("isBookmarked"), isLiked.as("isLiked"), isFollowing.as("isFollowing"))
                 .from(qRecipe)
@@ -112,18 +112,6 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
 
         queryBuilder = getBookmarkedAndBoardLikeAndisFollowing(queryBuilder, userId);
 
-        queryBuilder = getSQlByOrderBy(queryBuilder, dto.getLimit(), dto.getOffset());
-
-        return RecipeForList.toRecipeForList(queryBuilder.fetch());
-    }
-
-
-    @Override
-    public List<RecipeForList> findRecipeListByUser(RecipeByUserReqDTO dto, long userId){
-        JPAQuery<Tuple> queryBuilder = createCommonSql(userId);
-
-        queryBuilder = getSqlBySortType(queryBuilder, dto.getSortType(), userId);
-        queryBuilder = getBookmarkedAndBoardLikeAndisFollowing(queryBuilder, userId);
         queryBuilder = getSQlByOrderBy(queryBuilder, dto.getLimit(), dto.getOffset());
 
         return RecipeForList.toRecipeForList(queryBuilder.fetch());

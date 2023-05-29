@@ -18,14 +18,22 @@ public class RecipeDTO {
     private String thumbnailUri;
     private String quantity;
     private Long recipeId;
+    private String level;
+    private String durationTime;
+    private String sort;
+    private String situationCategory;
 
     public static RecipeDTO toDTO(Recipe recipe, BoardDTO boardDTO){
         return RecipeDTO.builder()
                 .board(boardDTO)
                 .description(recipe.getDescription())
-                .quantity(recipe.getQuantity().getValue()+"인분")
+                .quantity(recipe.getQuantity().toString())
                 .thumbnailUri(recipe.getThumbnailImgURI())
                 .recipeId(recipe.getId())
+                .level(recipe.getLevel().toString())
+                .durationTime(recipe.getDurationTime().toString())
+                .sort(recipe.getSort().toString())
+                .situationCategory(recipe.getSituation() != null ? recipe.getSituation().toString() : null)
                 .build();
     }
 
@@ -40,10 +48,14 @@ public class RecipeDTO {
                 .build();
 
         this.board = BoardDTO.toDTO(board, userSimpleProfileDTO, isLiked, isBookmarked);
-        this. description = recipe.getDescription();
+        this.description = recipe.getDescription();
         this.quantity = recipe.getQuantity().toString();
         this.thumbnailUri = recipe.getThumbnailImgURI();
         this.recipeId = recipe.getId();
+        this.level = recipe.getLevel().toString();
+        this.durationTime = recipe.getDurationTime().toString();
+        this.sort = recipe.getSort().toString();
+        this.situationCategory = recipe.getSituation() != null ? recipe.getSituation().toString() : null;
 
     }
 }

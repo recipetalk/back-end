@@ -14,6 +14,7 @@ public class RecipeRowDTO {
     private Long seqNum;
     private String description;
     private String imgUri;
+    private Long id;
 
 
     public static RecipeRowDTO toDTO(RecipeRow recipeRow){
@@ -21,6 +22,7 @@ public class RecipeRowDTO {
                 .description(recipeRow.getDescription())
                 .seqNum(recipeRow.getSeqNum())
                 .imgUri(recipeRow.getImageURI())
+                .id(recipeRow.getId())
                 .build();
     }
 }

@@ -19,6 +19,10 @@ import com.solution.recipetalk.domain.ingredient.repository.IngredientRepository
 import com.solution.recipetalk.domain.ingredient.trimming.entity.IngredientTrimming;
 import com.solution.recipetalk.domain.ingredient.trimming.repository.IngredientTrimmingRepository;
 import com.solution.recipetalk.domain.ingredient.trimming.row.repository.IngredientTrimmingRowRepository;
+import com.solution.recipetalk.domain.notification.entity.Notification;
+import com.solution.recipetalk.domain.notification.repository.NotificationRepository;
+import com.solution.recipetalk.domain.notification.state.NotificationSort;
+import com.solution.recipetalk.domain.notification.state.NotificationState;
 import com.solution.recipetalk.domain.product.entity.Product;
 import com.solution.recipetalk.domain.product.repository.ProductRepository;
 import com.solution.recipetalk.domain.recipe.entity.*;
@@ -42,6 +46,7 @@ import com.solution.recipetalk.exception.comment.CommentNotFoundException;
 import com.solution.recipetalk.exception.ingredient.IngredientNotFoundException;
 import com.solution.recipetalk.exception.recipe.RecipeNotFoundException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
+import com.solution.recipetalk.vo.notification.comment.CommentNotificationVO;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -78,6 +83,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private final BookmarkRepository bookmarkRepository;
     private final ProductRepository productRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final NotificationRepository notificationRepository;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -95,6 +101,15 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         loadBookmarkData();
         loadIngredientDescriptionData();
         loadProductData();
+        loadNotificationData();
+    }
+
+    private void loadNotificationData(){
+        createNotificationIfNotNull(1L, 1L, NotificationState.NOT_OPEN, "레시피톡", "테스트 알림1", CommentNotificationVO.toNavigationId(1L,1L, "RECIPE"), NotificationSort.COMMENT);
+        createNotificationIfNotNull(2L, 1L, NotificationState.NOT_OPEN, "레시피톡", "테스트 알림2", CommentNotificationVO.toNavigationId(1L,1L, "RECIPE"), NotificationSort.COMMENT);
+        createNotificationIfNotNull(3L, 1L, NotificationState.NOT_OPEN, "레시피톡", "테스트 알림3", CommentNotificationVO.toNavigationId(1L,1L, "RECIPE"), NotificationSort.COMMENT);
+        createNotificationIfNotNull(4L, 1L, NotificationState.NOT_OPEN, "레시피톡", "테스트 알림4", CommentNotificationVO.toNavigationId(1L,1L, "RECIPE"), NotificationSort.COMMENT);
+
     }
 
     private void loadUserData() {
@@ -414,5 +429,26 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
                 .ingredient(ingredient).build();
 
         productRepository.save(product);
+    }
+
+    private void createNotificationIfNotNull(Long notiId, Long userId, NotificationState state, String title, String body, String navigationId, NotificationSort sort){
+        Optional<Notification> findNoti = notificationRepository.findById(notiId);
+
+        if(findNoti.isPresent()){
+            return;
+        }else {
+            UserDetail user = userDetailRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+            Notification notification = Notification.builder()
+                    .sort(sort)
+                    .state(state)
+                    .user(user)
+                    .title(title)
+                    .navigationId(navigationId)
+                    .body(body)
+                    .build();
+
+            notificationRepository.save(notification);
+        }
+
     }
 }

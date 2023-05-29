@@ -39,8 +39,6 @@ public class IngredientTrimming extends SoftDeleteEntity {
     private String description;
 
     public void changeThumbnailUri(String thumbnailUri){
-        if (thumbnailUri != null){
-            this.thumbnailUri = thumbnailUri;
-        }
+        this.thumbnailUri = thumbnailUri;
     }
 }

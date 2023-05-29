@@ -21,9 +21,9 @@ public class RecipeForList {
     private Recipe recipe;
     private UserDetail writer;
     private Board board;
-    private boolean isBookmarked;
-    private boolean isLiked;
-    private boolean isFollowing;
+    private Boolean isBookmarked;
+    private Boolean isLiked;
+    private Boolean isFollowing;
 
     static List<RecipeForList> toRecipeForList(List<Tuple> recipeRaws){
         return recipeRaws.stream().map(recipeRaw ->
@@ -31,9 +31,9 @@ public class RecipeForList {
                     .recipe(recipeRaw.get(QRecipe.recipe))
                     .writer(recipeRaw.get(QUserDetail.userDetail))
                     .board(recipeRaw.get(QBoard.board))
-                    .isBookmarked(Boolean.TRUE.equals(recipeRaw.get(1, Boolean.class)))
-                    .isLiked(Boolean.TRUE.equals(recipeRaw.get(2, Boolean.class)))
-                    .isFollowing(Boolean.TRUE.equals(recipeRaw.get(3, Boolean.class)))
+                    .isBookmarked(Boolean.TRUE.equals(recipeRaw.get(3, Boolean.class)))
+                    .isLiked(Boolean.TRUE.equals(recipeRaw.get(4, Boolean.class)))
+                    .isFollowing(Boolean.TRUE.equals(recipeRaw.get(5, Boolean.class)))
                     .build())
                 .collect(Collectors.toList());
     }
