@@ -48,7 +48,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long>, RecipeQue
             "WHERE writer.isBlocked = FALSE " +
             "AND board.isDeleted = FALSE " +
             "AND userBlocked.id IS NULL " +
-            "AND recipe.id = :recipeId AND isBookmark IS NOT NULL")
+            "AND recipe.id = :recipeId AND isBookmark IS NOT NULL order by isBookmark.id desc ")
     List<RecipeDTO> findOneRecipeByViewerIdAndBookmarked(@Param("viewerId")Long viewerId, Pageable pageable);
 
 //    @Query("SELECT B.id AS boardId, B.title AS title, B.createdDate AS createdDate, (UBL.user.id IS NOT NULL or true) AS isLiked, " +
