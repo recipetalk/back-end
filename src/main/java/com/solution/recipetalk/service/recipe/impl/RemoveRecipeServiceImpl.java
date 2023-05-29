@@ -47,6 +47,7 @@ public class RemoveRecipeServiceImpl implements RemoveRecipeService {
     public ResponseEntity<?> removeRecipeById(Long recipeId){
         Long loginUser = ContextHolder.getUserLoginId();
         Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(RecipeNotFoundException::new);
+        Board board = boardRepository.findById(recipeId).orElseThrow(BoardNotFoundException::new);
         Long recipeWriterId = recipe.getBoard().getWriter().getId();
 
         if (!Objects.equals(loginUser, recipeWriterId)){
@@ -60,7 +61,7 @@ public class RemoveRecipeServiceImpl implements RemoveRecipeService {
         recipeRows.forEach(recipeRow -> removeRecipeRowService.removeRecipeRowNoWriterCheckingById(recipeRow.getId()));
         recipeIngredientRepository.deleteAll(recipeIngredients);
         recipeRepository.delete(recipe);
-        boardRepository.delete(recipe.getBoard());
+        boardRepository.delete(board);
 
         return ResponseEntity.ok(null);
     }
