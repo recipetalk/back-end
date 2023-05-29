@@ -32,7 +32,8 @@ jobs:
         
       - name: make fcm
         run: |
-            cd ./src/main/resources
+            mkdir ./src/main/resources/firebase
+            cd ./src/main/resources/firebase
             touch ./fcm-private-key.json
             echo "${{ secrets.AWS_FCM_KEY }}" > ./fcm-private-key.json
         shell: bash
