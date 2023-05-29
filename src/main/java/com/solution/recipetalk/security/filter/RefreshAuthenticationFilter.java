@@ -28,10 +28,15 @@ public class RefreshAuthenticationFilter extends AbstractAuthenticationProcessin
         String refreshToken = request.getHeader(JWT.REFRESH_TOKEN_HEADER);
 
         if(refreshToken == null)
-            throw new BadCredentialsException("Not a refresh token");
+            throw new BadCredentialsException("No token.");
 
-        JWTAuthenticationToken jwtAuthenticationToken = new JWTAuthenticationToken(refreshToken);
+        if(!refreshToken.startsWith(JWT.TOKEN_PREFIX)) {
+            throw new BadCredentialsException("Not a bearer token.");
+        }
+
+        String realToken = refreshToken.substring(JWT.TOKEN_PREFIX.length());
+
+        JWTAuthenticationToken jwtAuthenticationToken = new JWTAuthenticationToken(realToken);
         return getAuthenticationManager().authenticate(jwtAuthenticationToken);
     }
-
 }
