@@ -38,9 +38,10 @@ public class ModifyRecipeServiceImpl implements ModifyRecipeService {
         }
 
         board.changeTitle(dto.getTitle());
-        String thumbnailURI = null;
+        String thumbnailURI = recipe.getThumbnailImgURI();
         if(recipe.getThumbnailImgURI() != null && dto.getIsThumbnailDeleted() ){
             s3Uploader.deleteFile(recipe.getThumbnailImgURI(), S3dir.RECIPE_IMG_DIR);
+            thumbnailURI = null;
         }
         if(dto.getThumbnailImg() != null) {
             try {
