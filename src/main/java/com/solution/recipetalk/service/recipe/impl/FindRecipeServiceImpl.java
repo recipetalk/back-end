@@ -16,6 +16,8 @@ import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.recipe.FindRecipeService;
 import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +41,13 @@ public class FindRecipeServiceImpl implements FindRecipeService {
             return ResponseEntity.ok(recipeByViewerId.get());
         else
             return ResponseEntity.notFound().build();
+    }
+
+    @Override
+    public ResponseEntity<?> findPickRecipe() {
+        List<RecipeDTO> findPickRecipe = recipeRepository.findOneRecipeByViewerIdAndBookmarked(ContextHolder.getUserLoginId(), PageRequest.of(0,1));
+
+        return ResponseEntity.ok(findPickRecipe);
     }
 
     @Override

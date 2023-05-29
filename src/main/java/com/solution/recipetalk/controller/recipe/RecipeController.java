@@ -35,6 +35,11 @@ public class RecipeController {
         return findRecipeService.findRecipeWithId(recipeId);
     }
 
+    @GetMapping("/pick")
+    public ResponseEntity<?> recipePick(){
+        return findRecipeService.findPickRecipe();
+    }
+
     @GetMapping("/list")
     public ResponseEntity<?> recipeList(@Valid RecipeListReqDTO dto){
         return findRecipeService.findRecipeList(dto);
