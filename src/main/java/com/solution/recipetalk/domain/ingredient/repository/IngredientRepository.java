@@ -13,7 +13,7 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
 
     @Query(value = "select new com.solution.recipetalk.dto.ingredient.IngredientFindResultDTO(i.name, i.id) " +
             "from Ingredient i " +
-            "where i.name like :nameComponent% order by i.name asc limit 10"
+            "where i.name like :nameComponent% order by i.usedCount desc limit 10"
     )
     List<IngredientFindResultDTO> findSomeStartWith(String nameComponent);
 }
