@@ -12,5 +12,10 @@ import java.util.Optional;
 
 public interface IngredientTrimmingRowRepository extends JpaRepository<IngredientTrimmingRow, Long> {
     List<IngredientTrimmingRow> findAllByIngredientTrimming(IngredientTrimming ingredientTrimming);
-    Optional<IngredientTrimmingRow> findByIngredientTrimmingAndTrimmingSeqAndTrimmingSubSeq(IngredientTrimming ingredientTrimming, Long trimmingSeq, Long trimmingSubSeq);
+
+    @Query("SELECT itr FROM IngredientTrimmingRow itr WHERE itr.ingredientTrimming.id = :trimmingId AND itr.trimmingSeq = :trimmingSeq")
+    Optional<IngredientTrimmingRow> findByIngredientTrimmingAndTrimmingSeq(@Param("trimmingId")Long trimmingId, @Param("trimmingSeq")Long trimmingSeq);
+
+    @Query("SELECT itr FROM IngredientTrimmingRow itr WHERE itr.ingredientTrimming.id = :trimmingId AND itr.trimmingSeq > :trimmingSeq ")
+    List<IngredientTrimmingRow> findIngredientTrimmingRowsByIngredientTrimming_IdAndTrimmingSeq(@Param("trimmingId")Long trimmingId, @Param("trimmingSeq")Long trimmingSeq);
 }

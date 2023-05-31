@@ -22,7 +22,7 @@ public class UserHasIngredientRepositoryImpl implements UserHasIngredientCustomR
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<UserHasIngredientResponseDTO> findAllUserIngredient(Pageable pageable, Long startId, String sortElement) {
+    public Page<UserHasIngredientResponseDTO> findAllUserIngredient(Pageable pageable, String sortElement) {
         QUserHasIngredient userHasIngredient = QUserHasIngredient.userHasIngredient;
         QIngredient ingredient = QIngredient.ingredient;
 
@@ -32,12 +32,14 @@ public class UserHasIngredientRepositoryImpl implements UserHasIngredientCustomR
             case "expiry_date_immi" -> new OrderSpecifier<>(Order.ASC, userHasIngredient.expirationDate);
             case "expiry_date_spare" -> new OrderSpecifier<>(Order.DESC, userHasIngredient.expirationDate);
             case "new" -> new OrderSpecifier<>(Order.ASC, userHasIngredient.createdDate);
+            case "old" -> new OrderSpecifier<>(Order.DESC, userHasIngredient.createdDate);
             default -> null;
         };
 
-        JPAQuery<UserHasIngredientResponseDTO> query = queryFactory.select(Projections.bean(UserHasIngredientResponseDTO.class, userHasIngredient.ingredient.name, userHasIngredient.state, userHasIngredient.quantity, userHasIngredient.expirationDate, userHasIngredient.ingredient.id))
+        JPAQuery<UserHasIngredientResponseDTO> query = queryFactory
+                .select(Projections.bean(UserHasIngredientResponseDTO.class, userHasIngredient.name.as("ingredientName"), userHasIngredient.state, userHasIngredient.quantity, userHasIngredient.expirationDate, userHasIngredient.ingredient.id.as("ingredientId"), userHasIngredient.id.as("userHasIngredientId")))
                 .from(userHasIngredient)
-                .join(userHasIngredient.ingredient, ingredient)
+                .leftJoin(userHasIngredient.ingredient, ingredient).on(userHasIngredient.ingredient.eq(ingredient))
                 .orderBy(orderSpecifier);
 
         JPAQuery<UserHasIngredient> countQuery = queryFactory.selectFrom(userHasIngredient);

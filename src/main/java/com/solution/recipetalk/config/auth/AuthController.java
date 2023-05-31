@@ -2,17 +2,16 @@ package com.solution.recipetalk.config.auth;
 
 
 import com.solution.recipetalk.dto.fcm.temp.TempFcmTokenRegisterDTO;
-import com.solution.recipetalk.dto.user.PhoneAuthRequestDTO;
-import com.solution.recipetalk.dto.user.PhoneAuthVerificationRequestDTO;
-import com.solution.recipetalk.dto.user.SignUpUserReqDto;
+import com.solution.recipetalk.dto.user.*;
 import com.solution.recipetalk.service.fcm.temp.RegisterTempFcmTokenService;
-import com.solution.recipetalk.service.mail.SendMailForTemporaryPasswordService;
+import com.solution.recipetalk.service.mail.SendMailForModifyingPasswordService;
 import com.solution.recipetalk.service.mail.SendMailService;
 import com.solution.recipetalk.service.sms.SMSRequestService;
 import com.solution.recipetalk.service.user.FindUserService;
 import com.solution.recipetalk.service.user.RegisterUserService;
 import com.solution.recipetalk.service.user.VerifyAuthenticationService;
 import com.solution.recipetalk.service.user.login.FindUserLoginService;
+import com.solution.recipetalk.service.user.login.ModifyUserLoginService;
 import jakarta.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -40,11 +39,13 @@ public class AuthController {
 
     private final FindUserLoginService findUserLoginService;
 
+    private final ModifyUserLoginService modifyUserLoginService;
+
     private final SendMailService sendMailService;
 
     private final RegisterTempFcmTokenService registerTempFcmTokenService;
 
-    private final SendMailForTemporaryPasswordService sendMailForTemporaryPasswordService;
+    private final SendMailForModifyingPasswordService sendMailForModifyingPasswordService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUpUser(@RequestBody @NonNull SignUpUserReqDto signUpUserReqDto){
@@ -91,8 +92,13 @@ public class AuthController {
         return registerTempFcmTokenService.registerTempFcmTokenService(dto);
     }
 
-    @GetMapping("/find/pw/{username}")
-    public ResponseEntity<?> forgottenPasswordModify(@PathVariable(name = "username") String username) {
-        return sendMailForTemporaryPasswordService.sendEmail(username);
+    @PostMapping("/find/pw")
+    public ResponseEntity<?> forgottenPasswordModify(@RequestBody ForgottenPasswordFindResponseDTO dto) {
+        return sendMailForModifyingPasswordService.sendEmail(dto);
+    }
+
+    @PatchMapping("/reset/pw")
+    public ResponseEntity<?> passwordReset(@RequestBody PasswordResetDTO dto) {
+        return modifyUserLoginService.modifyPassword(dto);
     }
 }

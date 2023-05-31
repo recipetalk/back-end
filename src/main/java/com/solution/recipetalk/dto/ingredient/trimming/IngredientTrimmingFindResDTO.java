@@ -2,7 +2,11 @@ package com.solution.recipetalk.dto.ingredient.trimming;
 
 import com.solution.recipetalk.domain.ingredient.trimming.repository.IngredientTrimmingRepository.IngredientTrimmingDetailResult;
 import com.solution.recipetalk.domain.ingredient.trimming.row.entity.IngredientTrimmingRow;
+import com.solution.recipetalk.domain.user.entity.UserDetail;
+import com.solution.recipetalk.dto.board.BoardDTO;
+import com.solution.recipetalk.dto.ingredient.IngredientFindResultDTO;
 import com.solution.recipetalk.dto.ingredient.trimming.row.IngredientTrimmingRowResDTO;
+import com.solution.recipetalk.dto.user.UserSimpleProfileDTO;
 import lombok.*;
 
 import java.util.List;
@@ -13,13 +17,24 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class IngredientTrimmingFindResDTO {
-    String description;
     List<IngredientTrimmingRowResDTO> trimmingRows;
+    BoardDTO boardDTO;
+    String description;
+    String thumbnailURI;
+    IngredientFindResultDTO ingredient;
 
     public static IngredientTrimmingFindResDTO fromIngredientTrimmingDetailResultAndTrimmingRows(IngredientTrimmingDetailResult result, List<IngredientTrimmingRow> trimmingRows){
         IngredientTrimmingFindResDTO dto = new IngredientTrimmingFindResDTO();
-        dto.setDescription(result.getDescription());
+        UserSimpleProfileDTO userSimpleProfileDTO = UserSimpleProfileDTO.toDTO(result.getWriter(), result.getIsFollowed());
+        BoardDTO boardDTO = BoardDTO.toDTO(result.getBoard(), userSimpleProfileDTO, result.getIsLiked(), result.getIsBookmarked());
+        dto.setBoardDTO(boardDTO);
+        dto.setDescription(result.getIngredientTrimming().getDescription());
+        dto.setThumbnailURI(result.getIngredientTrimming().getThumbnailUri());
         dto.setTrimmingRows(trimmingRows.stream().map(IngredientTrimmingRowResDTO::fromTrimmingRow).toList());
+        IngredientFindResultDTO dto1 = IngredientFindResultDTO.toDTO(result.getIngredient());
+
+        dto.setIngredient(dto1);
+
         return dto;
     }
 

@@ -34,6 +34,9 @@ public class RecipeListReqDTO {
     @Length(max = 10000)
     private String title;
 
+    @Nullable
+    private String targetUsername;
+
     //TODO: length validate
     @NonNull
     private Integer offset;

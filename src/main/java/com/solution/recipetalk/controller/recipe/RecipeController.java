@@ -1,5 +1,6 @@
 package com.solution.recipetalk.controller.recipe;
 
+import com.solution.recipetalk.dto.recipe.RecipeByUserReqDTO;
 import com.solution.recipetalk.dto.recipe.RecipeListReqDTO;
 import com.solution.recipetalk.dto.recipe.RecipeModifyDTO;
 import com.solution.recipetalk.dto.recipe.RecipeRegisterDTO;
@@ -34,23 +35,28 @@ public class RecipeController {
         return findRecipeService.findRecipeWithId(recipeId);
     }
 
+    @GetMapping("/pick")
+    public ResponseEntity<?> recipePick(){
+        return findRecipeService.findPickRecipe();
+    }
+
     @GetMapping("/list")
     public ResponseEntity<?> recipeList(@Valid RecipeListReqDTO dto){
         return findRecipeService.findRecipeList(dto);
     }
 
-    @GetMapping("/username/{username}")
-    public ResponseEntity<?> recipeByUserDetails(@PathVariable(name = "username") String username){
-        return findRecipeService.findRecipeWithUsername(username);
-    }
-
     @PutMapping("/{id}")
-    public ResponseEntity<?> recipeModify(@PathVariable(name = "id") Long recipeId, @Valid @NonNull @RequestBody() RecipeModifyDTO recipeModifyDTO){
+    public ResponseEntity<?> recipeModify(@PathVariable(name = "id") Long recipeId, @Valid @NonNull RecipeModifyDTO recipeModifyDTO){
         return modifyRecipeService.modifyRecipe(recipeId, recipeModifyDTO);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> recipeRemove(@PathVariable(name = "id") Long recipeId){
         return removeRecipeService.removeRecipeById(recipeId);
+    }
+
+    @DeleteMapping("/hard/{id}")
+    public ResponseEntity<?> recipeHardRemove(@PathVariable(name = "id") Long recipeId){
+        return removeRecipeService.hardRemoveRecipeById(recipeId);
     }
 }

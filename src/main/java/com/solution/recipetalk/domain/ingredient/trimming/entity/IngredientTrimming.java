@@ -16,21 +16,21 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor
 @Entity
 @Table(name="ingredient_trimming")
-@SQLDelete(sql = "UPDATE ingredient_trimming SET is_deleted = true WHERE ingredient_trimming_id = ?")
+@SQLDelete(sql = "UPDATE ingredient_trimming SET is_deleted = true WHERE board_id = ?")
 @Where(clause = "is_deleted = false")
 public class IngredientTrimming extends SoftDeleteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name ="ingredient_trimming_id", nullable = false)
     private Long id;
+
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id", nullable = false ,referencedColumnName = "board_id")
+    private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredient_id", nullable = false)
     private Ingredient ingredient;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id", nullable = false)
-    private Board board;
 
     @Column(name = "thumb_nail_uri")
     private String thumbnailUri;
@@ -39,8 +39,6 @@ public class IngredientTrimming extends SoftDeleteEntity {
     private String description;
 
     public void changeThumbnailUri(String thumbnailUri){
-        if (thumbnailUri != null){
-            this.thumbnailUri = thumbnailUri;
-        }
+        this.thumbnailUri = thumbnailUri;
     }
 }

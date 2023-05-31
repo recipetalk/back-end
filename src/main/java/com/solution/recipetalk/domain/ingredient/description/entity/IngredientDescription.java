@@ -17,11 +17,11 @@ public class IngredientDescription extends AuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ingredient_description_id", nullable = false)
     private Long id;
 
+    @MapsId
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id", nullable = false)
+    @JoinColumn(name = "board_id", nullable = false, referencedColumnName = "board_id")
     private Board board;
 
     @OneToOne(fetch = FetchType.LAZY)

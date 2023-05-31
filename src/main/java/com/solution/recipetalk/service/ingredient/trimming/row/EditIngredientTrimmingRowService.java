@@ -6,5 +6,5 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface EditIngredientTrimmingRowService {
-    ResponseEntity<?> editIngredientTrimmingRow(List<IngredientTrimmingRowModifyDTO> dtoList, Long trimmingId);
+    ResponseEntity<?> editIngredientTrimmingRow(IngredientTrimmingRowModifyDTO dto, Long trimmingId);
 }

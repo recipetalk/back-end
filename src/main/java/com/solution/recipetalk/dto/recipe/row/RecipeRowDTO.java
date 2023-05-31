@@ -11,18 +11,18 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class RecipeRowDTO {
-    private Long sequenceNum;
+    private Long seqNum;
     private String description;
-    private List<String> imgUris;
-    private Long rowSeq;
+    private String imgUri;
+    private Long id;
 
 
-    public static RecipeRowDTO toDTO(RecipeRow recipeRow, List<String> imgUris, Long sequenceNum, Long recipeRowId){
+    public static RecipeRowDTO toDTO(RecipeRow recipeRow){
         return RecipeRowDTO.builder()
                 .description(recipeRow.getDescription())
-                .sequenceNum(sequenceNum)
-                .imgUris(imgUris)
-                .rowSeq(recipeRowId)
+                .seqNum(recipeRow.getSeqNum())
+                .imgUri(recipeRow.getImageURI())
+                .id(recipeRow.getId())
                 .build();
     }
 }

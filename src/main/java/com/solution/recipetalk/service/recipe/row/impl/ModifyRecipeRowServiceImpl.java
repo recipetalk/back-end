@@ -3,91 +3,146 @@ package com.solution.recipetalk.service.recipe.row.impl;
 import com.solution.recipetalk.config.properties.S3dir;
 import com.solution.recipetalk.domain.image.entity.Image;
 import com.solution.recipetalk.domain.image.repository.ImageRepository;
+import com.solution.recipetalk.domain.recipe.entity.Recipe;
+import com.solution.recipetalk.domain.recipe.repository.RecipeRepository;
 import com.solution.recipetalk.domain.recipe.row.entity.RecipeRow;
-import com.solution.recipetalk.domain.recipe.row.img.entity.RecipeRowImg;
-import com.solution.recipetalk.domain.recipe.row.img.repository.RecipeRowImgRepository;
 import com.solution.recipetalk.domain.recipe.row.repository.RecipeRowRepository;
+import com.solution.recipetalk.dto.recipe.row.RecipeRowDTO;
 import com.solution.recipetalk.dto.recipe.row.RecipeRowModifyDTO;
 import com.solution.recipetalk.dto.recipe.row.RecipeRowModifyDTOWrapper;
+import com.solution.recipetalk.exception.common.NotAuthorizedException;
+import com.solution.recipetalk.exception.common.NotAuthorizedToModifyException;
+import com.solution.recipetalk.exception.recipe.RecipeNotFoundException;
+import com.solution.recipetalk.exception.recipe.row.RecipeRowNotFoundException;
 import com.solution.recipetalk.exception.s3.ImageUploadFailedException;
 import com.solution.recipetalk.s3.upload.S3Uploader;
 import com.solution.recipetalk.service.recipe.row.ModifyRecipeRowService;
+import com.solution.recipetalk.service.recipe.row.RegisterRecipeRowService;
 import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import software.amazon.ion.IonException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class ModifyRecipeRowServiceImpl implements ModifyRecipeRowService {
     private final RecipeRowRepository recipeRowRepository;
-    private final RecipeRowImgRepository recipeRowImgRepository;
-    private final ImageRepository imageRepository;
+    private final RecipeRepository recipeRepository;
     private final S3Uploader s3Uploader;
-
+    private final RegisterRecipeRowService registerRecipeRowService;
     @Override
-    public ResponseEntity<?> modifyRecipeRow(Long recipeId, RecipeRowModifyDTOWrapper wrapper){
-        Long loginUserId = ContextHolder.getUserLoginId();
-        List<RecipeRowModifyDTO> dtoList = wrapper.getDtoList();
+    public ResponseEntity<?> modifyRecipeRow(Long recipeId, RecipeRowModifyDTO dto){
+        Recipe findRecipe = recipeRepository.findById(recipeId).orElseThrow(RecipeNotFoundException::new);
 
-        if (dtoList.size() > 0){
-            // TODO: Exception (NotFoundRecipeRowException)
-            Long recipeRowUserId = recipeRowRepository.findById(wrapper.getDtoList().get(0).getRowSeq()).orElseThrow()
-                    .getRecipe().getBoard().getWriter().getId();
+        //권한 체킹
+        if(!recipeRepository.existsRecipeByBoardWriter_IdAndId(ContextHolder.getUserLoginId(), recipeId)){
+            throw new NotAuthorizedException();
+        }
+        //레시피 Seq로 찾아오는 로직 필요
+        //이 경우에는 찾아온 녀석 entity 삭제 후 dto.id 찾아와서 등록 (
 
-            // TODO: Exception (수정 권한 검증)
-            if (!Objects.equals(loginUserId, recipeRowUserId)){
-                throw new RuntimeException("수정 권한이 없습니다.");
+        Optional<RecipeRow> recipeRowByRecipe_idAndSeqNum = recipeRowRepository.findRecipeRowByRecipe_IdAndSeqNum(recipeId, dto.getSeqNum());
+
+
+
+        if (recipeRowByRecipe_idAndSeqNum.isPresent()){
+            if (dto.getId() != null) {
+                RecipeRow dtoRecipeRow = recipeRowRepository.findById(dto.getId()).orElseThrow(RecipeRowNotFoundException::new);
+                RecipeRow repoRecipeRow = recipeRowByRecipe_idAndSeqNum.get();
+
+
+                if(!dtoRecipeRow.getSeqNum().equals(repoRecipeRow.getSeqNum())) {
+                    imageDelete(repoRecipeRow);
+                    recipeRowRepository.delete(repoRecipeRow);
+                }
+
+                if(dto.getImg() != null) {
+                    imageDelete(dtoRecipeRow);
+                    uploadImage(dto.getImg(), dtoRecipeRow);
+                }else {
+                    dtoRecipeRow.updateImageURI(dto.getImgUri());
+                }
+
+                dtoRecipeRow.updateSeqNum(dto.getSeqNum());
+                dtoRecipeRow.updateDescription(dto.getDescription());
+            }else {
+                RecipeRow repoRecipeRow = recipeRowByRecipe_idAndSeqNum.get();
+
+                imageDelete(repoRecipeRow);
+
+                if(dto.getImg() != null) {
+                    uploadImage(dto.getImg(), repoRecipeRow);
+                }
+
+                repoRecipeRow.updateSeqNum(dto.getSeqNum());
+                repoRecipeRow.updateDescription(dto.getDescription());
+            }
+        }else {
+            if(dto.getId() != null) {
+                RecipeRow dtoRecipeRow = recipeRowRepository.findById(dto.getId()).orElseThrow(RecipeRowNotFoundException::new);
+
+                if(dto.getImg() != null) {
+                    imageDelete(dtoRecipeRow);
+                    uploadImage(dto.getImg(), dtoRecipeRow);
+                }else {
+                    dtoRecipeRow.updateImageURI(dto.getImgUri());
+                }
+
+                dtoRecipeRow.updateSeqNum(dto.getSeqNum());
+                dtoRecipeRow.updateDescription(dto.getDescription());
+            }else{
+                registerRecipeRowService.registerRecipeRow(findRecipe, dto.toRegisterDTO());
             }
         }
 
-        dtoList.forEach(recipeRowModifyDTO -> {
-            // TODO: Exception (NotFoundRecipeRowException)
-            RecipeRow recipeRow = recipeRowRepository.findById(recipeRowModifyDTO.getRowSeq()).orElseThrow();
+        //나보다 큰 녀석은 모두 삭제.
+        if(dto.getIsLast()){
+            List<RecipeRow> recipeRowsByRecipeIdAndSeqNum = recipeRowRepository.findRecipeRowsByRecipeIdAndSeqNum(recipeId, dto.getSeqNum());
 
-            List<String> imgUriList = recipeRowImgRepository.findImageURIByRecipeRowId(recipeRow.getId());
-            List<Long> imgIdList = recipeRowImgRepository.findImageIdByRecipeRowId(recipeRow.getId());
-            List<Image> imgs = imageRepository.findAllById(imgIdList);
-            List<String> newImgUri = new ArrayList<>();
+            recipeRowsByRecipeIdAndSeqNum.forEach(this::imageDelete);
 
-            // 이미지 업로드 및 recipeRow 수정
-            recipeRowModifyDTO.getImgs().forEach(img -> {
-                try{
-                    newImgUri.add(s3Uploader.upload(img, S3dir.RECIPE_ROW_IMG_DIR));
-                }catch (IOException e){
-                    throw new ImageUploadFailedException();
-                }
-            });
-
-
-            // 업로드 정상 확인
-            if (newImgUri.size() != imgs.size()){
-                // TODO: Exception
-                throw new RuntimeException("파일 업로드 중 문제가 발생하였습니다. 재시도해주세요.");
+            if(recipeRowsByRecipeIdAndSeqNum.size() > 0){
+                recipeRowRepository.deleteAll(recipeRowsByRecipeIdAndSeqNum);
             }
+        }
 
-            // 기존 이미지 s3 삭제
-            imgUriList.forEach(uri -> s3Uploader.deleteFile(uri, S3dir.RECIPE_ROW_IMG_DIR));
-
-            // 이미지 uri 수정
-            for (int i = 0; i < imgs.size(); i++){
-                imgs.get(i).changeUri(newImgUri.get(i));
-            }
-
-            // row description, timer 수정
-            recipeRow.changeDescription(recipeRowModifyDTO.getDescription());
-            recipeRow.changeTimer(recipeRowModifyDTO.getTimer());
-        });
+        //Seq가 없다면 dto.Id로 Entity 찾아오는 로직 필요
+        //이럴 경우엔 Seq를 변경하는 로직 추가. (이미지가 멀티파트다. 그럼 등록. isDelete가 true다. 그럼 삭제)
 
 
-        return null;
+        //마지막 시퀀스면 나머지 다 삭제하는 로직 필요
+
+
+
+        return ResponseEntity.ok(null);
+    }
+
+    private void imageDelete(RecipeRow recipeRow){
+        if(recipeRow.getImageURI() != null){
+            s3Uploader.deleteFile(recipeRow.getImageURI(), S3dir.RECIPE_ROW_IMG_DIR);
+            recipeRow.updateImageURI(null);
+        }
+    }
+
+    private void uploadImage(MultipartFile file, RecipeRow entity){
+        try {
+            String uri = s3Uploader.upload(file, S3dir.RECIPE_ROW_IMG_DIR);
+            entity.updateImageURI(uri);
+        } catch (IOException e) {
+            throw new ImageUploadFailedException();
+        }
     }
 }
+

@@ -22,8 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -47,6 +45,21 @@ public class RegisterIngredientTrimmingRowServiceImpl implements RegisterIngredi
 
         try {
             IngredientTrimmingRow createdIngredientTrimmingRows = dto.toIngredientTrimmingRow(findIngredientTrimming,
+                    dto.getImg() != null ? s3Uploader.upload(dto.getImg(), S3dir.INGREDIENT_TRIMMING_ROW_IMG_DIR) : null);
+            ingredientTrimmingRowRepository.save(createdIngredientTrimmingRows);
+        } catch (IOException e) {
+            throw new ImageUploadFailedException();
+        }
+
+
+        return ResponseEntity.ok(null);
+    }
+
+    @Override
+    public ResponseEntity<?> registerIngredientTrimmingRow(IngredientTrimmingRowRegisterDTO dto, IngredientTrimming ingredientTrimming) {
+
+        try {
+            IngredientTrimmingRow createdIngredientTrimmingRows = dto.toIngredientTrimmingRow(ingredientTrimming,
                     dto.getImg() != null ? s3Uploader.upload(dto.getImg(), S3dir.INGREDIENT_TRIMMING_ROW_IMG_DIR) : null);
             ingredientTrimmingRowRepository.save(createdIngredientTrimmingRows);
         } catch (IOException e) {

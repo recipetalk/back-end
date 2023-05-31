@@ -6,6 +6,7 @@ import com.solution.recipetalk.dto.comment.CommentResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -79,7 +80,13 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Optional<Comment> findByBoardAndId(Board board, Long commentId);
 
-    void deleteAllByBoard(Board board);
+    @Modifying
+    @Query(value = "DELETE FROM comment WHERE board_id = :boardId AND parent_comment_id is not null", nativeQuery = true)
+    void hardDeleteChildCommentsAllByBoard_Id(@Param("boardId") Long boardId);
+
+    @Modifying
+    @Query(value = "DELETE FROM comment WHERE board_id = :boardId", nativeQuery = true)
+    void hardDeleteParentCommentsAllByBoard_id(@Param("boardId") Long boardId);
 
     @Query(value = "SELECT distinct new com.solution.recipetalk.dto.comment.CommentResponseDTO(writer.username, writer.nickname, writer.profileImageURI, c.id, c.description, c.createdDate, c.createdDate <> c.modifiedDate as Modified, childComment is not null, c.isDeleted, writer.isDeleted) " +
             "FROM Comment c " +

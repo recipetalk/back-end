@@ -11,6 +11,9 @@ public enum ErrorCode {
     NOT_FOUND(HttpStatus.NOT_FOUND, "C001", "페이지를 찾을 수 없습니다"),
     NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "C003", "권한이 없습니다"),
 
+    NOT_AUTHORIZED_TO_REMOVE(HttpStatus.FORBIDDEN, "C004", "삭제 권한이 없습니다"),
+    NOT_AUTHORIZED_TO_MODIFY(HttpStatus.FORBIDDEN, "C005", "수정 권한이 없습니다"),
+
     // signup
     SMS_API_REQUEST_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "U002", "인증번호를 다시 한번 요청해 주세요."),
     PHONE_AUTH_ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND, "U003", "인증번호를 요청해 주세요."),
@@ -49,15 +52,19 @@ public enum ErrorCode {
     // recipe
     RECIPE_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "R001", "레시피를 찾을 수 없습니다."),
 
+    RECIPE_ROW_NOT_FOUND(HttpStatus.NOT_FOUND, "R002", "레시피 행을 찾을 수 없습니다."),
+
     // user
     USER_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "U001", "유저를 찾을 수 없습니다."),
 
     // user Follow
     USER_FOLLOW_NOT_FOUND(HttpStatus.NOT_FOUND, "UF001", "팔로우 되어 있지 않습니다."),
-
+    USER_FOLLOW_EXIST(HttpStatus.FORBIDDEN, "UF002", "이미 팔로우 되어 있습니다."),
     // user Block
     USER_BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "UB001", "차단 되어 있지 않습니다."),
     USER_BLOCK_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "UB002", "이미 차단되어 있습니다."),
+    USER_INFORMATION_NOT_MATCH(HttpStatus.BAD_REQUEST, "U002", "사용자 정보가 일치하지 않습니다."),
+
     REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "REP001", "신고내역을 찾을 수 없습니다."),
 
     BARCODE_LENGTH_NOT_VALID(HttpStatus.BAD_REQUEST, "P001", "바코드 길이가 유효하지 않습니다."),

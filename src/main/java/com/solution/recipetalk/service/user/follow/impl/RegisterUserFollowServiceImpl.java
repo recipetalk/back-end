@@ -7,6 +7,7 @@ import com.solution.recipetalk.domain.user.follow.entity.UserFollow;
 import com.solution.recipetalk.domain.user.follow.repository.UserFollowRepository;
 import com.solution.recipetalk.domain.user.login.entity.UserLogin;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
+import com.solution.recipetalk.exception.user.UserFollowExistException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.user.follow.RegisterUserFollowService;
 import com.solution.recipetalk.util.ContextHolder;
@@ -37,11 +38,19 @@ public class RegisterUserFollowServiceImpl implements RegisterUserFollowService 
 
         UserLogin followerLogin = ContextHolder.getUserLogin();
 
+        if(followingDetail.getId().equals(followerLogin.getId())){
+            return ResponseEntity.badRequest().body(null);
+        }
+
         UserDetail followerDetail = userDetailRepository.findById(followerLogin.getId()).orElseThrow(UserNotFoundException::new);
 
         UserFollow userFollow = UserFollow.builder().user(followerDetail)
                 .following(followingDetail)
                 .build();
+
+        if(userFollowRepository.findUserFollowByUserAndFollowing(followerDetail, followingDetail).isPresent()){
+            throw new UserFollowExistException();
+        }
 
         userFollowRepository.save(userFollow);
 

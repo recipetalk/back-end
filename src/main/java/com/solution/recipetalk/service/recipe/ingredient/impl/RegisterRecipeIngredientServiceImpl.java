@@ -27,7 +27,7 @@ public class RegisterRecipeIngredientServiceImpl implements RegisterRecipeIngred
     @Override
     public ResponseEntity<?> registerRecipeIngredient(Long recipeId, List<RecipeIngredientRegisterDTO> dtos) {
         List<RecipeIngredient> newRecipeIngredientList = dtos.stream().map(dto -> dto.toRecipeIngredientEntity(
-                    ingredientRepository.findById(dto.getIngredientId()).orElseThrow(IngredientNotFoundException::new),
+                    dto.getIngredientId() == null ? null : ingredientRepository.findById(dto.getIngredientId()).orElseThrow(IngredientNotFoundException::new),
                     recipeRepository.findById(recipeId).orElseThrow(RecipeNotFoundException::new)
             )
         ).toList();

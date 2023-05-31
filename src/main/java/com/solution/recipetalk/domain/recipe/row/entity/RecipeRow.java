@@ -19,25 +19,35 @@ public class RecipeRow extends AuditingEntity {
     @Column(name = "recipe_row_id", nullable = false)
     private Long id;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "timer")
-    private Long timer; //currentTimeMillis
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipe_id")
+    @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
-    public void changeTimer(Long timer){
-        if (timer != null){
-            this.timer = timer;
-        }
-    }
+    @Column(name = "recipe_row_image_uri")
+    private String imageURI;
 
-    public void changeDescription(String description){
+    @Column(nullable = true)
+    private String tips;
+
+    @Column(name = "seq_num", nullable = false)
+    private Long seqNum;
+
+    public void updateDescription(String description){
         if (description != null){
             this.description = description;
         }
     }
+
+    public void updateImageURI(String imageURI) {
+        this.imageURI = imageURI;
+    }
+
+    public void updateSeqNum(Long num) {
+        this.seqNum = num;
+    }
+
 }

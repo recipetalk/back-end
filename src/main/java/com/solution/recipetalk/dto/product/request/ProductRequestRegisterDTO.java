@@ -10,8 +10,9 @@ import lombok.*;
 @AllArgsConstructor
 public class ProductRequestRegisterDTO {
     @NonNull
-    @CustomLength(equals = 13, message = "barcode")
+    @CustomLength(max = 13, message = "barcode")
     private Long barcode;
+
     @NonNull
     @CustomLength(max = 100, message = "productName")
     private String productName;

@@ -7,7 +7,6 @@ import com.solution.recipetalk.domain.board.bookmark.repository.BookmarkReposito
 import com.solution.recipetalk.domain.board.entity.Board;
 import com.solution.recipetalk.domain.board.entity.BoardSort;
 import com.solution.recipetalk.domain.board.like.entity.BoardLike;
-import com.solution.recipetalk.domain.board.like.id.BoardLikeId;
 import com.solution.recipetalk.domain.board.like.repository.BoardLikeRepository;
 import com.solution.recipetalk.domain.board.repository.BoardRepository;
 import com.solution.recipetalk.domain.comment.entity.Comment;
@@ -20,6 +19,12 @@ import com.solution.recipetalk.domain.ingredient.repository.IngredientRepository
 import com.solution.recipetalk.domain.ingredient.trimming.entity.IngredientTrimming;
 import com.solution.recipetalk.domain.ingredient.trimming.repository.IngredientTrimmingRepository;
 import com.solution.recipetalk.domain.ingredient.trimming.row.repository.IngredientTrimmingRowRepository;
+import com.solution.recipetalk.domain.notification.entity.Notification;
+import com.solution.recipetalk.domain.notification.repository.NotificationRepository;
+import com.solution.recipetalk.domain.notification.state.NotificationSort;
+import com.solution.recipetalk.domain.notification.state.NotificationState;
+import com.solution.recipetalk.domain.product.entity.Product;
+import com.solution.recipetalk.domain.product.repository.ProductRepository;
 import com.solution.recipetalk.domain.recipe.entity.*;
 import com.solution.recipetalk.domain.recipe.ingredient.repository.RecipeIngredientRepository;
 import com.solution.recipetalk.domain.recipe.repository.RecipeRepository;
@@ -27,10 +32,8 @@ import com.solution.recipetalk.domain.recipe.row.entity.RecipeRow;
 import com.solution.recipetalk.domain.recipe.row.repository.RecipeRowRepository;
 import com.solution.recipetalk.domain.report.repository.ReportRepository;
 import com.solution.recipetalk.domain.user.block.entity.UserBlock;
-import com.solution.recipetalk.domain.user.block.id.UserBlockId;
 import com.solution.recipetalk.domain.user.block.repository.UserBlockRepository;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
-import com.solution.recipetalk.domain.user.follow.UserFollowId;
 import com.solution.recipetalk.domain.user.follow.entity.UserFollow;
 import com.solution.recipetalk.domain.user.follow.repository.UserFollowRepository;
 import com.solution.recipetalk.domain.user.login.entity.RoleType;
@@ -43,6 +46,7 @@ import com.solution.recipetalk.exception.comment.CommentNotFoundException;
 import com.solution.recipetalk.exception.ingredient.IngredientNotFoundException;
 import com.solution.recipetalk.exception.recipe.RecipeNotFoundException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
+import com.solution.recipetalk.vo.notification.comment.CommentNotificationVO;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +56,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 @Slf4j
 @Component
@@ -78,7 +81,9 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private final UserBlockRepository userBlockRepository;
     private final UserFollowRepository userFollowRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final ProductRepository productRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final NotificationRepository notificationRepository;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -95,6 +100,16 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         loadCommentData();
         loadBookmarkData();
         loadIngredientDescriptionData();
+        loadProductData();
+        loadNotificationData();
+    }
+
+    private void loadNotificationData(){
+        createNotificationIfNotNull(1L, 1L, NotificationState.NOT_OPEN, "레시피톡", "테스트 알림1", CommentNotificationVO.toNavigationId(1L,1L, "RECIPE"), NotificationSort.COMMENT);
+        createNotificationIfNotNull(2L, 1L, NotificationState.NOT_OPEN, "레시피톡", "테스트 알림2", CommentNotificationVO.toNavigationId(1L,1L, "RECIPE"), NotificationSort.COMMENT);
+        createNotificationIfNotNull(3L, 1L, NotificationState.NOT_OPEN, "레시피톡", "테스트 알림3", CommentNotificationVO.toNavigationId(1L,1L, "RECIPE"), NotificationSort.COMMENT);
+        createNotificationIfNotNull(4L, 1L, NotificationState.NOT_OPEN, "레시피톡", "테스트 알림4", CommentNotificationVO.toNavigationId(1L,1L, "RECIPE"), NotificationSort.COMMENT);
+
     }
 
     private void loadUserData() {
@@ -111,7 +126,12 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private void loadBoardData() {
         createBoardData(1L, "test", "test board", 0L, BoardSort.RECIPE);
         createBoardData(2L, "hyunkim", "test board2", 0L, BoardSort.TRIMMING);
-        createBoardData(3L, "test1", "test board2", 0L,BoardSort.DESCRIPTION);
+        createBoardData(3L, "test1", "test board3", 0L,BoardSort.DESCRIPTION);
+        createBoardData(4L, "hyunkim", "test board4", 0L,BoardSort.RECIPE);
+        for(long i = 5L; i <=25 ; i++){
+            createBoardData(i, "hyunkim", Long.toString(i), 0L,BoardSort.RECIPE);
+        }
+
     }
 
     private void loadIngredientData() {
@@ -121,15 +141,19 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
 
     private void loadRecipeData() {
         createRecipeDataIfNotNull(1L, "", 1L, "ONE", "sample");
+        createRecipeDataIfNotNull(4L, "", 4L, "ONE", "sample");
+        for(long i = 5L; i <=25 ; i++){
+            createRecipeDataIfNotNull(i, "", i, "ONE", "sample");
+        }
     }
 
     private void loadRecipeRowData() {
         createRecipeRowDataIfNotNull(1L, "kind of food", 2L, 1L);
-        createRecipeRowDataIfNotNull(2L, "kind of recipe", 0L, 1L);
+        createRecipeRowDataIfNotNull(2L, "kind of recipe", 1L, 1L);
     }
 
     private void loadIngredientTrimmingData() {
-        createIngredientTrimmingDataIfNotNull(1L, 1L, 2L);
+        createIngredientTrimmingDataIfNotNull(2L, 1L, 2L);
     }
 
     private void loadUserFollowData() {
@@ -162,9 +186,14 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     }
 
     private void loadIngredientDescriptionData() {
-        createIngredientDescriptionIfNotNull(1L, 3L, 1L, "test1");
+        createIngredientDescriptionIfNotNull(3L, 3L, 1L, "test1");
     }
 
+    private void loadProductData() {
+        createProductIfNotNull(1L, "바코드1", 1L, null, null, 1L);
+        createProductIfNotNull(2L, "바코드2", 2L, "2023-05-15", null, 2L);
+        createProductIfNotNull(3L, "바코드3", 1L, null, "2023-05-15", 3L);
+    }
 
     private void createUserDataIfNotNull(Long id, String nickname, String username, String password, Boolean isBlocked, String email){
         Optional<UserDetail> byId = userDetailRepository.findById(id);
@@ -250,7 +279,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
 
 
 
-    private void createRecipeRowDataIfNotNull(Long id, String description, Long timer, Long recipeId) {
+    private void createRecipeRowDataIfNotNull(Long id, String description, Long seqNum, Long recipeId) {
         Optional<RecipeRow> byId = recipeRowRepository.findById(id);
         if(byId.isPresent()) {
             return;
@@ -260,7 +289,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
 
         RecipeRow row = RecipeRow.builder()
                 .description(description)
-                .timer(timer)
+                .seqNum(seqNum)
                 .recipe(recipe)
                 .build();
 
@@ -378,5 +407,48 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
                     .build();
             ingredientDescriptionRepository.save(build);
         }
+    }
+
+    private void createProductIfNotNull(Long barcode, String name, Long ingredientId,String closedDate, String shutdownDate, Long registrationNumber) {
+
+
+        Optional<Product> byId = productRepository.findById(barcode);
+
+        if(byId.isPresent()){
+            return;
+        }
+
+        Ingredient ingredient = ingredientRepository.findById(ingredientId).orElseThrow(IngredientNotFoundException::new);
+
+        Product product = Product.builder()
+                .barcode(barcode)
+                .productName(name)
+                .productShutdownDate(shutdownDate)
+                .closedDate(closedDate)
+                .productRegistrationNumber(registrationNumber)
+                .ingredient(ingredient).build();
+
+        productRepository.save(product);
+    }
+
+    private void createNotificationIfNotNull(Long notiId, Long userId, NotificationState state, String title, String body, String navigationId, NotificationSort sort){
+        Optional<Notification> findNoti = notificationRepository.findById(notiId);
+
+        if(findNoti.isPresent()){
+            return;
+        }else {
+            UserDetail user = userDetailRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+            Notification notification = Notification.builder()
+                    .sort(sort)
+                    .state(state)
+                    .user(user)
+                    .title(title)
+                    .navigationId(navigationId)
+                    .body(body)
+                    .build();
+
+            notificationRepository.save(notification);
+        }
+
     }
 }

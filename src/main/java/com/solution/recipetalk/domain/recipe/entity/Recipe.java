@@ -19,21 +19,20 @@ import java.util.List;
 @SuperBuilder
 @Entity
 @Table(name="recipe")
-@SQLDelete(sql = "UPDATE recipe SET is_deleted = true WHERE recipe_id = ?")
+@SQLDelete(sql = "UPDATE recipe SET is_deleted = true WHERE board_id = ?")
 @Where(clause = "is_deleted = false")
 public class Recipe extends SoftDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "recipe_id", nullable = false)
     private Long id;
 
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id", nullable = false, referencedColumnName = "board_id")
+    private Board board;
     @Column(name = "thumbnail_img_uri")
     private String thumbnailImgURI;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id", nullable = false)
-    private Board board;
 
     @Column(name = "description", nullable = false)
     private String description;
@@ -67,14 +66,19 @@ public class Recipe extends SoftDeleteEntity {
 
 
     // dto 내 null check 를 진행하므로 null check 생략
-    public void changeByRecipeModifyDTO(RecipeModifyDTO dto, Board board){
-        this.thumbnailImgURI = dto.getThumbnailImgUri();
-        this.board = board;
+    public void changeByRecipeModifyDTO(RecipeModifyDTO dto, String thumbnailImgURI){
+        this.thumbnailImgURI = thumbnailImgURI;
         this.description = dto.getDescription();
         this.durationTime = dto.getDurationTime();
         this.level = dto.getLevel();
         this.quantity = dto.getQuantity();
-        this.situation = dto.getSituation();
+
+        //얘는 널일 수 있음.
+        if(dto.getSituation() != null) {
+            this.situation = dto.getSituation();
+        }
+
         this.sort = dto.getSort();
     }
+
 }

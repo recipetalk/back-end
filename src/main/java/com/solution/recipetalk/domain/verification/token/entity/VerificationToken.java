@@ -34,6 +34,10 @@ public class VerificationToken extends AuditingEntity {
     @Column(name = "is_verified", nullable = false)
     private Boolean isVerified;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sort", nullable = false)
+    private VerificationSort verificationSort;
+
     public void updateToken(String token) {
         this.token = token;
     }
@@ -44,5 +48,11 @@ public class VerificationToken extends AuditingEntity {
 
     public void ok(){
         isVerified = true;
+    }
+
+    public void updateSort(VerificationSort verificationSort) { this.verificationSort = verificationSort;}
+
+    public void denied(){
+        isVerified = false;
     }
 }
