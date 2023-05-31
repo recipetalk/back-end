@@ -39,7 +39,7 @@ public class UserHasIngredientRepositoryImpl implements UserHasIngredientCustomR
         JPAQuery<UserHasIngredientResponseDTO> query = queryFactory
                 .select(Projections.bean(UserHasIngredientResponseDTO.class, userHasIngredient.name.as("ingredientName"), userHasIngredient.state, userHasIngredient.quantity, userHasIngredient.expirationDate, userHasIngredient.ingredient.id.as("ingredientId"), userHasIngredient.id.as("userHasIngredientId")))
                 .from(userHasIngredient)
-                .join(userHasIngredient.ingredient, ingredient).on(userHasIngredient.ingredient.eq(ingredient))
+                .leftJoin(userHasIngredient.ingredient, ingredient).on(userHasIngredient.ingredient.eq(ingredient))
                 .orderBy(orderSpecifier);
 
         JPAQuery<UserHasIngredient> countQuery = queryFactory.selectFrom(userHasIngredient);
