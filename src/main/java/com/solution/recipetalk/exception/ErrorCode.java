@@ -59,7 +59,7 @@ public enum ErrorCode {
 
     // user Follow
     USER_FOLLOW_NOT_FOUND(HttpStatus.NOT_FOUND, "UF001", "팔로우 되어 있지 않습니다."),
-
+    USER_FOLLOW_EXIST(HttpStatus.FORBIDDEN, "UF002", "이미 팔로우 되어 있습니다."),
     // user Block
     USER_BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "UB001", "차단 되어 있지 않습니다."),
     USER_BLOCK_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "UB002", "이미 차단되어 있습니다."),

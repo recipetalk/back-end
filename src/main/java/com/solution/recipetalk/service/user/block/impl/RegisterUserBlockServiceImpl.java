@@ -33,6 +33,10 @@ public class RegisterUserBlockServiceImpl implements RegisterUserBlockService {
 
         UserDetail blockedUser = userDetailRepository.findUserDetailByUsername(dto.getBlockUsername()).orElseThrow(UserNotFoundException::new);
 
+        if(blockedUser.getId().equals(session.getId())){
+            return ResponseEntity.badRequest().body(null);
+        }
+
         UserBlock userBlock = UserBlock.builder().user(session).blockedUser(blockedUser).build();
 
 
@@ -40,7 +44,7 @@ public class RegisterUserBlockServiceImpl implements RegisterUserBlockService {
         if(byId.isPresent()){
             throw new UserBlockExistException();
         }
-        //이미 차단되어 있음. 처리 필요
+
         userBlockRepository.save(userBlock);
 
         return ResponseEntity.ok(null);
