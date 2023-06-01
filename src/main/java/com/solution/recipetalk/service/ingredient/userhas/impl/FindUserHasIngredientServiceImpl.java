@@ -30,4 +30,6 @@ public class FindUserHasIngredientServiceImpl implements FindUserHasIngredientSe
         Page<UserHasIngredientResponseDTO> allUserIngredient = userHasIngredientRepository.findAllUserIngredient(pageable, sortElement);
         return ResponseEntity.ok(allUserIngredient);
     }
+
+
 }
