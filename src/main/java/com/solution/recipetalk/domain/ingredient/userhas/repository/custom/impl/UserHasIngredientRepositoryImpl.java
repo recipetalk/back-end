@@ -25,10 +25,10 @@ public class UserHasIngredientRepositoryImpl implements UserHasIngredientCustomR
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<UserHasIngredientResponseDTO> findAllUserIngredient(Pageable pageable, String sortElement) {
+    public Page<UserHasIngredientResponseDTO> findAllUserIngredient(Long userId, Pageable pageable, String sortElement) {
         QUserHasIngredient userHasIngredient = QUserHasIngredient.userHasIngredient;
         QIngredient ingredient = QIngredient.ingredient;
-        LocalDate now = LocalDate.now();
+
         OrderSpecifier<?> orderSpecifier = switch (sortElement) {
             case "alphabet_asc" -> new OrderSpecifier<>(Order.ASC, userHasIngredient.ingredient.name);
             case "alphabet_desc" -> new OrderSpecifier<>(Order.DESC, userHasIngredient.ingredient.name);
@@ -45,7 +45,7 @@ public class UserHasIngredientRepositoryImpl implements UserHasIngredientCustomR
                 .select(Projections.bean(UserHasIngredientResponseDTO.class, userHasIngredient.name.as("ingredientName"), userHasIngredient.state, userHasIngredient.quantity, userHasIngredient.expirationDate, userHasIngredient.ingredient.id.as("ingredientId"), userHasIngredient.id.as("userHasIngredientId")))
                 .from(userHasIngredient)
                 .leftJoin(userHasIngredient.ingredient, ingredient).on(userHasIngredient.ingredient.eq(ingredient))
-                .where(whereCaseWithExpiryDate(sortElement))
+                .where(whereCaseWithExpiryDate(sortElement), userHasIngredient.user.id.eq(userId))
                 .orderBy(orderSpecifier);
 
         JPAQuery<UserHasIngredient> countQuery = queryFactory.selectFrom(userHasIngredient);
@@ -55,7 +55,6 @@ public class UserHasIngredientRepositoryImpl implements UserHasIngredientCustomR
 
     public BooleanExpression whereCaseWithExpiryDate(String sortElement){
         QUserHasIngredient userHasIngredient = QUserHasIngredient.userHasIngredient;
-        QIngredient ingredient = QIngredient.ingredient;
         LocalDate now = LocalDate.now();
         return switch (sortElement){
             case "expiry_date_immi", "expiry_date_spare" -> userHasIngredient.expirationDate.before(now).or(userHasIngredient.expirationDate.eq(now));
