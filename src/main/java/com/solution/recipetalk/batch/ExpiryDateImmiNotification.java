@@ -33,7 +33,6 @@ public class ExpiryDateImmiNotification {
         userHasIngredientsByExpirationDate.forEach(expiryDateImmiIngredientDTO -> {
             UserHasIngredientNotificationVO vo = new UserHasIngredientNotificationVO(expiryDateImmiIngredientDTO, term);
             eventPublisher.publishEvent(vo);
-            notificationRepository.save(vo.toEntity());
         });
     }
 }
