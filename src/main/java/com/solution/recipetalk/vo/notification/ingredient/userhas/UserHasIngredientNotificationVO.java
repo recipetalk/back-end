@@ -18,14 +18,14 @@ public class UserHasIngredientNotificationVO implements NotificationVO {
 
     private static final String TITLE = "레시피톡";
 
-    private static final String BODY_PATTERN_WITHOUT_COUNT = "%님, %s가 %d일 내에 소비기한 마감됩니다. 얼른 드셔주세요!";
+    private static final String BODY_PATTERN_WITHOUT_COUNT = "%s님, %s가 %d일 내에 소비기한 마감됩니다. 얼른 드셔주세요!";
     private static final String BODY_PATTERN = "%s님, %s외 %d개가 %d일 내에 소비기한 마감됩니다. 얼른 드셔주세요!";
 
     public UserHasIngredientNotificationVO(UserHasIngredientRepository.ExpiryDateImmiIngredientDTO expiryDateImmiIngredient, Long term){
         this.highLayerIngredientName = expiryDateImmiIngredient.getIngredientName();
         this.fcmToken = expiryDateImmiIngredient.getFcmToken();
         this.userDetail = expiryDateImmiIngredient.getUserDetail();
-        this.countNum = expiryDateImmiIngredient.countNum();
+        this.countNum = expiryDateImmiIngredient.getCountNum();
         this.term = term;
     }
 
@@ -68,7 +68,7 @@ public class UserHasIngredientNotificationVO implements NotificationVO {
         return this.fcmToken;
     }
 
-    private String notificationBodyBuilder() {
+    public String notificationBodyBuilder() {
         if(countNum > 1){
             return String.format(BODY_PATTERN, userDetail.getNickname(), highLayerIngredientName, countNum-1, term);
         }else {

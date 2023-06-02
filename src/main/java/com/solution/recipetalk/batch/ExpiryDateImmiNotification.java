@@ -23,7 +23,7 @@ public class ExpiryDateImmiNotification {
     public void run () {
         long term = 3L;
         LocalDate now = LocalDate.now();
-        LocalDate target = now.minusDays(term);
+        LocalDate target = now.plusDays(term);
         List<UserHasIngredientRepository.ExpiryDateImmiIngredientDTO> userHasIngredientsByExpirationDate = userHasIngredientRepository.findUserHasIngredientsByExpirationDate(now, target);
 
         userHasIngredientsByExpirationDate.forEach(expiryDateImmiIngredientDTO -> {
