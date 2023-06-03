@@ -1,5 +1,6 @@
 package com.solution.recipetalk.listener;
 
+import com.solution.recipetalk.batch.ExpiryDateImmiNotification;
 import com.solution.recipetalk.domain.bill.repository.BillRepository;
 import com.solution.recipetalk.domain.board.bookmark.entity.Bookmark;
 import com.solution.recipetalk.domain.board.bookmark.id.BookmarkId;
@@ -209,10 +210,10 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         Long term = 3L;
         LocalDate target = now.plusDays(term);
         createUserHasIngredientIfNotNull(1L, 1L, "1", now);
-        createUserHasIngredientIfNotNull(2L, 1L, "2", now.minusDays(1));
-        createUserHasIngredientIfNotNull(3L, 1L, "3", now.minusDays(2));
-        createUserHasIngredientIfNotNull(4L, 1L, "4", now.minusDays(3));
-        createUserHasIngredientIfNotNull(6L, 1L, "5", now.plusDays(1));
+        createUserHasIngredientIfNotNull(2L, 1L, "2", now.plusDays(1));
+        createUserHasIngredientIfNotNull(3L, 1L, "3", now.plusDays(2));
+        createUserHasIngredientIfNotNull(4L, 1L, "4", now.plusDays(3));
+        createUserHasIngredientIfNotNull(6L, 1L, "5", now.minusDays(1));
         createUserHasIngredientIfNotNull(7L, 2L, "1", now);
         createUserHasIngredientIfNotNull(8L, 2L, "2", now.minusDays(1));
         createUserHasIngredientIfNotNull(9L, 2L, "3", now.minusDays(2));

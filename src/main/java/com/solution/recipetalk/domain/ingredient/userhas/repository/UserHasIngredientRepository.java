@@ -6,6 +6,7 @@ import com.solution.recipetalk.domain.ingredient.userhas.repository.custom.UserH
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,10 +26,12 @@ public interface UserHasIngredientRepository extends JpaRepository<UserHasIngred
     }
 
     // 인원 많아 지면 userDetail id 쪼개서 받아오는 로직 필요함. (last id Paging 방식)
-    @Query("SELECT MAX(uhi.name) as ingredientName, count(uhi) as countNum,  u as userDetail FROM UserHasIngredient uhi " +
-            "JOIN UserDetail u ON uhi.user = u AND u.isDeleted = false AND u.isBlocked = false " +
+    @Query("SELECT MIN(uhi.name) as ingredientName, count(uhi) as countNum, fcm AS fcmToken, u as userDetail " +
+            "FROM UserHasIngredient uhi " +
+            "JOIN UserDetail u ON uhi.user.id = u.id AND u.isDeleted = false AND u.isBlocked = false " +
+            "JOIN FcmToken fcm ON fcm.user.id = u.id " +
             "WHERE uhi.expirationDate between :now and :target " +
-            "group by u")
-    List<ExpiryDateImmiIngredientDTO> findUserHasIngredientsByExpirationDate(LocalDate now, LocalDate target);
+            "group by fcm.id")
+    List<ExpiryDateImmiIngredientDTO> findUserHasIngredientsByExpirationDate(@Param("now")LocalDate now, @Param("target")LocalDate target);
 
 }

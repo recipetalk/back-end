@@ -4,6 +4,7 @@ import com.solution.recipetalk.domain.ingredient.userhas.repository.UserHasIngre
 import com.solution.recipetalk.domain.notification.repository.NotificationRepository;
 import com.solution.recipetalk.vo.notification.ingredient.userhas.UserHasIngredientNotificationVO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,11 +18,11 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class ExpiryDateImmiNotification {
 
     private final UserHasIngredientRepository userHasIngredientRepository;
     private final ApplicationEventPublisher eventPublisher;
-    private final NotificationRepository notificationRepository;
     //매일 오전 1시에
     @Scheduled(cron = "0 0 1 * * *")
     public void run () {
@@ -30,6 +31,7 @@ public class ExpiryDateImmiNotification {
         LocalDate target = now.plusDays(term);
         List<UserHasIngredientRepository.ExpiryDateImmiIngredientDTO> userHasIngredientsByExpirationDate = userHasIngredientRepository.findUserHasIngredientsByExpirationDate(now, target);
 
+        log.info(now.toString() + ", scheduling about expired user ingredient count number : " + String.valueOf(userHasIngredientsByExpirationDate.size()));
         userHasIngredientsByExpirationDate.forEach(expiryDateImmiIngredientDTO -> {
             UserHasIngredientNotificationVO vo = new UserHasIngredientNotificationVO(expiryDateImmiIngredientDTO, term);
             eventPublisher.publishEvent(vo);
