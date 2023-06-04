@@ -31,11 +31,11 @@ public class JsonAuthSuccessHandler implements AuthenticationSuccessHandler {
         //json web token 생성
         JWTDTO jwtDto = JWTDTO.builder()
                         .accessToken(JWTFactory.createAccessToken(userLogin))
-                        .refreshToken(JWTFactory.createRefreshToken(userLogin))
+                        //.refreshToken(JWTFactory.createRefreshToken(userLogin))
                 .build();
 
         res.setHeader(JWT.ACCESS_TOKEN_HEADER, JWT.TOKEN_PREFIX+jwtDto.getAccessToken());
-        res.setHeader(JWT.REFRESH_TOKEN_HEADER, JWT.TOKEN_PREFIX+jwtDto.getRefreshToken());
+        //res.setHeader(JWT.REFRESH_TOKEN_HEADER, JWT.TOKEN_PREFIX+jwtDto.getRefreshToken());
     }
 
 }

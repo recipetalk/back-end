@@ -34,9 +34,9 @@ public class JWTAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication auth) throws AuthenticationException {
 
-        String phoneNumber = verifyToken((JWTAuthenticationToken)auth);
+        String username = verifyToken((JWTAuthenticationToken)auth);
 
-        UserLoginContext userLoginContext = (UserLoginContext) userDetailsService.loadUserByUsername(phoneNumber);
+        UserLoginContext userLoginContext = (UserLoginContext) userDetailsService.loadUserByUsername(username);
 
         return new JWTAuthenticationToken(userLoginContext.getUserLogin(), null, userLoginContext.getAuthorities());
     }
