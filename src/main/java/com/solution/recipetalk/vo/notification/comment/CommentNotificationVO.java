@@ -1,7 +1,6 @@
 package com.solution.recipetalk.vo.notification.comment;
 
-import com.google.firebase.messaging.Message;
-import com.google.firebase.messaging.Notification;
+import com.google.firebase.messaging.*;
 import com.solution.recipetalk.domain.board.entity.Board;
 import com.solution.recipetalk.domain.board.entity.BoardSort;
 import com.solution.recipetalk.domain.comment.entity.Comment;
@@ -72,6 +71,16 @@ public class CommentNotificationVO implements NotificationVO {
                 .putData("navigation", board.getBoardSort().toString())
                 .putData("boardId", String.valueOf(board.getId()))
                 .putData("parentCommentId", String.valueOf(parentCommentId))
+                .setApnsConfig(
+                        ApnsConfig.builder()
+                                .setAps(
+                                        Aps.builder()
+                                                .setContentAvailable(true)
+                                                .build()
+                                )//.putHeader("apns-push-type", "background")
+                                .putHeader("apns-priority", "5") // 저전력 모드
+                                .build()
+                ).setAndroidConfig(AndroidConfig.builder().setPriority(AndroidConfig.Priority.NORMAL).build())
                 .build();
     }
 
@@ -84,6 +93,16 @@ public class CommentNotificationVO implements NotificationVO {
                 ).setToken(fcmTarget.getFcmToken())
                 .putData("navigation", board.getBoardSort().toString())
                 .putData("boardId", String.valueOf(board.getId()))
+                .setApnsConfig(
+                        ApnsConfig.builder()
+                                .setAps(
+                                        Aps.builder()
+                                                .setContentAvailable(true)
+                                                .build()
+                                )//.putHeader("apns-push-type", "background")
+                                .putHeader("apns-priority", "5") // 저전력 모드
+                                .build()
+                ).setAndroidConfig(AndroidConfig.builder().setPriority(AndroidConfig.Priority.NORMAL).build())
                 .build();
     }
 

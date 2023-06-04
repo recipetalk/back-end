@@ -44,10 +44,10 @@ public class UserHasIngredientNotificationVO implements NotificationVO {
                                 Aps.builder()
                                         .setContentAvailable(true)
                                         .build()
-                            ).putHeader("apns-push-type", "background")
-                                .putHeader("apns-priority", "5")
+                            )//.putHeader("apns-push-type", "background")
+                                .putHeader("apns-priority", "5") // 저전력 모드
                                 .build()
-                ).setAndroidConfig(AndroidConfig.builder().setPriority(AndroidConfig.Priority.HIGH).build())
+                ).setAndroidConfig(AndroidConfig.builder().setPriority(AndroidConfig.Priority.NORMAL).build())
                 .build();
     }
 
