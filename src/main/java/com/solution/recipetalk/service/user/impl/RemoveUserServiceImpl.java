@@ -1,6 +1,5 @@
 package com.solution.recipetalk.service.user.impl;
 
-import com.solution.recipetalk.config.properties.S3dir;
 import com.solution.recipetalk.domain.board.bookmark.repository.BookmarkRepository;
 import com.solution.recipetalk.domain.board.like.repository.BoardLikeRepository;
 import com.solution.recipetalk.domain.board.repository.BoardRepository;
@@ -15,13 +14,8 @@ import com.solution.recipetalk.domain.recipe.row.repository.RecipeRowRepository;
 import com.solution.recipetalk.domain.user.block.repository.UserBlockRepository;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.domain.user.follow.repository.UserFollowRepository;
-import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
-import com.solution.recipetalk.dto.user.UserDetailProfileModifyDTO;
-import com.solution.recipetalk.exception.s3.ImageUploadFailedException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
-import com.solution.recipetalk.s3.upload.S3Uploader;
-import com.solution.recipetalk.service.user.ModifyUserDetailService;
 import com.solution.recipetalk.service.user.RemoveUserService;
 import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
