@@ -52,13 +52,11 @@ public class UserDetail extends SoftDeleteEntity {
     }
 
     public void setProfileImageURI(String profileImageURI){
-        if(null != profileImageURI)
-            this.profileImageURI = profileImageURI;
+        this.profileImageURI = profileImageURI;
     }
 
     public void setDescription(String description){
-        if(null != description)
-            this.description = description;
+        this.description = description;
     }
 
 }
