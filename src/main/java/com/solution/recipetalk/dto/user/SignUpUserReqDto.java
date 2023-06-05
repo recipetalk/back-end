@@ -5,6 +5,7 @@ import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.domain.user.login.entity.UserProvider;
 import com.solution.recipetalk.domain.user.login.entity.UserLogin;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -15,11 +16,13 @@ import lombok.Setter;
 @Builder
 public class SignUpUserReqDto {
     @NonNull
+    @Pattern(regexp = "[ㄱ-ㅎ가-힣a-zA-Z0-9]{4,10}$")
     private String nickname;
     @NonNull
     @Email(message = "이메일 형식이 맞지 않습니다.")
     private String email;
     @NonNull
+    @Pattern(regexp = "^[a-zA-Z0-9]{8,16}$")
     private String username;
     @NonNull
     private String password;

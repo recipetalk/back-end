@@ -31,7 +31,6 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 
     @Transactional
     public ResponseEntity<?> addUser(SignUpUserReqDto signUpUserReqDto) {
-        validateReqDTO(signUpUserReqDto);
         //아이디 존재
         if (userDetailRepository.findUserDetailByUsername(signUpUserReqDto.getUsername()).isPresent())
             throw new DuplicatedUserException();
@@ -57,13 +56,4 @@ public class RegisterUserServiceImpl implements RegisterUserService {
         return ResponseEntity.ok(null);
     }
 
-    private void validateReqDTO(SignUpUserReqDto dto){
-        if(dto.getUsername().contains("/")){
-            throw new IllegalArgumentException();
-        }
-        if(dto.getNickname().contains("/")){
-            throw new IllegalArgumentException();
-        }
-
-    }
 }
