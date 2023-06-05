@@ -36,7 +36,7 @@ public class ModifyUserDetailServiceImpl implements ModifyUserDetailService {
 
         if(dto.getIsProfileImgDeleted() && loginDetail.getProfileImageURI() != null) {
             s3Uploader.deleteFile(loginDetail.getProfileImageURI(), S3dir.USER_PROFILE_IMG_DIR);
-            loginDetail.setProfileImageURI(null);
+            loginDetail.setProfileImageURI("");
         }
 
         if(dto.getProfileImg() != null){
