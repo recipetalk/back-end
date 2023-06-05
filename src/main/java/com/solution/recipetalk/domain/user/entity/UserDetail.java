@@ -16,7 +16,7 @@ import org.hibernate.annotations.SQLDelete;
 @SuperBuilder
 @Entity
 @Table(name = "user_detail", indexes = {@Index(name = "idx_username", columnList = "username", unique = true)})
-@SQLDelete(sql = "UPDATE user_detail SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE user_detail SET is_deleted = true WHERE user_detail_id = ?")
 public class UserDetail extends SoftDeleteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
