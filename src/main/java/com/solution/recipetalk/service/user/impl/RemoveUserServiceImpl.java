@@ -16,6 +16,9 @@ import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.domain.user.follow.repository.UserFollowRepository;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
+import com.solution.recipetalk.service.board.RemoveBoardService;
+import com.solution.recipetalk.service.ingredient.trimming.RemoveIngredientTrimmingService;
+import com.solution.recipetalk.service.recipe.RemoveRecipeService;
 import com.solution.recipetalk.service.user.RemoveUserService;
 import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
@@ -43,13 +46,14 @@ public class RemoveUserServiceImpl implements RemoveUserService {
     private final BookmarkRepository bookmarkRepository; // 삭제 필요.
     private final UserFollowRepository userFollowRepository; // 삭제 필요
     private final FcmTokenRepository fcmTokenRepository; // 삭제 필요
+    private final RemoveRecipeService removeRecipeService;
+    private final RemoveIngredientTrimmingService removeIngredientTrimmingService;
 
     @Override
     public ResponseEntity<?> removeUserDetail() {
         Long userLoginId = ContextHolder.getUserLoginId();
         UserDetail loginUser = userDetailRepository.findById(userLoginId).orElseThrow(UserNotFoundException::new);
 
-        userDetailRepository.delete(loginUser);
 
 
         userHasIngredientRepository.deleteAllByUser_Id(userLoginId);
@@ -61,6 +65,10 @@ public class RemoveUserServiceImpl implements RemoveUserService {
         userFollowRepository.deleteAllByFollowing_Id(userLoginId);
 
         fcmTokenRepository.deleteAllByUser_Id(userLoginId);
+
+        boardRepository.deleteAllByWriter_Id(userLoginId);
+
+        userDetailRepository.delete(loginUser);
 
         return ResponseEntity.ok(null);
     }
