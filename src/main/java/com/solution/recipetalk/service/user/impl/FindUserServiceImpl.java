@@ -76,7 +76,7 @@ public class FindUserServiceImpl implements FindUserService {
 
         Long followingCount = userFollowRepository.countByUser(findUserDetail, ContextHolder.getUserLoginId());
         Long followerCount = userFollowRepository.countByFollowing(findUserDetail, ContextHolder.getUserLoginId());
-        Long recipeNum = recipeRepository.countByBoard_Writer(findUserDetail);
+        Long recipeNum = recipeRepository.countByBoard_WriterAndBoardIsDeleted(findUserDetail, false);
 
         UserDetailProfileDTO findUserProfileDTO = UserDetailProfileDTO.toDTO(findUserDetail, followingCount, followerCount, recipeNum);
 

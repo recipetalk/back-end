@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Long>, RecipeQueryDslRepository {
 
-    Long countByBoard_Writer(UserDetail writer);
+    Long countByBoard_WriterAndBoardIsDeleted(UserDetail writer, boolean boardIsDeleted);
 
     @Query("SELECT CASE WHEN count(r) > 0 THEN TRUE ELSE FALSE END FROM Recipe r JOIN Board b ON r.board = b WHERE b.writer.id = :writerId AND r.id = :recipeId")
     Boolean existsRecipeByBoardWriter_IdAndId(@Param("writerId")Long writerId, @Param("recipeId")Long recipeId);
