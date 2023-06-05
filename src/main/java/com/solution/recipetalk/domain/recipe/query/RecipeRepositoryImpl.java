@@ -107,6 +107,7 @@ public class RecipeRepositoryImpl implements RecipeQueryDslRepository {
             queryBuilder = queryBuilder.where(qRecipe.situation.eq(dto.getSituationCategory()));
         }
 
+        queryBuilder = queryBuilder.where(qBoard.isDeleted.eq(false), qUserDetail.isBlocked.eq(false), qUserDetail.isDeleted.eq(false));
 
         queryBuilder = getSqlBySortType(queryBuilder, dto.getSortType(), userId);
 

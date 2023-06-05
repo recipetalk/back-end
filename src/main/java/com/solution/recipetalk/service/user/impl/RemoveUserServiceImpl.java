@@ -14,6 +14,7 @@ import com.solution.recipetalk.domain.recipe.row.repository.RecipeRowRepository;
 import com.solution.recipetalk.domain.user.block.repository.UserBlockRepository;
 import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.domain.user.follow.repository.UserFollowRepository;
+import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.service.board.RemoveBoardService;
@@ -33,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RemoveUserServiceImpl implements RemoveUserService {
 
     private final UserDetailRepository userDetailRepository;
+    private final UserLoginRepository userLoginRepository;
     private final UserBlockRepository userBlockRepository; // 삭제 필요 -> 차단된 사용자면 회원탈퇴 가능하게 해야 할까?
     private final CommentRepository commentRepository; // => 어차피 삭제된 유저는 조회 안되게 해놓음.
     private final BoardRepository boardRepository; // soft delete
@@ -68,6 +70,7 @@ public class RemoveUserServiceImpl implements RemoveUserService {
 
         boardRepository.deleteAllByWriter_Id(userLoginId);
 
+        userLoginRepository.delete(loginUser.getUserLogin());
         userDetailRepository.delete(loginUser);
 
         return ResponseEntity.ok(null);
