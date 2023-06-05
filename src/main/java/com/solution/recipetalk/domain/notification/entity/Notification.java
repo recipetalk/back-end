@@ -22,7 +22,7 @@ import java.util.Map;
 @Getter
 @NoArgsConstructor
 @SuperBuilder
-@SQLDelete(sql = "UPDATE notification SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE notification SET is_deleted = true WHERE notification_id = ?")
 @Where(clause = "is_deleted = false")
 public class Notification extends SoftDeleteEntity {
     @Id
