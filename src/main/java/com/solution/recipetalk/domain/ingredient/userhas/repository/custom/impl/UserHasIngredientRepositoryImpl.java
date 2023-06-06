@@ -57,8 +57,8 @@ public class UserHasIngredientRepositoryImpl implements UserHasIngredientCustomR
         QUserHasIngredient userHasIngredient = QUserHasIngredient.userHasIngredient;
         LocalDate now = LocalDate.now();
         return switch (sortElement){
-            case "expiry_date_immi", "expiry_date_spare" -> userHasIngredient.expirationDate.before(now).or(userHasIngredient.expirationDate.eq(now));
-            case "expired" -> userHasIngredient.expirationDate.after(now);
+            case "expiry_date_immi", "expiry_date_spare" -> userHasIngredient.expirationDate.after(now).or(userHasIngredient.expirationDate.eq(now));
+            case "expired" -> userHasIngredient.expirationDate.before(now);
             default -> null;
         };
     }
