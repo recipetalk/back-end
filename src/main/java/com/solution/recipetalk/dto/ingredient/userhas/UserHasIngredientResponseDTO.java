@@ -21,7 +21,7 @@ public class UserHasIngredientResponseDTO {
 
     public static UserHasIngredientResponseDTO toDTO(UserHasIngredient entity) {
         return UserHasIngredientResponseDTO.builder()
-                .ingredientId(entity.getIngredient().getId())
+                .ingredientId(entity.getIngredient() == null? null : entity.getIngredient().getId())
                 .ingredientName(entity.getName())
                 .state(entity.getState())
                 .quantity(entity.getQuantity())
