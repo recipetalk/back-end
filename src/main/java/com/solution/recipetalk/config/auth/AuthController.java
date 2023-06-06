@@ -52,15 +52,15 @@ public class AuthController {
         return registerUserService.addUser(signUpUserReqDto);
     }
 
-    @PostMapping("/signup/phone")
-    public ResponseEntity<?> sendPhoneAuthSMS(@RequestBody @Valid @NonNull PhoneAuthRequestDTO dto) {
-        return smsRequestService.sendSMS(dto.getPhoneNum());
-    }
-
-    @PatchMapping("/signup/phone")
-    public ResponseEntity<?> verifyPhoneAuth(@RequestBody @Valid @NonNull PhoneAuthVerificationRequestDTO dto) {
-        return verifyAuthenticationService.verifyAuthentication(dto.getPhoneNum(), dto.getAuthNum());
-    }
+//    @PostMapping("/signup/phone")
+//    public ResponseEntity<?> sendPhoneAuthSMS(@RequestBody @Valid @NonNull PhoneAuthRequestDTO dto) {
+//        return smsRequestService.sendSMS(dto.getPhoneNum());
+//    }
+//
+//    @PatchMapping("/signup/phone")
+//    public ResponseEntity<?> verifyPhoneAuth(@RequestBody @Valid @NonNull PhoneAuthVerificationRequestDTO dto) {
+//        return verifyAuthenticationService.verifyAuthentication(dto.getPhoneNum(), dto.getAuthNum());
+//    }
 
     @GetMapping("/signup/{id}")
     public ResponseEntity<?> duplicatedUserCheck(@PathVariable("id") @NonNull String userName) {
