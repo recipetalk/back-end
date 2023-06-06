@@ -34,8 +34,8 @@ public class UserHasIngredientRepositoryImpl implements UserHasIngredientCustomR
             case "alphabet_desc" -> new OrderSpecifier<>(Order.DESC, userHasIngredient.ingredient.name);
             case "expiry_date_immi" -> new OrderSpecifier<>(Order.ASC, userHasIngredient.expirationDate);
             case "expiry_date_spare", "expired" -> new OrderSpecifier<>(Order.DESC, userHasIngredient.expirationDate);
-            case "new" -> new OrderSpecifier<>(Order.ASC, userHasIngredient.createdDate);
-            case "old" -> new OrderSpecifier<>(Order.DESC, userHasIngredient.createdDate);
+            case "new" -> new OrderSpecifier<>(Order.DESC, userHasIngredient.createdDate);
+            case "old" -> new OrderSpecifier<>(Order.ASC, userHasIngredient.createdDate);
             default -> null;
         };
 
