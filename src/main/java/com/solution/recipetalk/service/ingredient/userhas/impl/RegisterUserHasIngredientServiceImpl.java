@@ -33,7 +33,7 @@ public class RegisterUserHasIngredientServiceImpl implements RegisterUserHasIngr
             userHasIngredientRepository.save(UserHasIngredient.builder()
                             .user(currentUser)
                             .name(i.getIngredientName())
-                            .ingredient(ingredientRepository.findById(i.getIngredientId()).orElseThrow(IngredientNotFoundException::new))
+                            .ingredient(i.getIngredientId() != null ? ingredientRepository.findById(i.getIngredientId()).orElseThrow(IngredientNotFoundException::new) : null)
                             .state(i.getIngredientState())
                             .quantity(i.getQuantity())
                             .expirationDate(i.getExpirationDate())

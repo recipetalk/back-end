@@ -16,7 +16,6 @@ public class UserHasIngredientRegisterDTO {
     @Size(min = 1, max = 50, message = "입력할 수 있는 한도를 초과하였습니다.")
     private String ingredientName;
 
-    @NonNull
     private Long ingredientId;
 
     @NonNull
