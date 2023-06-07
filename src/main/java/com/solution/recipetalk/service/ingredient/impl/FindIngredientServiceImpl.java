@@ -18,8 +18,8 @@ public class FindIngredientServiceImpl implements FindIngredientService {
     private final IngredientRepository ingredientRepository;
 
     @Override
-    public ResponseEntity<?> findIngredientListByNameComponentPage(String nameComponent) {
-        List<IngredientFindResultDTO> dtos = ingredientRepository.findSomeStartWith(nameComponent);
+    public ResponseEntity<?> findIngredientListByNameComponentPage(String nameComponent, Pageable pageable) {
+        List<IngredientFindResultDTO> dtos = ingredientRepository.findSomeStartWith(nameComponent, pageable);
         return ResponseEntity.ok(dtos);
     }
 }

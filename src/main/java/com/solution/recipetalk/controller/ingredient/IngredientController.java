@@ -2,6 +2,7 @@ package com.solution.recipetalk.controller.ingredient;
 
 import com.solution.recipetalk.service.ingredient.FindIngredientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +19,8 @@ public class IngredientController {
 
     @GetMapping("/ingredient/{nameComponent}")
     public ResponseEntity<?> recipeIngredientListForRegister(
-            @PathVariable(name = "nameComponent") String nameComponent
+            @PathVariable(name = "nameComponent") String nameComponent, Pageable pageable
     ) {
-        return findIngredientService.findIngredientListByNameComponentPage(nameComponent);
+        return findIngredientService.findIngredientListByNameComponentPage(nameComponent, pageable);
     }
 }
