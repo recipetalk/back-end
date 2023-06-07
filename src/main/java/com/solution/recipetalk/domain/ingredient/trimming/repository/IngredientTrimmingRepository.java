@@ -19,7 +19,7 @@ public interface IngredientTrimmingRepository extends JpaRepository<IngredientTr
         String getTitle();
         Long getLikeCount();
         Long getCommentCount();
-        String getThumbnailUri();
+        String getThumbnailURI();
         String getNickname();
     }
 
@@ -38,7 +38,7 @@ public interface IngredientTrimmingRepository extends JpaRepository<IngredientTr
     @Query("SELECT CASE WHEN count(it) > 0 THEN TRUE ELSE FALSE END FROM IngredientTrimming it JOIN Board b ON it.board = b WHERE b.writer.id = :writerId AND it.id = :trimmingId")
     Boolean existsIngredientTrimmingByBoardWriter_IAndId(@Param("writerId")Long writerId, @Param("trimmingId")Long trimmingId);
 
-    @Query("SELECT B.id AS id, B.title AS title, B.likeCount AS likeCount, B.commentCount AS commentCount, IT.thumbnailUri AS thumbnailUri, B.writer.nickname AS nickname " +
+    @Query("SELECT B.id AS id, B.title AS title, B.likeCount AS likeCount, B.commentCount AS commentCount, IT.thumbnailUri AS thumbnailURI, B.writer.nickname AS nickname " +
             "FROM IngredientTrimming AS IT " +
             "JOIN Board AS B ON B = IT.board " +
             "LEFT JOIN UserBlock AS UB ON UB.user = B.writer AND UB.blockedUser = :currentUser " +
