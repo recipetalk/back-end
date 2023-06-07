@@ -1,6 +1,5 @@
 package com.solution.recipetalk.service.user.impl;
 
-import com.solution.recipetalk.config.properties.S3dir;
 import com.solution.recipetalk.domain.board.bookmark.repository.BookmarkRepository;
 import com.solution.recipetalk.domain.board.like.repository.BoardLikeRepository;
 import com.solution.recipetalk.domain.board.repository.BoardRepository;
@@ -17,11 +16,10 @@ import com.solution.recipetalk.domain.user.entity.UserDetail;
 import com.solution.recipetalk.domain.user.follow.repository.UserFollowRepository;
 import com.solution.recipetalk.domain.user.login.repository.UserLoginRepository;
 import com.solution.recipetalk.domain.user.repository.UserDetailRepository;
-import com.solution.recipetalk.dto.user.UserDetailProfileModifyDTO;
-import com.solution.recipetalk.exception.s3.ImageUploadFailedException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
-import com.solution.recipetalk.s3.upload.S3Uploader;
-import com.solution.recipetalk.service.user.ModifyUserDetailService;
+import com.solution.recipetalk.service.board.RemoveBoardService;
+import com.solution.recipetalk.service.ingredient.trimming.RemoveIngredientTrimmingService;
+import com.solution.recipetalk.service.recipe.RemoveRecipeService;
 import com.solution.recipetalk.service.user.RemoveUserService;
 import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RemoveUserServiceImpl implements RemoveUserService {
 
     private final UserDetailRepository userDetailRepository;
+    private final UserLoginRepository userLoginRepository;
     private final UserBlockRepository userBlockRepository; // 삭제 필요 -> 차단된 사용자면 회원탈퇴 가능하게 해야 할까?
     private final CommentRepository commentRepository; // => 어차피 삭제된 유저는 조회 안되게 해놓음.
     private final BoardRepository boardRepository; // soft delete
@@ -49,13 +48,14 @@ public class RemoveUserServiceImpl implements RemoveUserService {
     private final BookmarkRepository bookmarkRepository; // 삭제 필요.
     private final UserFollowRepository userFollowRepository; // 삭제 필요
     private final FcmTokenRepository fcmTokenRepository; // 삭제 필요
+    private final RemoveRecipeService removeRecipeService;
+    private final RemoveIngredientTrimmingService removeIngredientTrimmingService;
 
     @Override
     public ResponseEntity<?> removeUserDetail() {
         Long userLoginId = ContextHolder.getUserLoginId();
         UserDetail loginUser = userDetailRepository.findById(userLoginId).orElseThrow(UserNotFoundException::new);
 
-        userDetailRepository.delete(loginUser);
 
 
         userHasIngredientRepository.deleteAllByUser_Id(userLoginId);
@@ -67,6 +67,11 @@ public class RemoveUserServiceImpl implements RemoveUserService {
         userFollowRepository.deleteAllByFollowing_Id(userLoginId);
 
         fcmTokenRepository.deleteAllByUser_Id(userLoginId);
+
+        boardRepository.deleteAllByWriter_Id(userLoginId);
+
+        userLoginRepository.delete(loginUser.getUserLogin());
+        userDetailRepository.delete(loginUser);
 
         return ResponseEntity.ok(null);
     }

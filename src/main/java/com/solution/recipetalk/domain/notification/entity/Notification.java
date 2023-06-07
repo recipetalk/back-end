@@ -22,7 +22,7 @@ import java.util.Map;
 @Getter
 @NoArgsConstructor
 @SuperBuilder
-@SQLDelete(sql = "UPDATE notification SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE notification SET is_deleted = true WHERE notification_id = ?")
 @Where(clause = "is_deleted = false")
 public class Notification extends SoftDeleteEntity {
     @Id
@@ -52,6 +52,9 @@ public class Notification extends SoftDeleteEntity {
     private NotificationSort sort;
 
     public HashMap<String, String> navigationIdToHashmap() {
+        if(navigationId == null){
+            return null;
+        }
         HashMap<String, String> data = new HashMap<>();
         String[] navigationSplit = navigationId.split("&");
         for (String s : navigationSplit) {

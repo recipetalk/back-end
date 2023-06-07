@@ -168,7 +168,7 @@ public class SecurityConfig{
                 .and()
                 .addFilterAt(jsonLoginProcessingFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter(authenticationManager), JsonLoginProcessingFilter.class)
-                .addFilterBefore(refreshAuthenticationFilter(authenticationManager), JWTAuthenticationFilter.class)
+                //.addFilterBefore(refreshAuthenticationFilter(authenticationManager), JWTAuthenticationFilter.class)
 
                 /* 미인증, 인가예외 핸들러 등록 */
                 .exceptionHandling()
@@ -176,7 +176,7 @@ public class SecurityConfig{
                 .authenticationEntryPoint(jsonLoginAuthEntryPoint())
                 .and()
                 .addFilter(corsConfig.corsFilter()) // Enable CORS and disable CSRF //TODO: 왜 CORS는 활성화 하라는 것 ?
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and().build(); // Set session management to stateless
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().build(); // Set session management to stateless
 
 
     }

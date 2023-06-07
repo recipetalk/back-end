@@ -1,7 +1,6 @@
 package com.solution.recipetalk.vo.notification.user.follow;
 
-import com.google.firebase.messaging.Message;
-import com.google.firebase.messaging.Notification;
+import com.google.firebase.messaging.*;
 import com.solution.recipetalk.domain.fcm.entity.FcmToken;
 import com.solution.recipetalk.domain.notification.state.NotificationSort;
 import com.solution.recipetalk.domain.notification.state.NotificationState;
@@ -37,6 +36,16 @@ public class FollowNotificationVO implements NotificationVO {
                                 .setBody(String.format(FOLLOWING_ADD_MESSAGE_PATTERN, user.getNickname()))
                                 .build()
                 ).setToken(fcmTarget.getFcmToken())
+                .setApnsConfig(
+                        ApnsConfig.builder()
+                                .setAps(
+                                        Aps.builder()
+                                                .setContentAvailable(true)
+                                                .build()
+                                )//.putHeader("apns-push-type", "background")
+                                .putHeader("apns-priority", "5") // 저전력 모드
+                                .build()
+                ).setAndroidConfig(AndroidConfig.builder().setPriority(AndroidConfig.Priority.NORMAL).build())
                 .putData("navigation", NAVIGATION)
                 .putData("username", user.getUsername())
                 .build();

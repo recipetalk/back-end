@@ -30,16 +30,16 @@ public class RegisterUserServiceImpl implements RegisterUserService {
     private final VerificationTokenRepository verificationTokenRepository;
 
     @Transactional
-    public ResponseEntity<?> addUser(SignUpUserReqDto signUpUserReqDto){
+    public ResponseEntity<?> addUser(SignUpUserReqDto signUpUserReqDto) {
         //아이디 존재
-        if(userDetailRepository.findUserDetailByUsername(signUpUserReqDto.getUsername()).isPresent())
+        if (userDetailRepository.findUserDetailByUsername(signUpUserReqDto.getUsername()).isPresent())
             throw new DuplicatedUserException();
 
         // 인증 시도조차 없다면 에러
         VerificationToken verificationToken = verificationTokenRepository.findByEmail(signUpUserReqDto.getEmail()).orElseThrow(UnverifiedException::new);
 
         //인증 되지 않은 유저라면
-        if(!verificationToken.getIsVerified()){
+        if (!verificationToken.getIsVerified()) {
             throw new UnverifiedException();
         }
 
@@ -55,4 +55,5 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 
         return ResponseEntity.ok(null);
     }
+
 }

@@ -5,6 +5,7 @@ import com.solution.recipetalk.domain.ingredient.userhas.repository.UserHasIngre
 import com.solution.recipetalk.dto.ingredient.userhas.UserHasIngredientResponseDTO;
 import com.solution.recipetalk.exception.ingredient.IngredientNotFoundException;
 import com.solution.recipetalk.service.ingredient.userhas.FindUserHasIngredientService;
+import com.solution.recipetalk.util.ContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +28,11 @@ public class FindUserHasIngredientServiceImpl implements FindUserHasIngredientSe
 
     @Override
     public ResponseEntity<?> findUserHasIngredients(Pageable pageable, String sortElement) {
-        Page<UserHasIngredientResponseDTO> allUserIngredient = userHasIngredientRepository.findAllUserIngredient(pageable, sortElement);
+        Long currentUserId = ContextHolder.getUserLoginId();
+
+        Page<UserHasIngredientResponseDTO> allUserIngredient = userHasIngredientRepository.findAllUserIngredient(currentUserId, pageable, sortElement);
         return ResponseEntity.ok(allUserIngredient);
     }
+
+
 }

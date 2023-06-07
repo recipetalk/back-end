@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface UserHasIngredientCustomRepository {
-    Page<UserHasIngredientResponseDTO> findAllUserIngredient(Pageable pageable, String sortElement);
+    Page<UserHasIngredientResponseDTO> findAllUserIngredient(Long userId, Pageable pageable, String sortElement);
 }

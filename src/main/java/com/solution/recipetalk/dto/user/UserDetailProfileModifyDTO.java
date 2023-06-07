@@ -13,8 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserDetailProfileModifyDTO {
 
     private String nickname;
-    private String username;
     private String description;
     private MultipartFile profileImg;
+    private Boolean isProfileImgDeleted;
 
 }

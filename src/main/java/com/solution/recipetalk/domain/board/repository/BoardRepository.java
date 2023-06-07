@@ -16,4 +16,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Modifying
     @Query(value = "DELETE FROM board WHERE board_id = :boardId", nativeQuery = true)
     void hardDeleteBoardByboardId(@Param("boardId")Long boardId);
+
+    @Modifying
+    void deleteAllByWriter_Id(Long writerId);
 }

@@ -34,19 +34,19 @@ public class ModifyUserDetailServiceImpl implements ModifyUserDetailService {
         loginDetail.setNickname(dto.getNickname());
         loginDetail.setDescription(dto.getDescription());
 
-        if (null != dto.getProfileImg()){
-            try {
-                //차후엔 로그관리 필요할 것 같음..
-                if(loginDetail.getProfileImageURI() != null || loginDetail.getProfileImageURI().equals("")){
-                    s3Uploader.deleteFile(loginDetail.getProfileImageURI(), S3dir.USER_PROFILE_IMG_DIR);
-                }
-                String profileURI = s3Uploader.upload(dto.getProfileImg(), S3dir.USER_PROFILE_IMG_DIR);
-                loginDetail.setProfileImageURI(profileURI);
-            } catch (IOException e) {
-                throw new ImageUploadFailedException();
-            }
+        if(dto.getIsProfileImgDeleted() && loginDetail.getProfileImageURI() != null) {
+            s3Uploader.deleteFile(loginDetail.getProfileImageURI(), S3dir.USER_PROFILE_IMG_DIR);
+            loginDetail.setProfileImageURI("");
         }
 
+        if(dto.getProfileImg() != null){
+            try {
+                String dir =s3Uploader.upload(dto.getProfileImg(), S3dir.USER_PROFILE_IMG_DIR);
+                loginDetail.setProfileImageURI(dir);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return ResponseEntity.ok(null);
     }
 

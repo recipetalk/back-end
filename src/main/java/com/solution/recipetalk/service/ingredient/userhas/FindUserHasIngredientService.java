@@ -6,4 +6,6 @@ import org.springframework.http.ResponseEntity;
 public interface FindUserHasIngredientService {
     ResponseEntity<?> findUserHasIngredient(Long userHasIngredientId);
     ResponseEntity<?> findUserHasIngredients(Pageable pageable, String sortElement);
+
+
 }

@@ -1,5 +1,6 @@
 package com.solution.recipetalk.listener;
 
+import com.solution.recipetalk.batch.ExpiryDateImmiNotification;
 import com.solution.recipetalk.domain.bill.repository.BillRepository;
 import com.solution.recipetalk.domain.board.bookmark.entity.Bookmark;
 import com.solution.recipetalk.domain.board.bookmark.id.BookmarkId;
@@ -19,6 +20,9 @@ import com.solution.recipetalk.domain.ingredient.repository.IngredientRepository
 import com.solution.recipetalk.domain.ingredient.trimming.entity.IngredientTrimming;
 import com.solution.recipetalk.domain.ingredient.trimming.repository.IngredientTrimmingRepository;
 import com.solution.recipetalk.domain.ingredient.trimming.row.repository.IngredientTrimmingRowRepository;
+import com.solution.recipetalk.domain.ingredient.userhas.entity.IngredientState;
+import com.solution.recipetalk.domain.ingredient.userhas.entity.UserHasIngredient;
+import com.solution.recipetalk.domain.ingredient.userhas.repository.UserHasIngredientRepository;
 import com.solution.recipetalk.domain.notification.entity.Notification;
 import com.solution.recipetalk.domain.notification.repository.NotificationRepository;
 import com.solution.recipetalk.domain.notification.state.NotificationSort;
@@ -47,6 +51,7 @@ import com.solution.recipetalk.exception.ingredient.IngredientNotFoundException;
 import com.solution.recipetalk.exception.recipe.RecipeNotFoundException;
 import com.solution.recipetalk.exception.user.UserNotFoundException;
 import com.solution.recipetalk.vo.notification.comment.CommentNotificationVO;
+import com.solution.recipetalk.vo.notification.ingredient.userhas.UserHasIngredientNotificationVO;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +60,9 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -84,24 +92,26 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private final ProductRepository productRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final NotificationRepository notificationRepository;
+    private final UserHasIngredientRepository userHasIngredientRepository;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        loadUserData();
-        loadTestUserData();
-        loadBoardData();
-        loadIngredientData();
-        loadRecipeData();
-        loadRecipeRowData();
-        loadIngredientTrimmingData();
-        //loadUserBlockData();
-        loadBoardLikeData();
-        loadUserFollowData();
-        loadCommentData();
-        loadBookmarkData();
-        loadIngredientDescriptionData();
-        loadProductData();
-        loadNotificationData();
+//        loadUserData();
+//        loadTestUserData();
+//        loadBoardData();
+//        loadIngredientData();
+//        loadRecipeData();
+//        loadRecipeRowData();
+//        loadIngredientTrimmingData();
+//        //loadUserBlockData();
+//        loadBoardLikeData();
+//        loadUserFollowData();
+//        loadCommentData();
+//        loadBookmarkData();
+//        loadIngredientDescriptionData();
+//        loadProductData();
+//        loadNotificationData();
+//        loadUserHasIngredientData();
     }
 
     private void loadNotificationData(){
@@ -193,6 +203,22 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
         createProductIfNotNull(1L, "바코드1", 1L, null, null, 1L);
         createProductIfNotNull(2L, "바코드2", 2L, "2023-05-15", null, 2L);
         createProductIfNotNull(3L, "바코드3", 1L, null, "2023-05-15", 3L);
+    }
+
+    private void loadUserHasIngredientData() {
+        LocalDate now = LocalDate.now();
+        Long term = 3L;
+        LocalDate target = now.plusDays(term);
+        createUserHasIngredientIfNotNull(1L, 1L, "1", now);
+        createUserHasIngredientIfNotNull(2L, 1L, "2", now.plusDays(1));
+        createUserHasIngredientIfNotNull(3L, 1L, "3", now.plusDays(2));
+        createUserHasIngredientIfNotNull(4L, 1L, "4", now.plusDays(3));
+        createUserHasIngredientIfNotNull(6L, 1L, "5", now.minusDays(1));
+        createUserHasIngredientIfNotNull(7L, 2L, "1", now);
+        createUserHasIngredientIfNotNull(8L, 2L, "2", now.minusDays(1));
+        createUserHasIngredientIfNotNull(9L, 2L, "3", now.minusDays(2));
+        createUserHasIngredientIfNotNull(10L, 2L, "4", now.minusDays(3));
+        createUserHasIngredientIfNotNull(11L, 2L, "5", now.plusDays(1));
     }
 
     private void createUserDataIfNotNull(Long id, String nickname, String username, String password, Boolean isBlocked, String email){
@@ -450,5 +476,22 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
             notificationRepository.save(notification);
         }
 
+    }
+
+    private void createUserHasIngredientIfNotNull(Long id, Long userId, String name, LocalDate expiredDate) {
+        Optional<UserHasIngredient> byId = userHasIngredientRepository.findById(id);
+
+        if(byId.isPresent()){
+            return;
+        }
+        UserDetail userDetail = userDetailRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        UserHasIngredient userHasIngredient = UserHasIngredient.builder()
+                .user(userDetail)
+                .name(name)
+                .expirationDate(expiredDate)
+                .build();
+
+        userHasIngredientRepository.save(userHasIngredient);
     }
 }
