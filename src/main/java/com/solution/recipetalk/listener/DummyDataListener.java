@@ -96,22 +96,22 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        loadUserData();
-        loadTestUserData();
-        loadBoardData();
-        loadIngredientData();
-        loadRecipeData();
-        loadRecipeRowData();
-        loadIngredientTrimmingData();
-        //loadUserBlockData();
-        loadBoardLikeData();
-        loadUserFollowData();
-        loadCommentData();
-        loadBookmarkData();
-        loadIngredientDescriptionData();
-        loadProductData();
-        loadNotificationData();
-        loadUserHasIngredientData();
+//        loadUserData();
+//        loadTestUserData();
+//        loadBoardData();
+//        loadIngredientData();
+//        loadRecipeData();
+//        loadRecipeRowData();
+//        loadIngredientTrimmingData();
+//        //loadUserBlockData();
+//        loadBoardLikeData();
+//        loadUserFollowData();
+//        loadCommentData();
+//        loadBookmarkData();
+//        loadIngredientDescriptionData();
+//        loadProductData();
+//        loadNotificationData();
+//        loadUserHasIngredientData();
     }
 
     private void loadNotificationData(){
