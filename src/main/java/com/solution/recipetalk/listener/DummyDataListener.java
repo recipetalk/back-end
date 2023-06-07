@@ -113,7 +113,6 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
 //        loadProductData();
 //        loadNotificationData();
 //        loadUserHasIngredientData();
-        log.info(bCryptPasswordEncoder.encode("recipetalk_admin123"));
     }
 
     private void loadNotificationData(){
