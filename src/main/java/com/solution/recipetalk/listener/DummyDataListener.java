@@ -94,6 +94,7 @@ public class DummyDataListener implements ApplicationListener<ContextRefreshedEv
     private final NotificationRepository notificationRepository;
     private final UserHasIngredientRepository userHasIngredientRepository;
 
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
 //        loadUserData();
