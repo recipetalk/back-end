@@ -4,6 +4,7 @@ import com.solution.recipetalk.domain.ingredient.repository.IngredientRepository
 import com.solution.recipetalk.dto.ingredient.IngredientFindResultDTO;
 import com.solution.recipetalk.service.ingredient.FindIngredientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class FindIngredientServiceImpl implements FindIngredientService {
 
     @Override
     public ResponseEntity<?> findIngredientListByNameComponentPage(String nameComponent, Pageable pageable) {
-        List<IngredientFindResultDTO> dtos = ingredientRepository.findSomeStartWith(nameComponent, pageable);
+        Page<IngredientFindResultDTO> dtos = ingredientRepository.findSomeStartWith(nameComponent, pageable);
         return ResponseEntity.ok(dtos);
     }
 }
