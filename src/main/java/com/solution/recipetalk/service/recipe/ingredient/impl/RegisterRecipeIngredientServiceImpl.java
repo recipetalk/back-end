@@ -1,5 +1,6 @@
 package com.solution.recipetalk.service.recipe.ingredient.impl;
 
+import com.solution.recipetalk.domain.ingredient.entity.Ingredient;
 import com.solution.recipetalk.domain.ingredient.repository.IngredientRepository;
 import com.solution.recipetalk.domain.recipe.ingredient.entity.RecipeIngredient;
 import com.solution.recipetalk.domain.recipe.ingredient.repository.RecipeIngredientRepository;
@@ -26,10 +27,17 @@ public class RegisterRecipeIngredientServiceImpl implements RegisterRecipeIngred
 
     @Override
     public ResponseEntity<?> registerRecipeIngredient(Long recipeId, List<RecipeIngredientRegisterDTO> dtos) {
-        List<RecipeIngredient> newRecipeIngredientList = dtos.stream().map(dto -> dto.toRecipeIngredientEntity(
-                    dto.getIngredientId() == null ? null : ingredientRepository.findById(dto.getIngredientId()).orElseThrow(IngredientNotFoundException::new),
-                    recipeRepository.findById(recipeId).orElseThrow(RecipeNotFoundException::new)
-            )
+        List<RecipeIngredient> newRecipeIngredientList = dtos.stream().map(dto -> {
+            Ingredient ingredient = null;
+                if(dto.getIngredientId() != null) {
+                    ingredient = ingredientRepository.findById(dto.getIngredientId()).orElseThrow(IngredientNotFoundException::new);
+                    ingredient.countUp();
+                }
+                return dto.toRecipeIngredientEntity(
+                        ingredient,
+                        recipeRepository.findById(recipeId).orElseThrow(RecipeNotFoundException::new)
+                );
+            }
         ).toList();
         recipeIngredientRepository.saveAll(newRecipeIngredientList);
 

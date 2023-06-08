@@ -16,7 +16,7 @@ import lombok.Setter;
 @Builder
 public class SignUpUserReqDto {
     @NonNull
-    @Pattern(regexp = "[ㄱ-ㅎ가-힣a-zA-Z0-9]{4,10}$")
+    @Pattern(regexp = "[ㄱ-ㅎ가-힣a-zA-Z0-9]{3,10}$")
     private String nickname;
     @NonNull
     @Email(message = "이메일 형식이 맞지 않습니다.")

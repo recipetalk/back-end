@@ -23,8 +23,11 @@ public class Ingredient extends AuditingEntity {
     @Column(name = "usedCount")
     private Long usedCount;
 
-    public void updateCount() {
+    public void countUp() {
         this.usedCount++;
+    }
+    public void countDown() {
+        this.usedCount--;
     }
 
 // 주석처리 한 녀석은 추후 넣을 예정
