@@ -15,7 +15,7 @@ import lombok.*;
 public class RecipeDTO {
     private BoardDTO board;
     private String description;
-    private String thumbnailUri;
+    private String thumbnailURI;
     private String quantity;
     private Long recipeId;
     private String level;
@@ -28,7 +28,7 @@ public class RecipeDTO {
                 .board(boardDTO)
                 .description(recipe.getDescription())
                 .quantity(recipe.getQuantity().toString())
-                .thumbnailUri(recipe.getThumbnailImgURI())
+                .thumbnailURI(recipe.getThumbnailImgURI())
                 .recipeId(recipe.getId())
                 .level(recipe.getLevel().toString())
                 .durationTime(recipe.getDurationTime().toString())
@@ -50,7 +50,7 @@ public class RecipeDTO {
         this.board = BoardDTO.toDTO(board, userSimpleProfileDTO, isLiked, isBookmarked);
         this.description = recipe.getDescription();
         this.quantity = recipe.getQuantity().toString();
-        this.thumbnailUri = recipe.getThumbnailImgURI();
+        this.thumbnailURI = recipe.getThumbnailImgURI();
         this.recipeId = recipe.getId();
         this.level = recipe.getLevel().toString();
         this.durationTime = recipe.getDurationTime().toString();
