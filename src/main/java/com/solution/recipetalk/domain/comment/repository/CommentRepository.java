@@ -60,7 +60,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             "AND (parentComment IS NULL OR (" +
             "parentCommentWriter.isBlocked = FALSE " +
             "AND parentCommentWriter NOT IN (SELECT blockedUser from UserBlock  WHERE user.id = :userId)))" +
-            "ORDER BY c.id",
+            "ORDER BY c.id desc",
             countQuery = "SELECT COUNT(*) " +
                     "FROM Comment c " +
                     "JOIN UserDetail writer ON c.writer = writer " +
