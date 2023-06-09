@@ -27,12 +27,16 @@ public class SignUpUserReqDto {
     @NonNull
     private String password;
 
+    @NonNull
+    private Boolean marketingIsAccept;
+
     public UserDetail toUserDetail(){
         return UserDetail.builder()
                 .nickname(nickname)
                 .profileImageURI("")
                 .username(username)
                 .isBlocked(false)
+                .marketIngIsAccept(marketingIsAccept)
                 .build();
     }
 
