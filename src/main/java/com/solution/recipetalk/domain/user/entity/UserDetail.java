@@ -42,6 +42,9 @@ public class UserDetail extends SoftDeleteEntity {
     private Boolean isBlocked;
     //TODO : Where 절 없는 이유? 관리 입장에서 없어야 할 수 있음. 따라서 직접 false이면 어떻게, true이면 어떻게 조회해야 할지에 대한 처리 필요.
 
+    @Column(name = "marketing_is_accept", nullable = false)
+    private Boolean marketIngIsAccept;
+
     public void setUserLogin(UserLogin userLogin) {
         this.userLogin = userLogin;
     }
