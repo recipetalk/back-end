@@ -20,8 +20,8 @@ public class ProductResponseDTO {
         return ProductResponseDTO.builder()
                 .productName(entity.getProductName())
                 .ingredientId(entity.getIngredient().getId())
-                .isClosed(entity.getClosedDate() == null || "".equals(entity.getClosedDate()))
-                .isProductShutdown(entity.getProductShutdownDate() == null || "".equals(entity.getProductName()))
+                .isClosed(entity.getClosedDate() == null || !"".equals(entity.getClosedDate()))
+                .isProductShutdown(entity.getProductShutdownDate() == null || !"".equals(entity.getProductShutdownDate()))
                 .build();
     }
 }
