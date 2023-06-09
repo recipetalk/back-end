@@ -43,9 +43,9 @@ public class FollowNotificationVO implements NotificationVO {
                                                 .setContentAvailable(true)
                                                 .build()
                                 )//.putHeader("apns-push-type", "background")
-                                .putHeader("apns-priority", "5") // 저전력 모드
+                                .putHeader("apns-priority", "10") // 저전력 모드
                                 .build()
-                ).setAndroidConfig(AndroidConfig.builder().setPriority(AndroidConfig.Priority.NORMAL).build())
+                ).setAndroidConfig(AndroidConfig.builder().setPriority(AndroidConfig.Priority.HIGH).build())
                 .putData("navigation", NAVIGATION)
                 .putData("username", user.getUsername())
                 .build();
