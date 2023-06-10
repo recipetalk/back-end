@@ -23,7 +23,7 @@ public interface RecipeIngredientRepository extends JpaRepository<RecipeIngredie
             "LEFT JOIN Ingredient i ON ri.ingredient = i " +
             "LEFT JOIN UserHasIngredient uhi ON uhi.user.id = :viewerId AND ri.name = uhi.name " +
             "LEFT JOIN UserHasIngredient uhi2 ON uhi2.user.id = :viewerId AND ri.ingredient = uhi2.ingredient " +
-            "WHERE ri.recipe.id = :recipeId")
+            "WHERE ri.recipe.id = :recipeId group by ri")
     List<RecipeIngredientResult> findRecipeIngredientByUserIdAndRecipeId(@Param("viewerId")Long userId, @Param("recipeId")Long recipeId);
 
 }
