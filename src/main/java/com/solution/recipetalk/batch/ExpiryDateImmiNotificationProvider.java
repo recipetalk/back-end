@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class ExpiryDateImmiNotification {
+public class ExpiryDateImmiNotificationProvider {
 
     private final UserHasIngredientRepository userHasIngredientRepository;
     private final ApplicationEventPublisher eventPublisher;
@@ -29,7 +29,8 @@ public class ExpiryDateImmiNotification {
         long term = 3L;
         LocalDate now = LocalDate.now();
         LocalDate target = now.plusDays(term);
-        List<UserHasIngredientRepository.ExpiryDateImmiIngredientDTO> userHasIngredientsByExpirationDate = userHasIngredientRepository.findUserHasIngredientsByExpirationDate(now, target);
+        List<UserHasIngredientRepository.ExpiryDateImmiIngredientDTO> userHasIngredientsByExpirationDate =
+                userHasIngredientRepository.findUserHasIngredientsByExpirationDate(now, target);
 
         log.info(now.toString() + ", scheduling about expired user ingredient count number : " + String.valueOf(userHasIngredientsByExpirationDate.size()));
         userHasIngredientsByExpirationDate.forEach(expiryDateImmiIngredientDTO -> {

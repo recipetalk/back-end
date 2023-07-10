@@ -31,29 +31,17 @@ import java.util.Optional;
 @Transactional
 @Slf4j
 public class RegisterCommentServiceImpl implements RegisterCommentService {
-
-    @Autowired
     private final CommentRepository commentRepository;
-
-    @Autowired
     private final BoardRepository boardRepository;
-
-    @Autowired
     private final UserDetailRepository userDetailRepository;
-
     private final FcmTokenRepository fcmTokenRepository;
-
     private final ApplicationEventPublisher eventPublisher;
-
     private UserDetail writer;
     private UserDetail target;
     private Board board;
     private Comment parentComment;
     private Comment newComment;
-
-
     @Override
-    @Transactional
     public ResponseEntity<?> addComment(Long boardId, CommentCreateDTO comment) {
         validateCommentDescription(comment.getDescription());
         addNewComment(boardId, comment);
@@ -61,8 +49,7 @@ public class RegisterCommentServiceImpl implements RegisterCommentService {
         sendFcmNotification();
         return ResponseEntity.ok(null);
     }
-
-    private void addNewComment(Long boardId, CommentCreateDTO comment){
+    public void addNewComment(Long boardId, CommentCreateDTO comment){
         Long currentLoginUserId = ContextHolder.getUserLoginId();
         writer = userDetailRepository.findById(currentLoginUserId).orElseThrow(UserNotFoundException::new);
         board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
@@ -74,13 +61,10 @@ public class RegisterCommentServiceImpl implements RegisterCommentService {
         board.increaseCommentCount();
         commentRepository.save(newComment);
     }
-
     private void setTarget() {
         target = parentComment != null ? parentComment.getWriter() : board.getWriter();
     }
-
     private void sendFcmNotification(){
-
         if(!isEqualTargetAndWriter()){
             Optional<FcmToken> targetFcm = fcmTokenRepository.findFcmTokenByUser(target);
 
@@ -95,11 +79,9 @@ public class RegisterCommentServiceImpl implements RegisterCommentService {
             eventPublisher.publishEvent(commentNotificationVO);
         }
     }
-
     private boolean isEqualTargetAndWriter(){
         return target.equals(writer);
     }
-
     private void validateCommentDescription(String description) {
         /*
         * TODO : script는 입력 불가
