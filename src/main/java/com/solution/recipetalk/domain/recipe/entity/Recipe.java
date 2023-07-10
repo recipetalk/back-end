@@ -58,13 +58,6 @@ public class Recipe extends SoftDeleteEntity {
     private RecipeSituationCategory situation;
 
 
-    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
-    private List<RecipeIngredient> recipeIngredients;
-
-    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
-    private List<RecipeRow> recipeRows;
-
-
     // dto 내 null check 를 진행하므로 null check 생략
     public void changeByRecipeModifyDTO(RecipeModifyDTO dto, String thumbnailImgURI){
         this.thumbnailImgURI = thumbnailImgURI;
@@ -80,5 +73,4 @@ public class Recipe extends SoftDeleteEntity {
 
         this.sort = dto.getSort();
     }
-
 }

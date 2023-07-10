@@ -51,14 +51,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long>, RecipeQue
             "order by isBookmark.id desc ")
     List<RecipeDTO> findOneRecipeByViewerIdAndBookmarked(@Param("viewerId")Long viewerId, Pageable pageable);
 
-//    @Query("SELECT B.id AS boardId, B.title AS title, B.createdDate AS createdDate, (UBL.user.id IS NOT NULL or true) AS isLiked, " +
-//            "B.likeCount AS likeCount, B.commentCount AS commentCount, R.thumbnailImgURI AS thumbnailImgURI, R.quantity as quantity, " +
-//            "R.id as recipeId, B.boardSort AS boardSort FROM Recipe AS R " +
-//            "JOIN Board AS B ON R.board.id = B.id " +
-//            "LEFT JOIN BoardLike AS UBL ON UBL.user.id = :userId AND UBL.board.id = B.id " +
-//            "WHERE B.writer.id = :userId")
-//    Optional<List<RecipeByUsername>> findRecipeByUserId(@Param("userId") Long userId);
-
     @Modifying
     @Query(value = "DELETE FROM recipe WHERE board_id = :recipeId", nativeQuery = true)
     void hardDeleteRecipeById(@Param("recipeId")Long recipeId);

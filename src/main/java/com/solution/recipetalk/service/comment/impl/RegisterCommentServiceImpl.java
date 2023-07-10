@@ -43,39 +43,64 @@ public class RegisterCommentServiceImpl implements RegisterCommentService {
 
     private final ApplicationEventPublisher eventPublisher;
 
+    private UserDetail writer;
+    private UserDetail target;
+    private Board board;
+    private Comment parentComment;
+    private Comment newComment;
+
+
     @Override
     public ResponseEntity<?> addComment(Long boardId, CommentCreateDTO comment) {
         validateCommentDescription(comment.getDescription());
+        addNewComment(boardId, comment);
+        sendFcmNotification(newComment, target, writer, board, comment.getParentCommentId());
 
-        Long currentLoginUserId= ContextHolder.getUserLoginId();
-        UserDetail writer = userDetailRepository.findById(currentLoginUserId).orElseThrow(UserNotFoundException::new);
 
-        Board board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
+        return ResponseEntity.ok(null);
+    }
 
-        Comment parentComment = comment.getParentCommentId() != null ?
+    private void addNewComment(Long boardId, CommentCreateDTO comment){
+
+        Long currentLoginUserId = ContextHolder.getUserLoginId();
+
+        writer = userDetailRepository.findById(currentLoginUserId).orElseThrow(UserNotFoundException::new);
+
+        board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
+
+        parentComment = comment.getParentCommentId() != null ?
                 commentRepository.findById(comment.getParentCommentId()).orElseThrow(CommentNotFoundException::new) : null;
 
-        Comment newComment = comment.toEntity(writer, parentComment, board);
+        newComment = comment.toEntity(writer, parentComment, board);
 
         board.increaseCommentCount();
         commentRepository.save(newComment);
+    }
 
-        UserDetail target = parentComment != null ? parentComment.getWriter() : board.getWriter();
+    private void setTarget() {
+        target = parentComment != null ? parentComment.getWriter() : board.getWriter();
+    }
 
-        if(!target.equals(writer)){
+    private boolean isEqualTargetAndWriter(){
+        return target.equals(writer);
+    }
+
+    private void sendFcmNotification(Comment comment, UserDetail target, UserDetail writer, Board board, Long parentCommentId){
+        setTarget();
+
+        if(isEqualTargetAndWriter()){
             Optional<FcmToken> targetFcm = fcmTokenRepository.findFcmTokenByUser(target);
 
             CommentNotificationVO commentNotificationVO = CommentNotificationVO.builder()
-                    .parentCommentId(comment.getParentCommentId())
+                    .parentCommentId(parentCommentId)
                     .fcmTarget(targetFcm.orElse(null))
                     .board(board)
-                    .comment(newComment)
+                    .comment(comment)
                     .writer(writer)
                     .target(target)
                     .build();
             eventPublisher.publishEvent(commentNotificationVO);
         }
-        return ResponseEntity.ok(null);
     }
 
     private void validateCommentDescription(String description) {
