@@ -13,16 +13,16 @@
 # 기술 스택
 
 > 프론트엔드 : React Native CLI, FCM, redux(toolkit), encrypted-storage 
-
-백엔드 : Java17 + Spring Framework(With Spring Boot 3.0.1), Jakarta EE, ThymeLeaf, JPA, Hibernate, JPQL, QueryDSL 5.0, FCM
-
-데이터베이스 : MySQL
-
-클라우드 : AWS (s3, EC2, router 53, CodeDeploy, RDS)
-
-CI/CD : Git Action, Jenkins
-
-형상관리 : Github, Git
+>
+>백엔드 : Java17 + Spring Framework(With Spring Boot 3.0.1), Jakarta EE, ThymeLeaf, JPA, Hibernate, JPQL, QueryDSL 5.0, FCM
+>
+>데이터베이스 : MySQL
+>
+>클라우드 : AWS (s3, EC2, router 53, CodeDeploy, RDS)
+>
+>CI/CD : Git Action, Jenkins
+>
+>형상관리 : Github, Git
 > 
 
 # API 명세
