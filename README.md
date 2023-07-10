@@ -1,14 +1,5 @@
-# 자세히 보기
-
----
-
 ## 결과물
-
 [앱 빌드 파일](https://www.notion.so/430d0fdc6a08437fb28a8db813ca6881?pvs=21)
-
-- Github
-    - backend Code : https://github.com/recipetalk/back-end
-    - frontend Code : https://github.com/recipetalk/front-end
 
 # 기술 스택
 
