@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +44,9 @@ public class NotificationEventListener {
         try {
             firebaseCloudMessageService.sendMessageTo(notificationVO.toMessage());
         } catch (RuntimeException | FirebaseMessagingException e) {
-            fcmTokenRepository.delete(notificationVO.getFcmtoken());
+            if(notificationVO.getFcmtoken() != null){
+                fcmTokenRepository.delete(notificationVO.getFcmtoken());
+            }
         } finally {
             notificationRepository.save(notificationVO.toEntity());
         }

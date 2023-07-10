@@ -16,6 +16,7 @@ import com.solution.recipetalk.service.comment.RegisterCommentService;
 import com.solution.recipetalk.util.ContextHolder;
 import com.solution.recipetalk.vo.notification.comment.CommentNotificationVO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class RegisterCommentServiceImpl implements RegisterCommentService {
 
     @Autowired
@@ -51,23 +53,19 @@ public class RegisterCommentServiceImpl implements RegisterCommentService {
 
 
     @Override
+    @Transactional
     public ResponseEntity<?> addComment(Long boardId, CommentCreateDTO comment) {
         validateCommentDescription(comment.getDescription());
         addNewComment(boardId, comment);
-        sendFcmNotification(newComment, target, writer, board, comment.getParentCommentId());
-
-
+        setTarget();
+        sendFcmNotification();
         return ResponseEntity.ok(null);
     }
 
     private void addNewComment(Long boardId, CommentCreateDTO comment){
-
         Long currentLoginUserId = ContextHolder.getUserLoginId();
-
         writer = userDetailRepository.findById(currentLoginUserId).orElseThrow(UserNotFoundException::new);
-
         board = boardRepository.findById(boardId).orElseThrow(BoardNotFoundException::new);
-
         parentComment = comment.getParentCommentId() != null ?
                 commentRepository.findById(comment.getParentCommentId()).orElseThrow(CommentNotFoundException::new) : null;
 
@@ -81,26 +79,25 @@ public class RegisterCommentServiceImpl implements RegisterCommentService {
         target = parentComment != null ? parentComment.getWriter() : board.getWriter();
     }
 
-    private boolean isEqualTargetAndWriter(){
-        return target.equals(writer);
-    }
+    private void sendFcmNotification(){
 
-    private void sendFcmNotification(Comment comment, UserDetail target, UserDetail writer, Board board, Long parentCommentId){
-        setTarget();
-
-        if(isEqualTargetAndWriter()){
+        if(!isEqualTargetAndWriter()){
             Optional<FcmToken> targetFcm = fcmTokenRepository.findFcmTokenByUser(target);
 
             CommentNotificationVO commentNotificationVO = CommentNotificationVO.builder()
-                    .parentCommentId(parentCommentId)
+                    .parentCommentId(parentComment != null ? parentComment.getId() : null)
                     .fcmTarget(targetFcm.orElse(null))
                     .board(board)
-                    .comment(comment)
+                    .comment(newComment)
                     .writer(writer)
                     .target(target)
                     .build();
             eventPublisher.publishEvent(commentNotificationVO);
         }
+    }
+
+    private boolean isEqualTargetAndWriter(){
+        return target.equals(writer);
     }
 
     private void validateCommentDescription(String description) {
