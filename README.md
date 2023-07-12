@@ -120,7 +120,8 @@
 4. 아래사진은 복합키로 구성되어 있는 인덱스의 구조입니다.
     
 <img width="831" alt="JPA2" src="https://github.com/recipetalk/back-end/assets/68643347/f0ffa284-bb14-400a-8379-f08a4bb2ca4c">
-    - Primary Key의 인덱스 생성 순서를 보면, JPA에서 Column_name의 알파벳 순서로 생성이 된 것을 확인할 수 있습니다. 게다가 같은 Key_name을 보유한 것을 알 수 있습니다. 이 경우, 오라클의 경우는 상관없지만 Mysql의 경우 복합인덱스로 생성이 됩니다. 이는 인덱스의 순서가 중요하기 때문에 첫번째 인덱스가 Where 조건에서 NULL 이거나 배제되고 조회된다면 Full Scan이 발생할 수 있습니다.
+
+- Primary Key의 인덱스 생성 순서를 보면, JPA에서 Column_name의 알파벳 순서로 생성이 된 것을 확인할 수 있습니다. 게다가 같은 Key_name을 보유한 것을 알 수 있습니다. 이 경우, 오라클의 경우는 상관없지만 Mysql의 경우 복합인덱스로 생성이 됩니다. 이는 인덱스의 순서가 중요하기 때문에 첫번째 인덱스가 Where 조건에서 NULL 이거나 배제되고 조회된다면 Full Scan이 발생할 수 있습니다.
     
 5. 아래 사진은 PK는 JPA에서 GeneratedValue = GenerationType.Identity 로 설정되어 있고,  user와 blocked_user_id 모두 FK로 따로 주게 된 경우입니다.
     
