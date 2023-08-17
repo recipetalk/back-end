@@ -29,20 +29,7 @@
 
 # 아키텍처
 
-
-## 시스템 아키텍처 v1
-
-<img width="947" alt="시스템아키텍처v1" src="https://github.com/recipetalk/back-end/assets/68643347/7ad9bdd4-f2e5-4d41-9c13-b6534a918cb1">
-
-
-
-<br>
-<br>
-<br>
-
-## 시스템 아키텍처 v2 (학업, 토이프로젝트용)
-
-- 현재 준비중입니다.
+<img width="1255" alt="스크린샷 2023-08-17 오후 8 20 54" src="https://github.com/recipetalk/back-end/assets/68643347/7a16f501-9376-47b7-8394-d9fded049b0c">
 
 
 <br>
