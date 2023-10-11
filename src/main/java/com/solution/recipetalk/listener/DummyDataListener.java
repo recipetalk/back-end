@@ -1,6 +1,5 @@
 package com.solution.recipetalk.listener;
 
-import com.solution.recipetalk.batch.ExpiryDateImmiNotification;
 import com.solution.recipetalk.domain.bill.repository.BillRepository;
 import com.solution.recipetalk.domain.board.bookmark.entity.Bookmark;
 import com.solution.recipetalk.domain.board.bookmark.id.BookmarkId;
@@ -68,7 +67,6 @@ import java.util.Optional;
 @Slf4j
 @Component
 @AllArgsConstructor
-@Transactional
 public class DummyDataListener implements ApplicationListener<ContextRefreshedEvent> {
 
     private final BillRepository billRepository;
