@@ -8,14 +8,6 @@
 >### Jenkins, githubAction
 
 
-# API 명세
-
-[링크](https://www.notion.so/khj745700/04561b1c96e7455d8037818deb67bc48?v=8c466a55b30a49b2ac5aa619234b5f7a)
-
-
-
-<br>
-<br>
 <br>
 <br>
 
@@ -27,7 +19,6 @@
 
 <br>
 <br>
-<br>
 
 
 
@@ -37,8 +28,6 @@
 
 <br>
 <br>
-<br>
-
 
 # Project Structure
 
@@ -77,18 +66,118 @@ main/java/com/solution/recipetalk
 
 ```
 
-# 서비스 소개
-
-
-이 프로젝트는 만개의 레시피를 모티브로 한 레시피 제공 서비스에 식재료 관리 기능을 추가한 애플리케이션입니다. 코드 작성의 깔끔함과 유지보수의 중요성, 그리고 안전성을 고려하여 많은 노력을 기울였습니다.
-
-
-
 <br>
 <br>
 <br>
+
+
+# API 명세
+
+[링크](https://www.notion.so/khj745700/04561b1c96e7455d8037818deb67bc48?v=8c466a55b30a49b2ac5aa619234b5f7a)
+
+<br>
+<br>
+
+
 
 
 # installation
+corretto-jdk-17.0.4 버전과 mysql 8.0으로 구현되었습니다.
+<br>
+<br>
+<br>
+
+# Environment
+환경 변수는 프로젝트의 루트 패스 기준으로 src/main/resources/application.yml 에 아래 내용을 기입해 주시면 됩니다.
+
+<img width="435" alt="스크린샷 2023-10-15 오전 12 00 35" src="https://github.com/recipetalk/back-end/assets/68643347/82e359ee-c378-4af8-843a-9c040d447d3b">
+
+
+### 환경 변수 내용
+- DB 정보
+- JPA 설정 정보
+- SMTP 정보
+- JWT 설정 정보
+- AWS 설정 정보
+- multipart 설정 정보
+
+```yaml
+
+### DB ###
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ### 채우기 필수 ###
+    username: ### 채우기 필수 ###
+    password: ### 채우기 필수 ###
+
+### JPA ###
+  jpa:
+    show-sql: true
+    open-in-view: false 
+    hibernate:
+      ddl-auto: create ### table 생성 ###
+    properties:
+      hibernate:
+        highlight_sql: true
+        format_sql: true
+
+### SMTP 설정 ###
+  mail:
+    host: ## 채우기 필수 ##
+    port: ## 채우기 필수 ##
+    username: ## 채우기 필수 ##
+    password: ## 채우기 필수 ##
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: ## 채우기 필수 ##
+            enable: true
+        debug: false
+    title: '[레시피톡] 이메일 인증 안내입니다'
+
+### FCM 설정 ###
+
+fcm:
+  project-id: ## 채우기 필수 ##
+  secret-key-dir: ## 채우기 필수 ##
+  v1-url: ## 채우기 필수 ##
+  scope: ## 채우기 필수 ##
+
+### JWT 설정 정보 ###
+jwt:
+  issuer: solution.recipetalk
+  secret-key: ## 채우기 필수 ##
+  expiry-period: 1440 #분단위 1일
+  refresh-expiry-period: 43200 #분단위 30일
+
+### AWS 설정 정보 ###
+cloud:
+  aws:
+    credentials:
+      access-key: ## 채우기 필수 ##
+      secret-key: ## 채우기 필수 ##
+    s3:
+      bucket: ## 채우기 필수 ##
+    region:
+      static: ## 채우기 필수 ##
+    stack:
+      auto: false
+
+### multipart 설정 정보 ###
+file:
+  multipart:
+    maxUploadSize: 1782579 #1.7MB
+    maxUploadSizePerFile: 1363148 #1.3MB, 파일당 최대 사이즈
+
+```
+
+
 
 
