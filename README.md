@@ -155,7 +155,6 @@ jwt:
   issuer: solution.recipetalk
   secret-key: ## 채우기 필수 ##
   expiry-period: 1440 #분단위 1일
-  refresh-expiry-period: 43200 #분단위 30일
 
 ### AWS 설정 정보 ###
 cloud:
